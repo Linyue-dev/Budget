@@ -1,4 +1,5 @@
-﻿using Budget;
+﻿using Budget.Models;
+using Budget.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Budget
+namespace Budget.Services
 {
     public class Transactions
     {

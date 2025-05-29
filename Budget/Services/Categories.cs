@@ -5,28 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using Budget.Models;
+using Budget.Utils;
+using static Budget.Models.Category;
 
 
-namespace Budget
+namespace Budget.Services
 {
     public class Categories
     {
-        private static String DefaultFileName = "budgetCategories.txt";
+        private static string DefaultFileName = "budgetCategories.txt";
         private List<Category> _Cats = new List<Category>();
         private string _FileName;
         private string _DirName;
 
 
-        public String FileName { get { return _FileName; } }
-        public String DirName { get { return _DirName; } }
 
+        #region property        
+        public string FileName { get { return _FileName; } }
+        public string DirName { get { return _DirName; } }
+        #endregion
 
+        #region contructor
         public Categories()
         {
             SetCategoriesToDefaults();
         }
 
- 
+
         public Category GetCategoryFromId(int i)
         {
             Category c = _Cats.Find(x => x.Id == i);
@@ -36,9 +42,10 @@ namespace Budget
             }
             return c;
         }
+        #endregion
 
 
-        public void ReadFromFile(String filepath = null)
+        public void ReadFromFile(string filepath = null)
         {
 
             // reading from file resets all the current categories,
@@ -57,7 +64,7 @@ namespace Budget
             _DirName = Path.GetDirectoryName(filepath);
             _FileName = Path.GetFileName(filepath);
         }
-        public void SaveToFile(String filepath = null)
+        public void SaveToFile(string filepath = null)
         {
 
             // if file path not specified, set to last read file
@@ -87,22 +94,24 @@ namespace Budget
             _Cats.Clear();
 
             // Add Defaults
-            Add("Utilities", Category.CategoryType.Expense);
-            Add("Rent", Category.CategoryType.Expense);
-            Add("Food", Category.CategoryType.Expense);
-            Add("Entertainment", Category.CategoryType.Expense);
-            Add("Education", Category.CategoryType.Expense);
-            Add("Miscellaneous", Category.CategoryType.Expense);
-            Add("Medical Expenses", Category.CategoryType.Expense);
-            Add("Vacation", Category.CategoryType.Expense);
-            Add("Credit Card", Category.CategoryType.Credit);
-            Add("Clothes", Category.CategoryType.Expense);
-            Add("Gifts", Category.CategoryType.Expense);
-            Add("Insurance", Category.CategoryType.Expense);
-            Add("Transportation", Category.CategoryType.Expense);
-            Add("Eating Out", Category.CategoryType.Expense);
-            Add("Savings", Category.CategoryType.Savings);
-            Add("Income", Category.CategoryType.Income);
+            Add("Utilities", CategoryType.Expense);
+            Add("Food & Dining", CategoryType.Expense);
+            Add("Transportation", CategoryType.Expense);
+            Add("Health & Personal Care", CategoryType.Expense);
+            Add("Insurance", CategoryType.Expense);
+            Add("Clothes", CategoryType.Expense);
+            Add("Education", CategoryType.Expense);
+            Add("Vacation", CategoryType.Expense);
+            Add("Social Expenses", CategoryType.Expense);
+            Add("Municipal & SchoolTax", CategoryType.Expense);
+            Add("Rental Expenses", CategoryType.Expense);
+            Add("Miscellaneous", CategoryType.Expense);
+            Add("Savings", CategoryType.Savings);
+            Add("Housing mortgage", CategoryType.Debt);
+            Add("Auto loan", CategoryType.Debt);
+            Add("Salary", CategoryType.Income);
+            Add("Rental Income", CategoryType.Income);
+            Add("Stock & Fund", CategoryType.Investment);
 
         }
 
@@ -112,7 +121,7 @@ namespace Budget
             _Cats.Add(cat);
         }
 
-        public void Add(String desc, Category.CategoryType type)
+        public void Add(string desc, Category.CategoryType type)
         {
             int new_num = 1;
             if (_Cats.Count > 0)
@@ -141,7 +150,7 @@ namespace Budget
         }
 
 
-        private void _ReadXMLFile(String filepath)
+        private void _ReadXMLFile(string filepath)
         {
 
 
@@ -152,9 +161,9 @@ namespace Budget
 
                 foreach (XmlNode category in doc.DocumentElement.ChildNodes)
                 {
-                    String id = (((XmlElement)category).GetAttributeNode("ID")).InnerText;
-                    String typestring = (((XmlElement)category).GetAttributeNode("type")).InnerText;
-                    String desc = ((XmlElement)category).InnerText;
+                    string id = ((XmlElement)category).GetAttributeNode("ID").InnerText;
+                    string typestring = ((XmlElement)category).GetAttributeNode("type").InnerText;
+                    string desc = ((XmlElement)category).InnerText;
 
                     Category.CategoryType type;
                     switch (typestring.ToLower())
@@ -172,7 +181,7 @@ namespace Budget
                             type = Category.CategoryType.Expense;
                             break;
                     }
-                    this.Add(new Category(int.Parse(id), desc, type));
+                    Add(new Category(int.Parse(id), desc, type));
                 }
 
             }
@@ -183,7 +192,7 @@ namespace Budget
 
         }
 
-        private void _WriteXMLFile(String filepath)
+        private void _WriteXMLFile(string filepath)
         {
             try
             {

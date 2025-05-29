@@ -4,16 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Budget
+namespace Budget.Models
 {
     public class Transaction
     {
+        #region property
         public int Id { get; }
         public DateTime Date { get; }
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public int Category { get; set; }
 
+        #endregion
+
+        #region constructor
         public Transaction(int id, DateTime date, int category, decimal amount, string description)
         {
             if (id <= 0)
@@ -45,9 +49,7 @@ namespace Budget
             Amount = obj.Amount;
             Description = obj.Description;
         }
-        /// <summary>
-        /// Returns a string representation of the transaction.
-        /// </summary>
+        #endregion
         public override string ToString()
         {
             return $"{Date:yyyy-MM-dd} - {Description}: ${Amount}";

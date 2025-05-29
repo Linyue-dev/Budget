@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-namespace Budget
+namespace Budget.Utils
 {
     public class BudgetFiles
     {
-        private static String DefaultSavePath = @"Budget\";
-        private static String DefaultAppData = @"%USERPROFILE%\AppData\Local\";
+        private static string DefaultSavePath = @"Budget\";
+        private static string DefaultAppData = @"%USERPROFILE%\AppData\Local\";
 
-        public static String VerifyReadFromFileName(String FilePath, String DefaultFileName)
+        public static string VerifyReadFromFileName(string FilePath, string DefaultFileName)
         {
 
 
@@ -31,13 +31,13 @@ namespace Budget
 
         }
 
-        public static String VerifyWriteToFileName(String FilePath, String DefaultFileName)
+        public static string VerifyWriteToFileName(string FilePath, string DefaultFileName)
         {
 
             if (FilePath == null)
             {
                 // create the default appdata directory if it does not already exist
-                String tmp = Environment.ExpandEnvironmentVariables(DefaultAppData);
+                string tmp = Environment.ExpandEnvironmentVariables(DefaultAppData);
                 if (!Directory.Exists(tmp))
                 {
                     Directory.CreateDirectory(tmp);
@@ -52,8 +52,8 @@ namespace Budget
 
                 FilePath = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath + DefaultFileName);
             }
-            String folder = Path.GetDirectoryName(FilePath);
-            String delme = Path.GetFullPath(FilePath);
+            string folder = Path.GetDirectoryName(FilePath);
+            string delme = Path.GetFullPath(FilePath);
             if (!Directory.Exists(folder))
             {
                 throw new Exception("SaveToFileException: FilePath (" + FilePath + ") does not exist");

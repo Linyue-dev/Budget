@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Budget
+namespace Budget.Models
 {
 
     public class BudgetItem
@@ -35,6 +35,4 @@ namespace Budget
         public decimal Total { get; set; }
 
     }
-
-
 }
