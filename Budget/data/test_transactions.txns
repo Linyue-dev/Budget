@@ -1,0 +1,68 @@
+<Transactions>
+    <Transaction ID="1">
+        <Date>1/10/2018 12:00:00 AM</Date>
+        <Description>hat (on credit)</Description>
+        <Amount>10</Amount>
+        <Category>10</Category>
+    </Transaction>
+    <Transaction ID="2">
+        <Date>1/11/2018 12:00:00 AM</Date>
+        <Description>hat</Description>
+        <Amount>10</Amount>
+        <Category>9</Category>
+    </Transaction>
+	<Transaction ID="3">
+        <Date>1/10/2019 12:00:00 AM</Date>
+        <Description>scarf (on credit)</Description>
+        <Amount>15</Amount>
+        <Category>10</Category>
+    </Transaction>
+	<Transaction ID="4">
+        <Date>1/10/2020 12:00:00 AM</Date>
+        <Description>scarf</Description>
+        <Amount>15</Amount>
+        <Category>9</Category>
+    </Transaction>
+    <Transaction ID="5">
+        <Date>1/11/2020 12:00:00 AM</Date>
+        <Description>McDonalds</Description>
+        <Amount>45</Amount>
+        <Category>14</Category>
+  </Transaction>
+  <Transaction ID="9">
+        <Date>7/11/2020 12:00:00 AM</Date>
+        <Description>Cafeteria</Description>
+        <Amount>11.11</Amount>
+    <Category>14</Category>
+  </Transaction>
+  <Transaction ID="10">
+        <Date>2/1/2020 12:00:00 AM</Date>
+        <Description>Pizza</Description>
+        <Amount>33.33</Amount>
+        <Category>14</Category>
+  </Transaction>
+	    <Transaction ID="11">
+        <Date>2/27/2020 12:00:00 AM</Date>
+        <Description>Pizza</Description>
+        <Amount>33.33</Amount>
+        <Category>14</Category>
+    </Transaction>
+    <Transaction ID="12">
+        <Date>2/25/2020 12:00:00 AM</Date>
+        <Description>Hat</Description>
+        <Amount>25</Amount>
+        <Category>9</Category>
+    </Transaction>
+    <Transaction ID="13">
+        <Date>2/10/2020 12:00:00 AM</Date>
+        <Description>mittens</Description>
+        <Amount>15</Amount>
+        <Category>9</Category>
+    </Transaction>
+    <Transaction ID="7">
+        <Date>1/12/2020 12:00:00 AM</Date>
+        <Description>Wendys</Description>
+        <Amount>25</Amount>
+        <Category>14</Category>
+    </Transaction>
+</Transactions>
