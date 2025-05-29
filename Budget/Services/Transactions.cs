@@ -153,8 +153,6 @@ namespace Budget.Services
                 throw new Exception("ReadFromFileException: Reading XML " + e.Message);
             }
         }
-
-
         private void _WriteXMLFile(string filepath)
         {
 

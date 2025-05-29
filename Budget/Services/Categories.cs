@@ -121,7 +121,7 @@ namespace Budget.Services
             _Cats.Add(cat);
         }
 
-        public void Add(string desc, Category.CategoryType type)
+        public void Add(string name, Category.CategoryType type)
         {
             int new_num = 1;
             if (_Cats.Count > 0)
@@ -129,7 +129,7 @@ namespace Budget.Services
                 new_num = (from c in _Cats select c.Id).Max();
                 new_num++;
             }
-            _Cats.Add(new Category(new_num, desc, type));
+            _Cats.Add(new Category(new_num, name, type));
         }
 
 
@@ -152,8 +152,6 @@ namespace Budget.Services
 
         private void _ReadXMLFile(string filepath)
         {
-
-
             try
             {
                 XmlDocument doc = new XmlDocument();
@@ -174,11 +172,17 @@ namespace Budget.Services
                         case "expense":
                             type = Category.CategoryType.Expense;
                             break;
-                        case "credit":
-                            type = Category.CategoryType.Credit;
+                        case "debt":
+                            type = CategoryType.Debt;
+                            break;
+                        case "investment":
+                            type = CategoryType.Investment;
+                            break;
+                        case "savings":
+                            type = CategoryType.Savings;
                             break;
                         default:
-                            type = Category.CategoryType.Expense;
+                            type = CategoryType.Expense;
                             break;
                     }
                     Add(new Category(int.Parse(id), desc, type));
@@ -211,7 +215,7 @@ namespace Budget.Services
                     type.Value = cat.Type.ToString();
                     ele.SetAttributeNode(type);
 
-                    XmlText text = doc.CreateTextNode(cat.Description);
+                    XmlText text = doc.CreateTextNode(cat.Name);
                     doc.DocumentElement.AppendChild(ele);
                     doc.DocumentElement.LastChild.AppendChild(text);
 
