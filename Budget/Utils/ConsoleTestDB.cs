@@ -1,12 +1,18 @@
-﻿using Budget.Models;
-using Budget.Services;
+﻿using Budget.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Budget
+namespace Budget.Utils
 {
-    internal class Program
+    public class ConsoleTestDB
     {
-        
-        public static void Main(string[] args)
+
+        public ConsoleTestDB() { }
+
+        private static void InitializationDB()
         {
             string dbPath = "test.db";
 
@@ -65,9 +71,7 @@ namespace Budget
             {
                 Console.WriteLine($"Test failed: {ex.Message}");
             }
-         
-        }    
-        
+        }
         private static void VerifyTables(DatabaseService db)
         {
             using var command = db.Connection.CreateCommand();
