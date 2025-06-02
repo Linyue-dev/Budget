@@ -112,7 +112,6 @@ namespace Budget.Services
             Add("Salary", CategoryType.Income);
             Add("Rental Income", CategoryType.Income);
             Add("Stock & Fund", CategoryType.Investment);
-
         }
 
         private void Add(Category cat)

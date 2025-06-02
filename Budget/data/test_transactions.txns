@@ -1,68 +1,110 @@
 <Transactions>
     <Transaction ID="1">
         <Date>1/10/2018 12:00:00 AM</Date>
-        <Description>hat (on credit)</Description>
-        <Amount>10</Amount>
-        <Category>10</Category>
+        <Description>Tshirt</Description>
+        <Amount>22</Amount>
+        <Category>6</Category>
     </Transaction>
     <Transaction ID="2">
-        <Date>1/11/2018 12:00:00 AM</Date>
-        <Description>hat</Description>
-        <Amount>10</Amount>
-        <Category>9</Category>
+        <Date>1/16/2018 12:00:00 AM</Date>
+        <Description>mortagage</Description>
+        <Amount>800</Amount>
+        <Category>14</Category>
     </Transaction>
 	<Transaction ID="3">
-        <Date>1/10/2019 12:00:00 AM</Date>
-        <Description>scarf (on credit)</Description>
-        <Amount>15</Amount>
-        <Category>10</Category>
-    </Transaction>
+		<Date>2/10/2018 12:00:00 AM</Date>
+		<Description>monthly salary</Description>
+		<Amount>3500</Amount>
+		<Category>16</Category>
+	</Transaction>
 	<Transaction ID="4">
-        <Date>1/10/2020 12:00:00 AM</Date>
-        <Description>scarf</Description>
-        <Amount>15</Amount>
+        <Date>2/10/2019 12:00:00 AM</Date>
+        <Description>visit friend</Description>
+        <Amount>35</Amount>
         <Category>9</Category>
     </Transaction>
     <Transaction ID="5">
         <Date>1/11/2020 12:00:00 AM</Date>
         <Description>McDonalds</Description>
         <Amount>45</Amount>
-        <Category>14</Category>
+        <Category>2</Category>
   </Transaction>
-  <Transaction ID="9">
-        <Date>7/11/2020 12:00:00 AM</Date>
-        <Description>Cafeteria</Description>
-        <Amount>11.11</Amount>
-    <Category>14</Category>
-  </Transaction>
-  <Transaction ID="10">
+	<Transaction ID="6">
+		<Date>1/10/2020 12:00:00 AM</Date>
+		<Description>monthly salary</Description>
+		<Amount>4500</Amount>
+		<Category>16</Category>
+	</Transaction>
+	<Transaction ID="7">
+		<Date>1/12/2020 12:00:00 AM</Date>
+		<Description>Electricity bill</Description>
+		<Amount>225</Amount>
+		<Category>1</Category>
+	</Transaction>
+	<Transaction ID="8">
+		<Date>1/15/2020 12:00:00 AM</Date>
+		<Description>Wendys</Description>
+		<Amount>25</Amount>
+		<Category>2</Category>
+	</Transaction>
+    <Transaction ID="9">
         <Date>2/1/2020 12:00:00 AM</Date>
-        <Description>Pizza</Description>
-        <Amount>33.33</Amount>
-        <Category>14</Category>
-  </Transaction>
-	    <Transaction ID="11">
-        <Date>2/27/2020 12:00:00 AM</Date>
-        <Description>Pizza</Description>
-        <Amount>33.33</Amount>
-        <Category>14</Category>
+        <Description>Costco</Description>
+        <Amount>133.33</Amount>
+        <Category>2</Category>
     </Transaction>
-    <Transaction ID="12">
-        <Date>2/25/2020 12:00:00 AM</Date>
-        <Description>Hat</Description>
-        <Amount>25</Amount>
-        <Category>9</Category>
+	    <Transaction ID="10">
+        <Date>2/20/2020 12:00:00 AM</Date>
+        <Description>Mobile fee</Description>
+        <Amount>125.06</Amount>
+        <Category>1</Category>
     </Transaction>
+    <Transaction ID="11">
+        <Date>3/25/2020 12:00:00 AM</Date>
+        <Description>french course</Description>
+        <Amount>450</Amount>
+        <Category>7</Category>
+    </Transaction>
+	<Transaction ID="12">
+		<Date>4/21/2020 12:00:00 AM</Date>
+		<Description>2020 municipal</Description>
+		<Amount>2500</Amount>
+		<Category>10</Category>
+	</Transaction>	
     <Transaction ID="13">
-        <Date>2/10/2020 12:00:00 AM</Date>
-        <Description>mittens</Description>
-        <Amount>15</Amount>
-        <Category>9</Category>
+        <Date>2/10/2021 12:00:00 AM</Date>
+        <Description>car insurance</Description>
+        <Amount>1100</Amount>
+        <Category>5</Category>
     </Transaction>
-    <Transaction ID="7">
-        <Date>1/12/2020 12:00:00 AM</Date>
-        <Description>Wendys</Description>
-        <Amount>25</Amount>
-        <Category>14</Category>
-    </Transaction>
+	<Transaction ID="14">
+		<Date>7/11/2021 12:00:00 AM</Date>
+		<Description>school tax</Description>
+		<Amount>720.11</Amount>
+		<Category>10</Category>
+	</Transaction>
+	<Transaction ID="15">
+		<Date>1/11/2024 12:00:00 AM</Date>
+		<Description>us found</Description>
+		<Amount>1720.11</Amount>
+		<Category>18</Category>
+	</Transaction>
+	<Transaction ID="16">
+		<Date>3/01/2024 12:00:00 AM</Date>
+		<Description>rental income</Description>
+		<Amount>2720.11</Amount>
+		<Category>17</Category>
+	</Transaction>
+	<Transaction ID="17">
+		<Date>3/15/2024 12:00:00 AM</Date>
+		<Description>Costco</Description>
+		<Amount>126.66</Amount>
+		<Category>2</Category>
+	</Transaction>
+	<Transaction ID="18">
+		<Date>4/07/2024 12:00:00 AM</Date>
+		<Description>fix fence</Description>
+		<Amount>1026.66</Amount>
+		<Category>11</Category>
+	</Transaction>
 </Transactions>

@@ -93,7 +93,7 @@ namespace Budget
             _FileName = null;
 
             // get filepath name (throws exception if we can't write to the file)
-             filepath = BudgetFiles.VerifyWriteToFileName(filepath, "");
+            filepath = BudgetFiles.VerifyWriteToFileName(filepath, "");
 
             String path = Path.GetDirectoryName(Path.GetFullPath(filepath));
             String file = Path.GetFileNameWithoutExtension(filepath);
@@ -131,7 +131,7 @@ namespace Budget
                         where t.Date >= Start && t.Date <= End
                         select new { CatId = c.Id, TxnsId = t.Id, t.Date, CategoryType = c.Type, Category = c.Name, t.Description, t.Amount };
 
-   
+
             List<BudgetItem> items = new List<BudgetItem>();
             decimal total = 0;
 
@@ -160,7 +160,7 @@ namespace Budget
                     Date = t.Date,
                     // Income is shown as a positive number, while other items are shown as a negative number.
                     Category = t.Category,
-                    Amount = t.CategoryType == CategoryType.Income ? t.Amount : -t.Amount, 
+                    Amount = t.CategoryType == CategoryType.Income ? t.Amount : -t.Amount,
                     Balance = total
                 });
             }
@@ -168,7 +168,7 @@ namespace Budget
         }
 
         public List<BudgetItemsByMonth> GetBudgetItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
-        {       
+        {
             List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
 
             var GroupedByMonth = items.GroupBy(c => c.Date.Year.ToString("D4") + "/" + c.Date.Month.ToString("D2"));
@@ -228,7 +228,7 @@ namespace Budget
             return summary;
         }
 
-        public List<Dictionary<string,object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             List<BudgetItemsByMonth> GroupedByMonth = GetBudgetItemsByMonth(Start, End, FilterFlag, CategoryID);
 
@@ -258,7 +258,7 @@ namespace Budget
                     }
 
                     // add new properties and values to our record object
-                    record["details:" + CategoryGroup.Key] =  details;
+                    record["details:" + CategoryGroup.Key] = details;
                     record[CategoryGroup.Key] = total;
 
                     // keep track of totals for each category
