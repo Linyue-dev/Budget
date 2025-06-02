@@ -8,39 +8,86 @@ namespace Budget
         
         public static void Main(string[] args)
         {
+            string dbPath = "test.db";
+
             try
             {
-                using var db = DatabaseService.CreateNewDatabase("test.db");
-                Console.WriteLine("Database created successfully");
+                Console.WriteLine("=============== Test Database ===============");
 
-                Console.WriteLine($"Connection state: {db.Connection.State}");
-
-                using var command = db.Connection.CreateCommand();
-                command.CommandText = "SELECT name FROM sqlite_master WHERE type='table'";
-                using var reader = command.ExecuteReader();
-                Console.WriteLine("Tables created:");
-
-                while (reader.Read())
+                // 1. Cleaned up  file
+                if (File.Exists(dbPath))
                 {
-                    Console.WriteLine($"  - {reader.GetString(0)}");
+                    File.Delete(dbPath);
                 }
-                reader.Close();
 
-                command.CommandText = "SELECT Id, Description FROM categoryTypes";
-
-                using var reader1 = command.ExecuteReader();
-                Console.WriteLine("CategoryTypes data:");
-
-                while (reader1.Read())
+                // 2. Test for creating new db
+                Console.WriteLine("\nTest create new database...");
+                using (var newDb = DatabaseService.CreateNewDatabase(dbPath))
                 {
-                    Console.WriteLine($"  {reader1.GetInt32(0)}: {reader1.GetString(1)}");
+                    Console.WriteLine("Database created successfully");
+                    Console.WriteLine($"Connection state: {newDb.Connection.State}");
+                    Console.WriteLine("Tables created:");
+                    VerifyTables(newDb);
+                    Console.WriteLine("CategoryTypes data:");
+                    VerifyCategoryTypes(newDb);
                 }
-                Console.WriteLine("All tests passed!");
+
+                // 3. Test for existing db
+                Console.WriteLine("\nTesting OpenExisting...");
+                using (var existingDb = DatabaseService.OpenExisting(dbPath))
+                {
+                    Console.WriteLine("Existing database opened successfully");
+                    Console.WriteLine($"Connection state: {existingDb.Connection.State}");
+
+                    Console.WriteLine("CategoryTypes data:");
+                    VerifyCategoryTypes(existingDb);
+                }
+
+                // 4. Test not existing db
+                Console.WriteLine("\nTesting error handling...");
+                try
+                {
+                    DatabaseService.OpenExisting("nonexistent.db");
+                    Console.WriteLine("Should have thrown exception!");
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("Correctly handled missing file");
+                }
+
+                Console.WriteLine("\nAll tests passed!");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Test failed: {ex.Message}");
             }
-        }        
+            finally
+            {
+                if (File.Exists(dbPath))
+                    File.Delete(dbPath);
+            }         
+        }    
+        
+        private static void VerifyTables(DatabaseService db)
+        {
+            using var command = db.Connection.CreateCommand();
+            command.CommandText = "SELECT name FROM sqlite_master WHERE type='table'";
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine($"  - {reader.GetString(0)}");
+            }
+        }
+
+        private static void VerifyCategoryTypes(DatabaseService db)
+        {
+            using var commmand = db.Connection.CreateCommand();
+            commmand.CommandText = "SELECT Id, Description FROM categoryTypes";
+            using var reader = commmand.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine($"  {reader.GetInt32(0)}: {reader.GetString(1)}");
+            }
+        }
     }
 }
