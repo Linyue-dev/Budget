@@ -17,11 +17,11 @@ namespace Budget.Models
         #region CategoryType enum (The enumeration value corresponds directly to the database Id) 
         public enum CategoryType
         {
-            Income,
-            Expense,
-            Debt ,   
-            Investment,
-            Savings,
+            Income = 1,
+            Expense = 2,
+            Debt = 3,   
+            Investment = 4,
+            Savings = 5,
         };
         #endregion
 
