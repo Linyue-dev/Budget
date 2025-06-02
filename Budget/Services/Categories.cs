@@ -115,7 +115,6 @@ namespace Budget.Services
 
         }
 
-
         private void Add(Category cat)
         {
             _Cats.Add(cat);

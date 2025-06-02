@@ -7,4 +7,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Data\test.budget" />
+    <None Remove="Data\test_categories.cats" />
+    <None Remove="Data\test_transactions.txns" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\test.budget">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\test_categories.cats">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\test_transactions.txns">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

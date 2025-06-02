@@ -8,6 +8,7 @@ using System.Dynamic;
 using Budget.Utils;
 using Budget.Services;
 using Budget.Models;
+using static Budget.Models.Category;
 
 namespace Budget
 {
@@ -35,11 +36,8 @@ namespace Budget
                 }
             }
         }
-
-
         public Categories categories { get { return _categories; } }
         public Transactions transactions { get { return _transactions; } }
-
         public HomeBudget()
         {
             _categories = new Categories();
@@ -131,7 +129,7 @@ namespace Budget
             var query = from c in _categories.List()
                         join t in _transactions.List() on c.Id equals t.Category
                         where t.Date >= Start && t.Date <= End
-                        select new { CatId = c.Id, TxnsId = t.Id, t.Date, Category = c.Name, t.Description, t.Amount };
+                        select new { CatId = c.Id, TxnsId = t.Id, t.Date, CategoryType = c.Type, Category = c.Name, t.Description, t.Amount };
 
    
             List<BudgetItem> items = new List<BudgetItem>();
@@ -139,35 +137,39 @@ namespace Budget
 
             foreach (var t in query.OrderBy(q => q.Date))
             {
-                // filter out unwanted categories if filter flag is on
                 if (FilterFlag && CategoryID != t.CatId)
                 {
                     continue;
                 }
 
-                // keep track of running totals
-                total = total - t.Amount;
+                // The impact on the balance depends on the classification type.
+                if (t.CategoryType == CategoryType.Income)
+                {
+                    total = total + t.Amount;  // Increase in income balance
+                }
+                else
+                {
+                    total = total - t.Amount;  // Expenditure/Investment/Savings/Debt Reduction Balance
+                }
+
                 items.Add(new BudgetItem
                 {
                     CategoryID = t.CatId,
                     TransactionID = t.TxnsId,
                     ShortDescription = t.Description,
                     Date = t.Date,
-                    Amount = -t.Amount,
+                    // Income is shown as a positive number, while other items are shown as a negative number.
                     Category = t.Category,
+                    Amount = t.CategoryType == CategoryType.Income ? t.Amount : -t.Amount, 
                     Balance = total
                 });
             }
-
             return items;
         }
 
-
         public List<BudgetItemsByMonth> GetBudgetItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
-        {
-       
+        {       
             List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
-
 
             var GroupedByMonth = items.GroupBy(c => c.Date.Year.ToString("D4") + "/" + c.Date.Month.ToString("D2"));
 
@@ -195,15 +197,12 @@ namespace Budget
             return summary;
         }
 
-
         public List<BudgetItemsByCategory> GetBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
 
             List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
 
-
             var GroupedByCategory = items.GroupBy(c => c.Category);
-
 
             var summary = new List<BudgetItemsByCategory>();
             foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
@@ -229,12 +228,9 @@ namespace Budget
             return summary;
         }
 
-
         public List<Dictionary<string,object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-
             List<BudgetItemsByMonth> GroupedByMonth = GetBudgetItemsByMonth(Start, End, FilterFlag, CategoryID);
-
 
             var summary = new List<Dictionary<string, object>>();
             var totalsPerCategory = new Dictionary<String, decimal>();
@@ -251,7 +247,6 @@ namespace Budget
 
                 foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
                 {
-
                     // calculate totals for the cat/month, and create list of details
                     decimal total = 0;
                     var details = new List<BudgetItem>();
@@ -276,7 +271,6 @@ namespace Budget
                         totalsPerCategory[CategoryGroup.Key] = total;
                     }
                 }
-
                 // add record to collection
                 summary.Add(record);
             }
@@ -294,10 +288,8 @@ namespace Budget
             }
             summary.Add(totalsRecord);
 
-
             return summary;
         }
         #endregion GetList
-
     }
 }
