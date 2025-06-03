@@ -107,10 +107,28 @@ namespace Budget.Services
         }
 
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            int i = _Cats.FindIndex(x => x.Id == Id);
-            _Cats.RemoveAt(i);
+            using var checkCommand = _databaseService.Connection.CreateCommand();
+            checkCommand.CommandText = @"SELECT COUNT(*) FROM transactions WHERE CategoryId = @id";
+            checkCommand.Parameters.AddWithValue("@id", id);
+
+            var transactionCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+            if (transactionCount > 0)
+            {
+                throw new InvalidOperationException($"Cannot delete category with {transactionCount} associated transactions. Delete the transactions first.");
+            }
+
+            // Safe Deletion Categories
+            using var deleteCommand = _databaseService.Connection.CreateCommand();
+            deleteCommand.CommandText = "DELETE FROM categories WHERE Id = @id";
+            deleteCommand.Parameters.AddWithValue("@id", id);
+
+            var rowsAffected = deleteCommand.ExecuteNonQuery();
+            if (rowsAffected == 0)
+            {
+                throw new InvalidOperationException($"Category with ID {id} not found.");
+            }
         }
 
         public List<Category> List()
