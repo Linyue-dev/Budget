@@ -96,16 +96,16 @@ namespace Budget.Services
             command.CommandText = @"
                     INSERT INTO categories (Name, TypeId) 
                     VALUES (@name, @typeId);
-                    SELECT last_insert_rowid();";
+                    SELECT last_insert_rowid();"; // Get just insert id
 
             command.Parameters.AddWithValue("@name", name);
             command.Parameters.AddWithValue("@typeId", (int)type);
 
-            var result = command.ExecuteScalar();
+            var result = command.ExecuteScalar(); // result = new record id
             if (result == null || result == DBNull.Value)
                 throw new InvalidOperationException("Failed to insert category");
 
-            return Convert.ToInt32(result);
+            return Convert.ToInt32(result); // return to user
         }
 
 
@@ -137,7 +137,11 @@ namespace Budget.Services
         {
             EnsureNotDisposed();
             using var command = _databaseService.Connection.CreateCommand();
-            command.CommandText = "SELECT Id, Name,TypeId FROM categories";
+            command.CommandText = @"
+                SELECT c.Id, c.Name, c.TypeId
+                FROM categories c
+                ORDER BY c.TypeId, c.Name";
+
             using SQLiteDataReader reader = command.ExecuteReader();
 
             var categories = new List<Category>();
@@ -148,7 +152,7 @@ namespace Budget.Services
                     reader.GetInt32("Id"),
                     reader.GetString("Name"),
                     (CategoryType)reader.GetInt32("TypeId")
-                    ));
+                ));
             }
             return categories;
         }
@@ -165,6 +169,32 @@ namespace Budget.Services
             command.Parameters.AddWithValue("@name", name);
             command.Parameters.AddWithValue("@typeId", (int)type);
             command.ExecuteNonQuery();
+        }
+    
+        public List<Category> GetCategoriesByTpye(CategoryType type)
+        {
+            EnsureNotDisposed();
+            var categories = new List<Category>();
+
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                SELECT c.Id, c.Name, c.TypeId
+                FROM categories c
+                WHERE c.TypeId = @typeId
+                ORDER BY c.Name";
+            command.Parameters.AddWithValue("@typeId", (int)type);
+
+            using var reader = command.ExecuteReader();
+            
+            while (reader.Read())
+            {
+                categories.Add(new Category(
+                    reader.GetInt32("Id"),
+                    reader.GetString("Name"),
+                    (CategoryType)reader.GetInt32("Type")
+                ));
+            }
+            return categories;
         }
 
         #region Helper Methods
