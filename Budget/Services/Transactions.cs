@@ -114,7 +114,30 @@ namespace Budget.Services
             return transactions;
         }
 
-   
+        public Transaction GetTransactionFromId(int transactionId)
+        {
+            EnsureNotDisposed();
+
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+                            FROM transactions t
+                            WHERE Id = @transactionId";
+            command.Parameters.AddWithValue("@transactionId", transactionId);
+
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                return new Transaction(
+                    reader.GetInt32("Id"),
+                    reader.GetDateTime("Date"),
+                    reader.GetString("Description"),
+                    reader.GetDecimal("Amount"),
+                    reader.GetInt32("CategoryId")
+                );
+            }
+            return null;
+        }
         #region Helper Methods
         private void EnsureNotDisposed()
         {

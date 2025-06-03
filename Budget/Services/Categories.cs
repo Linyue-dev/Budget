@@ -302,7 +302,7 @@ namespace Budget.Services
         /// <param name="id">The ID of the category to retrieve.</param>
         /// <returns>A Category object if found; otherwise, null.</returns>
         /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        public Category GetCategoryFromId(int id)
+        public Category? GetCategoryFromId(int id)
         {
             EnsureNotDisposed();
 
