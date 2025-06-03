@@ -55,7 +55,7 @@ namespace Budget.Services
             EnsureNotDisposed();
 
             using var checkCommand = _databaseService.Connection.CreateCommand();
-            checkCommand.CommandText = "SELECT COUNT(*) FROM categories";
+            checkCommand.CommandText = @"SELECT COUNT(*) FROM categories";
             var categoryCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
             if (categoryCount > 0)
@@ -83,21 +83,27 @@ namespace Budget.Services
             Add("Rental Income", CategoryType.Income);
             Add("Stock & Fund", CategoryType.Investment);
         }
-
-        private void Add(Category cat)
+        public int Add(string name, Category.CategoryType type)
         {
-            _Cats.Add(cat);
-        }
+            EnsureNotDisposed();
 
-        public void Add(string name, Category.CategoryType type)
-        {
-            int new_num = 1;
-            if (_Cats.Count > 0)
-            {
-                new_num = (from c in _Cats select c.Id).Max();
-                new_num++;
-            }
-            _Cats.Add(new Category(new_num, name, type));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Category name cannot be null or empty.", nameof(name));
+
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                    INSERT INTO categories (Name, TypeId) 
+                    VALUES (@name, @typeId);
+                    SELECT last_insert_rowid();";
+
+            command.Parameters.AddWithValue("@name", name);
+            command.Parameters.AddWithValue("@typeId", (int)type);
+
+            var result = command.ExecuteScalar();
+            if (result == null || result == DBNull.Value)
+                throw new InvalidOperationException("Failed to insert category");
+
+            return Convert.ToInt32(result);
         }
 
 
@@ -140,6 +146,5 @@ namespace Budget.Services
             }
         }
         #endregion
-
     }
 }
