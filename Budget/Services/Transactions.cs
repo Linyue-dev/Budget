@@ -2,6 +2,8 @@
 using Budget.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,13 +92,29 @@ namespace Budget.Services
         }
         public List<Transaction> List()
         {
-            List<Transaction> newList = new List<Transaction>();
-            foreach (Transaction transaction in _Transactions)
+            EnsureNotDisposed();
+            var transactions = new List<Transaction>();
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+                            FROM transactions t
+                            ORDER BY t.Id, t.Description";
+
+            using SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                newList.Add(new Transaction(transaction));
+                transactions.Add(new Transaction(
+                    reader.GetInt32("Id"),
+                    reader.GetDateTime("Date"),
+                    reader.GetString("Description"),
+                    reader.GetDecimal("Amount"),
+                    reader.GetInt32("CategoryId")
+                ));
             }
-            return newList;
+            return transactions;
         }
+
+   
         #region Helper Methods
         private void EnsureNotDisposed()
         {

@@ -13,27 +13,27 @@ namespace Budget.Models
         public DateTime Date { get; }
         public decimal Amount { get; set; }
         public string Description { get; set; }
-        public int Category { get; set; }
+        public int CategoryId { get; set; }
 
         #endregion
 
         #region constructor
-        public Transaction(int id, DateTime date, int category, decimal amount, string description)
+        public Transaction(int id, DateTime date, string description, decimal amount, int categoryId)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            if (category <= 0)
+            if (categoryId <= 0)
             {
-                throw new ArgumentException("Category ID must be greater than zero.", nameof(category));
+                throw new ArgumentException("Category ID must be greater than zero.", nameof(categoryId));
             }
 
             Id = id;
             Date = date;
-            Category = category;
-            Amount = amount;
             Description = description;
+            Amount = amount;
+            CategoryId = categoryId;
         }
 
         public Transaction(Transaction obj)
@@ -45,7 +45,7 @@ namespace Budget.Models
 
             Id = obj.Id;
             Date = obj.Date;
-            Category = obj.Category;
+            CategoryId = obj.CategoryId;
             Amount = obj.Amount;
             Description = obj.Description;
         }

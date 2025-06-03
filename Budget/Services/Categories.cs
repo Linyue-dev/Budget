@@ -217,6 +217,8 @@ namespace Budget.Services
         public List<Category> List()
         {
             EnsureNotDisposed();
+            var categories = new List<Category>();
+
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
                                 SELECT c.Id, c.Name, c.TypeId
@@ -224,15 +226,12 @@ namespace Budget.Services
                                 ORDER BY c.TypeId, c.Name";
 
             using SQLiteDataReader reader = command.ExecuteReader();
-
-            var categories = new List<Category>();
-
             while (reader.Read())
             {
                 categories.Add(new Category(
-                    reader.GetInt32("Id"),
-                    reader.GetString("Name"),
-                    (CategoryType)reader.GetInt32("TypeId")
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    (CategoryType)reader.GetInt32(2)
                 ));
             }
             return categories;
