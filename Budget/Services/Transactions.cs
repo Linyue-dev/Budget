@@ -61,9 +61,9 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-            INSERT INTO transactions (Date, Description, Amount, CategoryId)
-            VALUES (@date, @description, @amount, @categoryId);
-            SELECT last_insert_rowid();";
+                            INSERT INTO transactions (Date, Description, Amount, CategoryId)
+                            VALUES (@date, @description, @amount, @categoryId);
+                            SELECT last_insert_rowid();";
 
             command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
             command.Parameters.AddWithValue("@description", description);
@@ -83,8 +83,8 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-            DELETE FROM transactions
-            WHERE Id = @transactionId";  
+                            DELETE FROM transactions
+                            WHERE Id = @transactionId";  
 
             command.Parameters.AddWithValue("@transactionId", transactionId);
 
@@ -102,9 +102,9 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
-            FROM transactions t
-            ORDER BY t.Date DESC, t.Id DESC";  
+                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+                            FROM transactions t
+                            ORDER BY t.Date DESC, t.Id DESC";  
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
@@ -126,9 +126,9 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
-            FROM transactions t
-            WHERE Id = @transactionId";
+                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+                            FROM transactions t
+                            WHERE Id = @transactionId";
             command.Parameters.AddWithValue("@transactionId", transactionId);
 
             using var reader = command.ExecuteReader();
@@ -151,12 +151,12 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-            UPDATE transactions 
-            SET Date = @date, 
-                Description = @description, 
-                Amount = @amount, 
-                CategoryId = @categoryId
-            WHERE Id = @transactionId";  
+                                UPDATE transactions 
+                                SET Date = @date, 
+                                    Description = @description, 
+                                    Amount = @amount, 
+                                    CategoryId = @categoryId
+                                WHERE Id = @transactionId";  
 
             command.Parameters.AddWithValue("@transactionId", transactionId);
             command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
