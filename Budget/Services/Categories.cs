@@ -197,6 +197,30 @@ namespace Budget.Services
             return categories;
         }
 
+        public Category GetCategoryFromId(int id)
+        {
+            EnsureNotDisposed();
+
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+            SELECT c.Id, c.Name, c.TypeId
+            FROM categories c
+            WHERE c.Id = @id";
+
+            command.Parameters.AddWithValue("@id", id);
+
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                return new Category(
+                    reader.GetInt32("Id"),
+                    reader.GetString("Name"),
+                    (CategoryType)reader.GetInt32("TypeId")
+                );
+            }
+            return null;
+        }
+
         #region Helper Methods
         private void EnsureNotDisposed()
         {
