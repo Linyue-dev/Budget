@@ -240,11 +240,11 @@ namespace Budget.Services
         /// <summary>
         /// Updates an existing category's name and type.
         /// </summary>
-        /// <param name="id">The ID of the category to update.</param>
+        /// <param name="categoryId">The ID of the category to update.</param>
         /// <param name="name">The new name for the category.</param>
         /// <param name="type">The new type for the category.</param>
         /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        public void UpdateCategory(int id, string name, CategoryType type)
+        public void UpdateCategory(int categoryId, string name, CategoryType type)
         {
             EnsureNotDisposed();
             using var command = _databaseService.Connection.CreateCommand();
@@ -253,7 +253,7 @@ namespace Budget.Services
                                 SET Name = @name, TypeId = @typeId 
                                 WHERE Id = @id";
 
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@id", categoryId);
             command.Parameters.AddWithValue("@name", name);
             command.Parameters.AddWithValue("@typeId", (int)type);
             command.ExecuteNonQuery();
@@ -299,10 +299,10 @@ namespace Budget.Services
         /// <summary>
         /// Retrieves a specific category by its ID.
         /// </summary>
-        /// <param name="id">The ID of the category to retrieve.</param>
+        /// <param name="categoryId">The ID of the category to retrieve.</param>
         /// <returns>A Category object if found; otherwise, null.</returns>
         /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        public Category? GetCategoryFromId(int id)
+        public Category? GetCategoryFromId(int categoryId)
         {
             EnsureNotDisposed();
 
@@ -312,7 +312,7 @@ namespace Budget.Services
                                     FROM categories c
                                     WHERE c.Id = @id";
 
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@id", categoryId);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())

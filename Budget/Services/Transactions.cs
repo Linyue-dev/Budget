@@ -49,6 +49,7 @@ namespace Budget.Services
 
         #endregion
 
+        #region Transaction Methods
         public int Add(DateTime date, int categoryId, decimal amount, string description)
         {
             EnsureNotDisposed();
@@ -114,7 +115,7 @@ namespace Budget.Services
             return transactions;
         }
 
-        public Transaction GetTransactionFromId(int transactionId)
+        public Transaction? GetTransactionFromId(int transactionId)
         {
             EnsureNotDisposed();
 
@@ -138,6 +139,30 @@ namespace Budget.Services
             }
             return null;
         }
+
+        public void UpdateTransaction(int transactionId, DateTime date, string description, decimal amount, int categoryId)
+        {
+            EnsureNotDisposed();
+
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                                UPDATE transactions 
+                                SET 
+                                    Id = @transactionId, 
+                                    Date = @date, 
+                                    Description = @description, 
+                                    Amount = @amount, 
+                                    CategoryId = @categoryId
+                                WHERE Id = @id";
+            command.Parameters.AddWithValue("@transactionId", transactionId);
+            command.Parameters.AddWithValue("@date", date);
+            command.Parameters.AddWithValue("@description", description);
+            command.Parameters.AddWithValue("@amount", amount);
+            command.Parameters.AddWithValue("@categoryId", categoryId);
+            command.ExecuteNonQuery();
+        }
+        #endregion
+
         #region Helper Methods
         private void EnsureNotDisposed()
         {
