@@ -8,6 +8,8 @@ using System.Xml;
 using Budget.Models;
 using Budget.Utils;
 using static Budget.Models.Category;
+using System.Data.SQLite;
+using System.Data;
 
 
 namespace Budget.Services
@@ -133,12 +135,22 @@ namespace Budget.Services
 
         public List<Category> List()
         {
-            List<Category> newList = new List<Category>();
-            foreach (Category category in _Cats)
+            EnsureNotDisposed();
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = "SELECT Id, Name,TypeId FROM categories";
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            var categories = new List<Category>();
+
+            while (reader.Read())
             {
-                newList.Add(new Category(category));
+                categories.Add(new Category(
+                    reader.GetInt32("Id"),
+                    reader.GetString("Name"),
+                    (CategoryType)reader.GetInt32("TypeId")
+                    ));
             }
-            return newList;
+            return categories;
         }
 
         #region Helper Methods
