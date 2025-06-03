@@ -16,7 +16,7 @@ namespace Budget.Services
 {
     public class Categories : IDisposable
     {
-
+        
         #region Private Fields
         private DatabaseService _databaseService;
         private readonly bool _ownsDatabase;

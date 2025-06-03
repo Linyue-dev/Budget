@@ -47,19 +47,31 @@ namespace Budget.Services
 
         #endregion
 
-        public void Add(DateTime date, int category, decimal amount, string description)
+        public int Add(DateTime date, int categoryId, decimal amount, string description)
         {
-            int new_id = 1;
+            EnsureNotDisposed();
 
-            // if we already have expenses, set ID to max
-            if (_Transactions.Count > 0)
-            {
-                new_id = (from e in _Transactions select e.Id).Max();
-                new_id++;
-            }
+            if (amount == 0)
+                throw new ArgumentException("Amount cannot be zero.", nameof(amount));
+            if (string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Description cannot be null or empty.", nameof(description));
+            
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                        INSERT INTO transactions (Date, Description, Amount, CategoryId)
+                        VALUES (@date, @description, @amount, @category);
+                        SELECT last_insert_rowid();";// Get just insert id
 
-            _Transactions.Add(new Transaction(new_id, date, category, amount, description));
+            command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
+            command.Parameters.AddWithValue("@description", categoryId);
+            command.Parameters.AddWithValue("@amount", amount);
+            command.Parameters.AddWithValue("@category", categoryId);
 
+            var result = command.ExecuteScalar();
+            if (result == null || result == DBNull.Value)
+                throw new InvalidOperationException("Failed to insert transaction");
+
+            return Convert.ToInt32(result);
         }
 
         public void Delete(int Id)
@@ -100,7 +112,6 @@ namespace Budget.Services
                 _disposed = true;
             }
         }
-
         #endregion
     }
 }
