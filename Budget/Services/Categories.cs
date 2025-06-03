@@ -16,7 +16,6 @@ namespace Budget.Services
 {
     public class Categories : IDisposable
     {
-        
         #region Private Fields
         private DatabaseService _databaseService;
         private readonly bool _ownsDatabase;
@@ -162,7 +161,7 @@ namespace Budget.Services
         /// <summary>
         /// Deletes a category from the database if it has no associated transactions.
         /// </summary>
-        /// <param name="id">The ID of the category to delete.</param>
+        /// <param name="categoryId">The ID of the category to delete.</param>
         /// <exception cref="InvalidOperationException">
         /// Thrown when the category has associated transactions or doesn't exist.
         /// </exception>
@@ -184,13 +183,13 @@ namespace Budget.Services
         /// }
         /// </code>
         /// </example>
-        public void Delete(int id)
+        public void Delete(int categoryId)
         {
             EnsureNotDisposed();
 
             using var checkCommand = _databaseService.Connection.CreateCommand();
             checkCommand.CommandText = @"SELECT COUNT(*) FROM transactions WHERE CategoryId = @id";
-            checkCommand.Parameters.AddWithValue("@id", id);
+            checkCommand.Parameters.AddWithValue("@id", categoryId);
 
             var transactionCount = Convert.ToInt32(checkCommand.ExecuteScalar());
             if (transactionCount > 0)
@@ -201,12 +200,12 @@ namespace Budget.Services
             // Safe Deletion Categories
             using var deleteCommand = _databaseService.Connection.CreateCommand();
             deleteCommand.CommandText = "DELETE FROM categories WHERE Id = @id";
-            deleteCommand.Parameters.AddWithValue("@id", id);
+            deleteCommand.Parameters.AddWithValue("@id", categoryId);
 
             var rowsAffected = deleteCommand.ExecuteNonQuery();
             if (rowsAffected == 0)
             {
-                throw new InvalidOperationException($"Category with ID {id} not found.");
+                throw new InvalidOperationException($"Category with ID {categoryId} not found.");
             }
         }
 

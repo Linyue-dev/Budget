@@ -229,14 +229,14 @@ namespace TestBudget
             _categories = new Categories(_testDatabasePath, isNew: true);
 
             // Add -> Update -> Delete workflow
-            int id = _categories.Add("Groceries", CategoryType.Expense);
-            _categories.UpdateCategory(id, "Food Shopping", CategoryType.Expense);
+            int categoryId = _categories.Add("Groceries", CategoryType.Expense);
+            _categories.UpdateCategory(categoryId, "Food Shopping", CategoryType.Expense);
 
-            var updated = _categories.GetCategoryFromId(id);
+            var updated = _categories.GetCategoryFromId(categoryId);
             Assert.Equal("Food Shopping", updated.Name);
 
-            _categories.Delete(id);
-            var deleted = _categories.GetCategoryFromId(id);
+            _categories.Delete(categoryId);
+            var deleted = _categories.GetCategoryFromId(categoryId);
             Assert.Null(deleted);
         }
         #endregion

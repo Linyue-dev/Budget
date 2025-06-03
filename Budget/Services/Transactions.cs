@@ -65,7 +65,7 @@ namespace Budget.Services
             command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
             command.Parameters.AddWithValue("@description", categoryId);
             command.Parameters.AddWithValue("@amount", amount);
-            command.Parameters.AddWithValue("@category", categoryId);
+            command.Parameters.AddWithValue("@categoryId", categoryId);
 
             var result = command.ExecuteScalar();
             if (result == null || result == DBNull.Value)
@@ -74,14 +74,20 @@ namespace Budget.Services
             return Convert.ToInt32(result);
         }
 
-        public void Delete(int Id)
+        public void Delete(int transactionId)
         {
-            int i = _Transactions.FindIndex(x => x.Id == Id);
-            _Transactions.RemoveAt(i);
+            EnsureNotDisposed();
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                            DELETE FROM Transactions
+                            WHERE Id = @transactionId";
 
+            var rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected == 0)
+            {
+                throw new InvalidOperationException($"Transaction with ID {transactionId} not found.");
+            }
         }
-
-
         public List<Transaction> List()
         {
             List<Transaction> newList = new List<Transaction>();
