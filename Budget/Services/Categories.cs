@@ -152,6 +152,20 @@ namespace Budget.Services
             }
             return categories;
         }
+        public void UpdateCategory(int id, string name, CategoryType type)
+        {
+            EnsureNotDisposed();
+            using var command = _databaseService.Connection.CreateCommand();
+            command.CommandText = @"
+                UPDATE categories 
+                SET Name = @name, TypeId = @typeId 
+                WHERE Id = @id";
+
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@name", name);
+            command.Parameters.AddWithValue("@typeId", (int)type);
+            command.ExecuteNonQuery();
+        }
 
         #region Helper Methods
         private void EnsureNotDisposed()
