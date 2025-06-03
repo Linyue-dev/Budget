@@ -39,7 +39,7 @@ namespace TestBudget
 
             // Assert
             Assert.True(_categories.IsConnected);
-            var categories = _categories.List();
+            var categories = _categories.GetAllCategories();
             Assert.True(categories.Count > 0);
             Assert.Contains(categories, c => c.Name == "Utilities");
             Assert.Contains(categories, c => c.Name == "Education");
@@ -61,7 +61,7 @@ namespace TestBudget
             _categories = new Categories(_testDatabasePath, isNew: true);
 
             // Act
-            int categoryId = _categories.Add("Test Category", CategoryType.Expense);
+            int categoryId = _categories.AddCategory("Test Category", CategoryType.Expense);
 
             // Assert
             Assert.True(categoryId > 0);
@@ -77,7 +77,7 @@ namespace TestBudget
             _categories = new Categories(_testDatabasePath, isNew: true);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => _categories.Add("", CategoryType.Expense));
+            Assert.Throws<ArgumentException>(() => _categories.AddCategory("", CategoryType.Expense));
         }
 
         [Fact]
@@ -85,10 +85,10 @@ namespace TestBudget
         {
             // Arrange
             _categories = new Categories(_testDatabasePath, isNew: true);
-            int categoryId = _categories.Add("Test Category", CategoryType.Expense);
+            int categoryId = _categories.AddCategory    ("Test Category", CategoryType.Expense);
 
             // Act
-            _categories.Delete(categoryId);
+            _categories.DeleteCategory(categoryId);
 
             // Assert
             var category = _categories.GetCategoryFromId(categoryId);
@@ -102,7 +102,7 @@ namespace TestBudget
             _categories = new Categories(_testDatabasePath, isNew: true);
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _categories.Delete(99999));
+            Assert.Throws<InvalidOperationException>(() => _categories.DeleteCategory(99999));
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace TestBudget
         {
             // Arrange
             _categories = new Categories(_testDatabasePath, isNew: true);
-            int categoryId = _categories.Add("Original", CategoryType.Expense);
+            int categoryId = _categories.AddCategory("Original", CategoryType.Expense);
 
             // Act
             _categories.UpdateCategory(categoryId, "Updated", CategoryType.Income);
@@ -130,12 +130,12 @@ namespace TestBudget
         {
             // Arrange
             _categories = new Categories(_testDatabasePath, isNew: true);
-            int initialCount = _categories.List().Count;
-            _categories.Add("Test1", CategoryType.Expense);
-            _categories.Add("Test2", CategoryType.Income);
+            int initialCount = _categories.GetAllCategories().Count;
+            _categories.AddCategory("Test1", CategoryType.Expense);
+            _categories.AddCategory("Tes    t2", CategoryType.Income);
 
             // Act
-            var categories = _categories.List();
+            var categories = _categories.GetAllCategories();
 
             // Assert
             Assert.Equal(initialCount + 2, categories.Count);
@@ -146,8 +146,8 @@ namespace TestBudget
         {
             // Arrange
             _categories = new Categories(_testDatabasePath, isNew: true);
-            _categories.Add("Expense1", CategoryType.Expense);
-            _categories.Add("Income1", CategoryType.Income);
+            _categories.AddCategory("Expense1", CategoryType.Expense);
+            _categories.AddCategory("Income1", CategoryType.Income);
 
             // Act
             var expenses = _categories.GetCategoriesByType(CategoryType.Expense);
@@ -165,7 +165,7 @@ namespace TestBudget
         {
             // Arrange
             _categories = new Categories(_testDatabasePath, isNew: true);
-            int categoryId = _categories.Add("Test", CategoryType.Expense);
+            int categoryId = _categories.AddCategory("Test", CategoryType.Expense);
 
             // Act
             var category = _categories.GetCategoryFromId(categoryId);
@@ -215,7 +215,7 @@ namespace TestBudget
             _categories.Dispose();
 
             // Act & Assert
-            Assert.Throws<ObjectDisposedException>(() => _categories.List());
+            Assert.Throws<ObjectDisposedException>(() => _categories.GetAllCategories());
         }
 
         #endregion
@@ -229,13 +229,13 @@ namespace TestBudget
             _categories = new Categories(_testDatabasePath, isNew: true);
 
             // Add -> Update -> Delete workflow
-            int categoryId = _categories.Add("Groceries", CategoryType.Expense);
+            int categoryId = _categories.AddCategory("Groceries", CategoryType.Expense);
             _categories.UpdateCategory(categoryId, "Food Shopping", CategoryType.Expense);
 
             var updated = _categories.GetCategoryFromId(categoryId);
             Assert.Equal("Food Shopping", updated.Name);
 
-            _categories.Delete(categoryId);
+            _categories.DeleteCategory(categoryId);
             var deleted = _categories.GetCategoryFromId(categoryId);
             Assert.Null(deleted);
         }

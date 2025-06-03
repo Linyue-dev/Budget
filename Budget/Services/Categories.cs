@@ -101,24 +101,23 @@ namespace Budget.Services
             }
 
             // Add defaults
-            Add("Utilities", CategoryType.Expense);
-            Add("Food & Dining", CategoryType.Expense);
-            Add("Transportation", CategoryType.Expense);
-            Add("Health & Personal Care", CategoryType.Expense);
-            Add("Insurance", CategoryType.Expense);
-            Add("Clothes", CategoryType.Expense);
-            Add("Education", CategoryType.Expense);
-            Add("Vacation", CategoryType.Expense);
-            Add("Social Expenses", CategoryType.Expense);
-            Add("Municipal & School Tax", CategoryType.Expense);
-            Add("Rental Expenses", CategoryType.Expense);
-            Add("Miscellaneous", CategoryType.Expense);
-            Add("Savings", CategoryType.Savings);
-            Add("Housing mortgage", CategoryType.Debt);
-            Add("Auto loan", CategoryType.Debt);
-            Add("Salary", CategoryType.Income);
-            Add("Rental Income", CategoryType.Income);
-            Add("Stock & Fund", CategoryType.Investment);
+            AddCategory("Utilities", CategoryType.Expense);
+            AddCategory("Food & Dining", CategoryType.Expense);
+            AddCategory("Transportation", CategoryType.Expense);
+            AddCategory("Health & Personal Care", CategoryType.Expense);
+            AddCategory("Insurance", CategoryType.Expense);
+            AddCategory("Clothes", CategoryType.Expense);
+            AddCategory("Education", CategoryType.Expense);
+            AddCategory("Vacation", CategoryType.Expense);
+            AddCategory("Social Expenses", CategoryType.Expense);
+            AddCategory("Municipal & School Tax", CategoryType.Expense);
+            AddCategory("Miscellaneous", CategoryType.Expense);
+            AddCategory("Savings", CategoryType.Savings);
+            AddCategory("Housing mortgage", CategoryType.Debt);
+            AddCategory("Auto loan", CategoryType.Debt);
+            AddCategory("Salary", CategoryType.Income);
+            AddCategory("Rental Income", CategoryType.Income);
+            AddCategory("Stock & Fund", CategoryType.Investment);
         }
 
         /// <summary>
@@ -135,7 +134,7 @@ namespace Budget.Services
         /// int categoryId = categories.Add("Entertainment", CategoryType.Expense);
         /// </code>
         /// </example>
-        public int Add(string name, Category.CategoryType type)
+        public int AddCategory(string name, Category.CategoryType type)
         {
             EnsureNotDisposed();
 
@@ -183,13 +182,13 @@ namespace Budget.Services
         /// }
         /// </code>
         /// </example>
-        public void Delete(int categoryId)
+        public void DeleteCategory(int categoryId)
         {
             EnsureNotDisposed();
 
             using var checkCommand = _databaseService.Connection.CreateCommand();
-            checkCommand.CommandText = @"SELECT COUNT(*) FROM transactions WHERE CategoryId = @id";
-            checkCommand.Parameters.AddWithValue("@id", categoryId);
+            checkCommand.CommandText = @"SELECT COUNT(*) FROM transactions WHERE CategoryId = @categoryId";
+            checkCommand.Parameters.AddWithValue("@categoryId", categoryId);
 
             var transactionCount = Convert.ToInt32(checkCommand.ExecuteScalar());
             if (transactionCount > 0)
@@ -199,8 +198,8 @@ namespace Budget.Services
 
             // Safe Deletion Categories
             using var deleteCommand = _databaseService.Connection.CreateCommand();
-            deleteCommand.CommandText = "DELETE FROM categories WHERE Id = @id";
-            deleteCommand.Parameters.AddWithValue("@id", categoryId);
+            deleteCommand.CommandText = "DELETE FROM categories WHERE Id = @categoryId";
+            deleteCommand.Parameters.AddWithValue("@categoryId", categoryId);
 
             var rowsAffected = deleteCommand.ExecuteNonQuery();
             if (rowsAffected == 0)
@@ -214,7 +213,7 @@ namespace Budget.Services
         /// </summary>
         /// <returns>A list of Category objects representing all categories in the database.</returns>
         /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        public List<Category> List()
+        public List<Category> GetAllCategories()
         {
             EnsureNotDisposed();
             var categories = new List<Category>();

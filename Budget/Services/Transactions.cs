@@ -24,13 +24,13 @@ namespace Budget.Services
         public bool IsConnected => !_disposed && _databaseService?.Connection?.State == System.Data.ConnectionState.Open;
         #endregion
 
-
         #region Constructors
         public Transactions(DatabaseService databaseService)
         {
             _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
-            _ownsDatabase = false;  
+            _ownsDatabase = false;
         }
+
         public Transactions(string databasePath, bool isNew = false)
         {
             if (string.IsNullOrWhiteSpace(databasePath))
@@ -44,13 +44,13 @@ namespace Budget.Services
             {
                 _databaseService = DatabaseService.OpenExisting(databasePath);
             }
-            _ownsDatabase = true; 
+            _ownsDatabase = true;
         }
-
         #endregion
 
         #region Transaction Methods
-        public int Add(DateTime date, int categoryId, decimal amount, string description)
+
+        public int AddTransaction(DateTime date, int categoryId, decimal amount, string description)
         {
             EnsureNotDisposed();
 
@@ -58,17 +58,17 @@ namespace Budget.Services
                 throw new ArgumentException("Amount cannot be zero.", nameof(amount));
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Description cannot be null or empty.", nameof(description));
-            
+
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-                        INSERT INTO transactions (Date, Description, Amount, CategoryId)
-                        VALUES (@date, @description, @amount, @category);
-                        SELECT last_insert_rowid();";// Get just insert id
+            INSERT INTO transactions (Date, Description, Amount, CategoryId)
+            VALUES (@date, @description, @amount, @categoryId);
+            SELECT last_insert_rowid();";
 
             command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
-            command.Parameters.AddWithValue("@description", categoryId);
+            command.Parameters.AddWithValue("@description", description);
             command.Parameters.AddWithValue("@amount", amount);
-            command.Parameters.AddWithValue("@categoryId", categoryId);
+            command.Parameters.AddWithValue("@categoryId", categoryId); 
 
             var result = command.ExecuteScalar();
             if (result == null || result == DBNull.Value)
@@ -77,13 +77,16 @@ namespace Budget.Services
             return Convert.ToInt32(result);
         }
 
-        public void Delete(int transactionId)
+        public void DeleteTransaction(int transactionId)
         {
             EnsureNotDisposed();
+
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-                            DELETE FROM Transactions
-                            WHERE Id = @transactionId";
+            DELETE FROM transactions
+            WHERE Id = @transactionId";  
+
+            command.Parameters.AddWithValue("@transactionId", transactionId);
 
             var rowsAffected = command.ExecuteNonQuery();
             if (rowsAffected == 0)
@@ -91,24 +94,26 @@ namespace Budget.Services
                 throw new InvalidOperationException($"Transaction with ID {transactionId} not found.");
             }
         }
-        public List<Transaction> List()
+
+        public List<Transaction> GetAllTransactions()
         {
             EnsureNotDisposed();
             var transactions = new List<Transaction>();
+
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
-                            FROM transactions t
-                            ORDER BY t.Id, t.Description";
+            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+            FROM transactions t
+            ORDER BY t.Date DESC, t.Id DESC";  
 
-            using SQLiteDataReader reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             while (reader.Read())
             {
                 transactions.Add(new Transaction(
                     reader.GetInt32("Id"),
                     reader.GetDateTime("Date"),
                     reader.GetString("Description"),
-                    reader.GetDecimal("Amount"),
+                    Convert.ToDecimal(reader["Amount"]),
                     reader.GetInt32("CategoryId")
                 ));
             }
@@ -121,9 +126,9 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-                            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
-                            FROM transactions t
-                            WHERE Id = @transactionId";
+            SELECT t.Id, t.Date, t.Description, t.Amount, t.CategoryId
+            FROM transactions t
+            WHERE Id = @transactionId";
             command.Parameters.AddWithValue("@transactionId", transactionId);
 
             using var reader = command.ExecuteReader();
@@ -133,7 +138,7 @@ namespace Budget.Services
                     reader.GetInt32("Id"),
                     reader.GetDateTime("Date"),
                     reader.GetString("Description"),
-                    reader.GetDecimal("Amount"),
+                    Convert.ToDecimal(reader["Amount"]),
                     reader.GetInt32("CategoryId")
                 );
             }
@@ -146,33 +151,36 @@ namespace Budget.Services
 
             using var command = _databaseService.Connection.CreateCommand();
             command.CommandText = @"
-                                UPDATE transactions 
-                                SET 
-                                    Id = @transactionId, 
-                                    Date = @date, 
-                                    Description = @description, 
-                                    Amount = @amount, 
-                                    CategoryId = @categoryId
-                                WHERE Id = @id";
+            UPDATE transactions 
+            SET Date = @date, 
+                Description = @description, 
+                Amount = @amount, 
+                CategoryId = @categoryId
+            WHERE Id = @transactionId";  
+
             command.Parameters.AddWithValue("@transactionId", transactionId);
-            command.Parameters.AddWithValue("@date", date);
+            command.Parameters.AddWithValue("@date", date.ToString("yyyy-MM-dd HH:mm:ss"));
             command.Parameters.AddWithValue("@description", description);
             command.Parameters.AddWithValue("@amount", amount);
             command.Parameters.AddWithValue("@categoryId", categoryId);
-            command.ExecuteNonQuery();
+
+            var rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected == 0)
+            {
+                throw new InvalidOperationException($"Transaction with ID {transactionId} not found.");
+            }
         }
         #endregion
 
         #region Helper Methods
         private void EnsureNotDisposed()
         {
-            if (_disposed) // Check whether the Transactions object has been released
+            if (_disposed)
                 throw new ObjectDisposedException(nameof(Transactions));
         }
         #endregion
 
         #region IDisposable Implementation
-
         public void Dispose()
         {
             if (!_disposed)
