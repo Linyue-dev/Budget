@@ -12,7 +12,7 @@ using static Budget.Models.Category;
 
 namespace Budget.Services
 {
-    public class Categories
+    public class Categories : IDisposable 
     {
 
         #region Private Fields
@@ -52,10 +52,18 @@ namespace Budget.Services
 
         public void SetCategoriesToDefaults()
         {
-            // reset any current categories,
-            _Cats.Clear();
+            EnsureNotDisposed();
 
-            // Add Defaults
+            using var checkCommand = _databaseService.Connection.CreateCommand();
+            checkCommand.CommandText = "SELECT COUNT(*) FROM categories";
+            var categoryCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+            if (categoryCount > 0)
+            {
+                throw new InvalidOperationException("Categories already exist");
+            }
+
+            // Add defaults
             Add("Utilities", CategoryType.Expense);
             Add("Food & Dining", CategoryType.Expense);
             Add("Transportation", CategoryType.Expense);
@@ -65,7 +73,7 @@ namespace Budget.Services
             Add("Education", CategoryType.Expense);
             Add("Vacation", CategoryType.Expense);
             Add("Social Expenses", CategoryType.Expense);
-            Add("Municipal & SchoolTax", CategoryType.Expense);
+            Add("Municipal & School Tax", CategoryType.Expense);
             Add("Rental Expenses", CategoryType.Expense);
             Add("Miscellaneous", CategoryType.Expense);
             Add("Savings", CategoryType.Savings);
@@ -109,7 +117,29 @@ namespace Budget.Services
             return newList;
         }
 
+        #region Helper Methods
+        private void EnsureNotDisposed()
+        {
+            if (_disposed) // Check whether the Categories object has been released
+                throw new ObjectDisposedException(nameof(Categories));
+        }
 
-       
+        #endregion
+
+        #region IDisposable Implementation
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                if (_ownsDatabase)
+                {
+                    _databaseService?.Dispose();
+                }
+                _disposed = true; // Mark as released
+            }
+        }
+        #endregion
+
     }
 }
