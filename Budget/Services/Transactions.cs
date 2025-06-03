@@ -9,65 +9,43 @@ using System.Xml;
 
 namespace Budget.Services
 {
-    public class Transactions
+    public class Transactions : IDisposable
     {
-        private static string DefaultFileName = "budget.txt";
-        private List<Transaction> _Transactions = new List<Transaction>();
-        private string _FileName;
-        private string _DirName;
-
-        #region property
-        public string FileName { get { return _FileName; } }
-        public string DirName { get { return _DirName; } }
+        #region Private Fields
+        private DatabaseService _databaseService;
+        private readonly bool _ownsDatabase;
+        private bool _disposed = false;
         #endregion
 
-        public void ReadFromFile(string filepath = null)
+        #region Properties
+        public string DatabasePath => Path.GetFullPath(_databaseService?.Connection?.DataSource ?? "");
+        public bool IsConnected => !_disposed && _databaseService?.Connection?.State == System.Data.ConnectionState.Open;
+        #endregion
+
+
+        #region Constructors
+        public Transactions(DatabaseService databaseService)
         {
-            _Transactions.Clear();
-
-
-            _DirName = null;
-            _FileName = null;
-
-            filepath = BudgetFiles.VerifyReadFromFileName(filepath, DefaultFileName);
-
-
-            _ReadXMLFile(filepath);
-
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-
-
+            _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+            _ownsDatabase = false;  
         }
-
-
-        public void SaveToFile(string filepath = null)
+        public Transactions(string databasePath, bool isNew = false)
         {
+            if (string.IsNullOrWhiteSpace(databasePath))
+                throw new ArgumentException("Database path cannot be null or empty.", nameof(databasePath));
 
-            if (filepath == null && DirName != null && FileName != null)
+            if (isNew)
             {
-                filepath = DirName + "\\" + FileName;
+                _databaseService = DatabaseService.CreateNewDatabase(databasePath);
             }
-
-            _DirName = null;
-            _FileName = null;
-
-
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath, DefaultFileName);
-
-
-            _WriteXMLFile(filepath);
-
-
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
+            else
+            {
+                _databaseService = DatabaseService.OpenExisting(databasePath);
+            }
+            _ownsDatabase = true; 
         }
 
-
-        private void Add(Transaction trans)
-        {
-            _Transactions.Add(trans);
-        }
+        #endregion
 
         public void Add(DateTime date, int category, decimal amount, string description)
         {
@@ -101,108 +79,28 @@ namespace Budget.Services
             }
             return newList;
         }
-
-
-        private void _ReadXMLFile(string filepath)
+        #region Helper Methods
+        private void EnsureNotDisposed()
         {
+            if (_disposed) // Check whether the Transactions object has been released
+                throw new ObjectDisposedException(nameof(Transactions));
+        }
+        #endregion
 
+        #region IDisposable Implementation
 
-            try
+        public void Dispose()
+        {
+            if (!_disposed)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(filepath);
-
-                // Loop over each Expense
-                foreach (XmlNode transaction in doc.DocumentElement.ChildNodes)
+                if (_ownsDatabase)
                 {
-                    // set default expense parameters
-                    int id = int.Parse(((XmlElement)transaction).GetAttributeNode("ID").InnerText);
-                    string description = "";
-                    DateTime date = DateTime.Parse("2000-01-01");
-                    int category = 0;
-                    decimal amount = 0;
-
-                    // get expense parameters
-                    foreach (XmlNode info in transaction.ChildNodes)
-                    {
-                        switch (info.Name)
-                        {
-                            case "Date":
-                                date = DateTime.Parse(info.InnerText);
-                                break;
-                            case "Amount":
-                                amount = decimal.Parse(info.InnerText);
-                                break;
-                            case "Description":
-                                description = info.InnerText;
-                                break;
-                            case "Category":
-                                category = int.Parse(info.InnerText);
-                                break;
-                        }
-                    }
-
-                    // have all info for expense, so create new one
-                    Add(new Transaction(id, date, category, amount, description));
-
+                    _databaseService?.Dispose();
                 }
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ReadFromFileException: Reading XML " + e.Message);
+                _disposed = true;
             }
         }
-        private void _WriteXMLFile(string filepath)
-        {
 
-            try
-            {
-                // create top level element of expenses
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml("<Transactions></Transactions>");
-
-                // foreach Category, create an new xml element
-                foreach (Transaction trans in _Transactions)
-                {
-                    // main element 'Expense' with attribute ID
-                    XmlElement ele = doc.CreateElement("Transaction");
-                    XmlAttribute attr = doc.CreateAttribute("ID");
-                    attr.Value = trans.Id.ToString();
-                    ele.SetAttributeNode(attr);
-                    doc.DocumentElement.AppendChild(ele);
-
-                    // child attributes (date, description, amount, category)
-                    XmlElement d = doc.CreateElement("Date");
-                    XmlText dText = doc.CreateTextNode(trans.Date.ToString("M/dd/yyyy hh:mm:ss tt"));
-                    ele.AppendChild(d);
-                    d.AppendChild(dText);
-
-                    XmlElement de = doc.CreateElement("Description");
-                    XmlText deText = doc.CreateTextNode(trans.Description);
-                    ele.AppendChild(de);
-                    de.AppendChild(deText);
-
-                    XmlElement a = doc.CreateElement("Amount");
-                    XmlText aText = doc.CreateTextNode(trans.Amount.ToString());
-                    ele.AppendChild(a);
-                    a.AppendChild(aText);
-
-                    XmlElement c = doc.CreateElement("Category");
-                    XmlText cText = doc.CreateTextNode(trans.Category.ToString());
-                    ele.AppendChild(c);
-                    c.AppendChild(cText);
-
-                }
-
-                // write the xml to FilePath
-                doc.Save(filepath);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("SaveToFileException: Reading XML " + e.Message);
-            }
-        }
+        #endregion
     }
 }
