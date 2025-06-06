@@ -9,6 +9,10 @@ using Budget.Utils;
 using Budget.Services;
 using Budget.Models;
 using static Budget.Models.Category;
+using System.Data.SQLite;
+using System.Data;
+using System.Transactions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Budget
 {
@@ -63,43 +67,62 @@ namespace Budget
         {
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
-
-            var query = from c in _categories.GetAllCategories()
-                        join t in _transactions.GetAllTransactions() on c.Id equals t.CategoryId
-                        where t.Date >= Start && t.Date <= End
-                        select new { CatId = c.Id, TxnsId = t.Id, t.Date, CategoryType = c.Type, Category = c.Name, t.Description, t.Amount };
-
-
             List<BudgetItem> items = new List<BudgetItem>();
             decimal total = 0;
 
-            foreach (var t in query.OrderBy(q => q.Date))
-            {
-                if (FilterFlag && CategoryID != t.CatId)
-                {
-                    continue;
-                }
+            using var command = DatabaseService.Connection.CreateCommand();
+            command.CommandText = @$"
+                        SELECT 
+                            c.Id as CategoryId,
+                            e.Id as TransactionId,
+                            e.Date,
+                            c.Name as Category,
+                            e.Description,
+                            e.Amount,
+                            c.TypeId as CategoryType -- Get the enumeration value from the TypeId field.
+                        FROM categories c
+                        JOIN transactions e
+                        ON c.Id = e.CategoryId
+                        WHERE e.Date >= @Start AND e.Date <= @End {(FilterFlag ? "AND c.Id = @CategoryID" : "")}";
 
-                // The impact on the balance depends on the classification type.
-                if (t.CategoryType == CategoryType.Income)
+            command.Parameters.AddWithValue("@Start", Start);
+            command.Parameters.AddWithValue("@End", End);
+
+            if (FilterFlag)
+            {
+                command.Parameters.AddWithValue("@CategoryID", CategoryID);
+            }
+
+            using SQLiteDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int categoryId = reader.GetInt32("CategoryId");
+                int transactionId = reader.GetInt32("TransactionId");
+                DateTime dateTime = reader.GetDateTime("Date");
+                string category = reader.GetString("Category");
+                string description = reader.GetString("Description");
+                decimal amount = reader.GetDecimal("Amount");
+                CategoryType categoryType = (CategoryType)reader.GetInt32("CategoryType");
+
+                if (categoryType == CategoryType.Income)
                 {
-                    total = total + t.Amount;  // Increase in income balance
+                    total += amount;
                 }
                 else
                 {
-                    total = total - t.Amount;  // Expenditure/Investment/Savings/Debt Reduction Balance
+                    total -= amount;
                 }
 
                 items.Add(new BudgetItem
                 {
-                    CategoryID = t.CatId,
-                    TransactionID = t.TxnsId,
-                    ShortDescription = t.Description,
-                    Date = t.Date,
-                    // Income is shown as a positive number, while other items are shown as a negative number.
-                    Category = t.Category,
-                    Amount = t.CategoryType == CategoryType.Income ? t.Amount : -t.Amount,
-                    Balance = total
+                    CategoryID = categoryId,
+                    TransactionID = transactionId,
+                    Date = dateTime,
+                    Category = category,
+                    ShortDescription = description,
+                    Amount = amount,
+                    Balance = total,
                 });
             }
             return items;
