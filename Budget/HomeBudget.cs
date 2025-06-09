@@ -65,8 +65,8 @@ namespace Budget
         #region GetList
         public List<BudgetItem> GetBudgetItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            Start = Start ?? new DateTime(1900, 1, 1);
-            End = End ?? new DateTime(2500, 1, 1);
+            DateTime realStart = Start ?? new DateTime(1900, 1, 1);
+            DateTime realEnd = End ?? new DateTime(2500, 1, 1);
             List<BudgetItem> items = new List<BudgetItem>();
             decimal total = 0;
 
@@ -74,19 +74,19 @@ namespace Budget
             command.CommandText = @$"
                         SELECT 
                             c.Id as CategoryId,
-                            e.Id as TransactionId,
-                            e.Date,
-                            c.Name as Category,
-                            e.Description,
-                            e.Amount,
+                            t.Id as TransactionId,
+                            t.Date,
+                            t.Name as Category,
+                            t.Description,
+                            t.Amount,
                             c.TypeId as CategoryType -- Get the enumeration value from the TypeId field.
                         FROM categories c
-                        JOIN transactions e
-                        ON c.Id = e.CategoryId
-                        WHERE e.Date >= @Start AND e.Date <= @End {(FilterFlag ? "AND c.Id = @CategoryID" : "")}";
+                        JOIN transactions t
+                        ON c.Id = t.CategoryId
+                        WHERE t.Date >= @Start AND t.Date <= @End {(FilterFlag ? "AND c.Id = @CategoryID" : "")}";
 
-            command.Parameters.AddWithValue("@Start", Start);
-            command.Parameters.AddWithValue("@End", End);
+            command.Parameters.AddWithValue("@Start", realStart);
+            command.Parameters.AddWithValue("@End", realEnd);
 
             if (FilterFlag)
             {
@@ -137,16 +137,14 @@ namespace Budget
             var summary = new List<BudgetItemsByMonth>();
             foreach (var MonthGroup in GroupedByMonth)
             {
-                // calculate total for this month, and create list of details
                 decimal total = 0;
                 var details = new List<BudgetItem>();
                 foreach (var item in MonthGroup)
                 {
-                    total = total + item.Amount;
+                    total += item.Amount;
                     details.Add(item);
                 }
 
-                // Add new BudgetItemsByMonth to our list
                 summary.Add(new BudgetItemsByMonth
                 {
                     Month = MonthGroup.Key,
@@ -192,63 +190,48 @@ namespace Budget
         public List<Dictionary<string, object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             List<BudgetItemsByMonth> GroupedByMonth = GetBudgetItemsByMonth(Start, End, FilterFlag, CategoryID);
-
             var summary = new List<Dictionary<string, object>>();
-            var totalsPerCategory = new Dictionary<String, decimal>();
+            var totalsPerCategory = new Dictionary<string, decimal>();
 
             foreach (var MonthGroup in GroupedByMonth)
             {
                 // create record object for this month
-                Dictionary<string, object> record = new Dictionary<string, object>();
-                record["Month"] = MonthGroup.Month;
-                record["Total"] = MonthGroup.Total;
+                var record = new Dictionary<string, object>
+                {
+                    ["Month"] = MonthGroup.Month,
+                    ["Total"] = MonthGroup.Total
+                };
 
                 // break up the month details into categories
-                var GroupedByCategory = MonthGroup.Details.GroupBy(c => c.Category);
+                var GroupedByCategory = MonthGroup.Details
+                    .GroupBy(c => c.Category)
+                    .OrderBy(g => g.Key);
 
-                foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
+                foreach (var CategoryGroup in GroupedByCategory)
                 {
-                    // calculate totals for the cat/month, and create list of details
-                    decimal total = 0;
-                    var details = new List<BudgetItem>();
-
-                    foreach (var item in CategoryGroup)
-                    {
-                        total = total + item.Amount;
-                        details.Add(item);
-                    }
+                    var details = CategoryGroup.ToList();
+                    var total = CategoryGroup.Sum(item => item.Amount);
 
                     // add new properties and values to our record object
                     record["details:" + CategoryGroup.Key] = details;
                     record[CategoryGroup.Key] = total;
 
                     // keep track of totals for each category
-                    if (totalsPerCategory.TryGetValue(CategoryGroup.Key, out decimal CurrentCatTotal))
-                    {
-                        totalsPerCategory[CategoryGroup.Key] = CurrentCatTotal + total;
-                    }
-                    else
-                    {
-                        totalsPerCategory[CategoryGroup.Key] = total;
-                    }
+                    totalsPerCategory[CategoryGroup.Key] = totalsPerCategory.GetValueOrDefault(CategoryGroup.Key, 0) + total;
                 }
-                // add record to collection
+
                 summary.Add(record);
             }
 
-            Dictionary<string, object> totalsRecord = new Dictionary<string, object>();
-            totalsRecord["Month"] = "TOTALS";
+            // Create totals record
+            var totalsRecord = new Dictionary<string, object> { ["Month"] = "TOTALS" };
 
-            foreach (var cat in categories.GetAllCategories())
+            foreach (var categoryTotal in totalsPerCategory.OrderBy(kvp => kvp.Key))
             {
-                try
-                {
-                    totalsRecord.Add(cat.Name, totalsPerCategory[cat.Name]);
-                }
-                catch { }
+                totalsRecord[categoryTotal.Key] = categoryTotal.Value;
             }
-            summary.Add(totalsRecord);
 
+            summary.Add(totalsRecord);
             return summary;
         }
         #endregion GetList
