@@ -76,14 +76,15 @@ namespace Budget
                             c.Id as CategoryId,
                             t.Id as TransactionId,
                             t.Date,
-                            t.Name as Category,
+                            c.Name as Category,
                             t.Description,
                             t.Amount,
                             c.TypeId as CategoryType -- Get the enumeration value from the TypeId field.
                         FROM categories c
                         JOIN transactions t
                         ON c.Id = t.CategoryId
-                        WHERE t.Date >= @Start AND t.Date <= @End {(FilterFlag ? "AND c.Id = @CategoryID" : "")}";
+                        WHERE t.Date >= @Start AND t.Date <= @End {(FilterFlag ? "AND c.Id = @CategoryID" : "")}
+                        ORDER BY t.Date, t.Id";
 
             command.Parameters.AddWithValue("@Start", realStart);
             command.Parameters.AddWithValue("@End", realEnd);
@@ -105,14 +106,10 @@ namespace Budget
                 decimal amount = reader.GetDecimal("Amount");
                 CategoryType categoryType = (CategoryType)reader.GetInt32("CategoryType");
 
-                if (categoryType == CategoryType.Income)
-                {
-                    total += amount;
-                }
-                else
-                {
-                    total -= amount;
-                }
+                decimal displayAmount = categoryType == CategoryType.Income ? amount : -amount;
+
+                // Calculate balance: Simply add up the displayed amounts.
+                total += displayAmount;
 
                 items.Add(new BudgetItem
                 {
@@ -121,13 +118,13 @@ namespace Budget
                     Date = dateTime,
                     Category = category,
                     ShortDescription = description,
-                    Amount = amount,
+                    Amount = displayAmount,  // Display the adjusted amount 
                     Balance = total,
                 });
             }
             return items;
         }
-
+       
         public List<BudgetItemsByMonth> GetBudgetItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
