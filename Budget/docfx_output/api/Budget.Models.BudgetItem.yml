@@ -1,0 +1,672 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models.BudgetItem
+  commentId: T:Budget.Models.BudgetItem
+  id: BudgetItem
+  parent: Budget.Models
+  children:
+  - Budget.Models.BudgetItem.Amount
+  - Budget.Models.BudgetItem.Balance
+  - Budget.Models.BudgetItem.Category
+  - Budget.Models.BudgetItem.CategoryID
+  - Budget.Models.BudgetItem.Date
+  - Budget.Models.BudgetItem.ShortDescription
+  - Budget.Models.BudgetItem.TransactionID
+  langs:
+  - csharp
+  - vb
+  name: BudgetItem
+  nameWithType: BudgetItem
+  fullName: Budget.Models.BudgetItem
+  type: Class
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: BudgetItem
+    path: Models/BudgetItem.cs
+    startLine: 72
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public class BudgetItem
+    content.vb: Public Class BudgetItem
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Models.BudgetItem.CategoryID
+  commentId: P:Budget.Models.BudgetItem.CategoryID
+  id: CategoryID
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: CategoryID
+  nameWithType: BudgetItem.CategoryID
+  fullName: Budget.Models.BudgetItem.CategoryID
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: CategoryID
+    path: Models/BudgetItem.cs
+    startLine: 97
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the unique identifier of the category associated with this budget item.\n"
+  remarks: "\nThis property establishes the relationship between the budget item and its category, \nenabling category-based filtering, grouping, and reporting. The category determines \nhow the transaction affects balance calculations and which reports include the item.\n"
+  example:
+  - "\n<pre><code>var budgetItem = new BudgetItem { CategoryID = 5 }; // Links to category with ID 5\n\n// Used for filtering by category\nvar foodItems = budgetItems.Where(item => item.CategoryID == foodCategoryId);\n\n// Used for grouping in reports\nvar itemsByCategory = budgetItems.GroupBy(item => item.CategoryID);</code></pre>\n"
+  syntax:
+    content: public int CategoryID { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+      description: "\nAn integer representing the category ID that links this item to a specific budget category.\nThis value corresponds to a category in the categories table/collection.\n"
+    content.vb: Public Property CategoryID As Integer
+  overload: Budget.Models.BudgetItem.CategoryID*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.TransactionID
+  commentId: P:Budget.Models.BudgetItem.TransactionID
+  id: TransactionID
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: TransactionID
+  nameWithType: BudgetItem.TransactionID
+  fullName: Budget.Models.BudgetItem.TransactionID
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: TransactionID
+    path: Models/BudgetItem.cs
+    startLine: 125
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the unique identifier of the underlying transaction.\n"
+  remarks: "\nThis property maintains the link to the original transaction data, enabling operations \nlike editing, deleting, or viewing detailed transaction information. It&apos;s essential \nfor maintaining data integrity between budget reports and source transaction data.\n"
+  example:
+  - "\n<pre><code>var budgetItem = new BudgetItem { TransactionID = 1001 };\n\n// Use transaction ID to fetch full transaction details\nvar fullTransaction = transactionService.GetTransaction(budgetItem.TransactionID);\n\n// Use for editing operations\nif (userWantsToEdit)\n{\n    var transaction = GetTransactionById(budgetItem.TransactionID);\n    // Present transaction editing form\n}</code></pre>\n"
+  syntax:
+    content: public int TransactionID { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+      description: "\nAn integer representing the transaction ID that links this budget item to the original transaction record.\nThis value corresponds to a transaction in the transactions table/collection.\n"
+    content.vb: Public Property TransactionID As Integer
+  overload: Budget.Models.BudgetItem.TransactionID*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.Date
+  commentId: P:Budget.Models.BudgetItem.Date
+  id: Date
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: Date
+  nameWithType: BudgetItem.Date
+  fullName: Budget.Models.BudgetItem.Date
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Date
+    path: Models/BudgetItem.cs
+    startLine: 159
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public DateTime Date { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property Date As Date
+  overload: Budget.Models.BudgetItem.Date*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.Category
+  commentId: P:Budget.Models.BudgetItem.Category
+  id: Category
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: BudgetItem.Category
+  fullName: Budget.Models.BudgetItem.Category
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Category
+    path: Models/BudgetItem.cs
+    startLine: 200
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public string Category { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Category As String
+  overload: Budget.Models.BudgetItem.Category*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.ShortDescription
+  commentId: P:Budget.Models.BudgetItem.ShortDescription
+  id: ShortDescription
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: ShortDescription
+  nameWithType: BudgetItem.ShortDescription
+  fullName: Budget.Models.BudgetItem.ShortDescription
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: ShortDescription
+    path: Models/BudgetItem.cs
+    startLine: 239
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets a brief description of the transaction.\n"
+  remarks: "\n<p>\nThe short description provides context about the transaction without overwhelming \nreport layouts with lengthy text. It should contain the most essential information \nneeded to identify and understand the transaction.\n</p>\n<p>\nThis field is particularly useful in summary reports, mobile interfaces, and \nother contexts where space is limited but some transaction detail is still needed.\n</p>\n"
+  example:
+  - "\n<pre><code>var budgetItem = new BudgetItem \n{ \n    ShortDescription = &quot;Grocery shopping&quot;,  // Concise description\n    // Full description might be: &quot;Weekly grocery shopping at Kroger - Main Street location&quot;\n    // ... other properties\n};\n\n// Display in compact report format\nConsole.WriteLine($&quot;{budgetItem.Date:MM/dd} - {budgetItem.ShortDescription}: {budgetItem.Amount:C}&quot;);\n\n// Use in mobile-friendly displays\nvar mobileDisplay = $&quot;{budgetItem.Category}: {budgetItem.ShortDescription}&quot;;\n\n// Search functionality\nvar searchResults = budgetItems.Where(item => \n    item.ShortDescription?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true);</code></pre>\n"
+  syntax:
+    content: public string ShortDescription { get; set; }
+    parameters: []
+    return:
+      type: System.String
+      description: "\nA string containing a concise description of what the transaction represents, \nor <code>null</code> if not provided. This is typically a shortened version of the full transaction description.\n"
+    content.vb: Public Property ShortDescription As String
+  overload: Budget.Models.BudgetItem.ShortDescription*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.Amount
+  commentId: P:Budget.Models.BudgetItem.Amount
+  id: Amount
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: Amount
+  nameWithType: BudgetItem.Amount
+  fullName: Budget.Models.BudgetItem.Amount
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Amount
+    path: Models/BudgetItem.cs
+    startLine: 293
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public decimal Amount { get; set; }
+    parameters: []
+    return:
+      type: System.Decimal
+    content.vb: Public Property Amount As Decimal
+  overload: Budget.Models.BudgetItem.Amount*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItem.Balance
+  commentId: P:Budget.Models.BudgetItem.Balance
+  id: Balance
+  parent: Budget.Models.BudgetItem
+  langs:
+  - csharp
+  - vb
+  name: Balance
+  nameWithType: BudgetItem.Balance
+  fullName: Budget.Models.BudgetItem.Balance
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Balance
+    path: Models/BudgetItem.cs
+    startLine: 345
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public decimal Balance { get; set; }
+    parameters: []
+    return:
+      type: System.Decimal
+    content.vb: Public Property Balance As Decimal
+  overload: Budget.Models.BudgetItem.Balance*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+references:
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Models.BudgetItem.CategoryID*
+  commentId: Overload:Budget.Models.BudgetItem.CategoryID
+  name: CategoryID
+  nameWithType: BudgetItem.CategoryID
+  fullName: Budget.Models.BudgetItem.CategoryID
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: Budget.Models.BudgetItem.TransactionID*
+  commentId: Overload:Budget.Models.BudgetItem.TransactionID
+  name: TransactionID
+  nameWithType: BudgetItem.TransactionID
+  fullName: Budget.Models.BudgetItem.TransactionID
+- uid: Budget.Models.BudgetItem.Date*
+  commentId: Overload:Budget.Models.BudgetItem.Date
+  name: Date
+  nameWithType: BudgetItem.Date
+  fullName: Budget.Models.BudgetItem.Date
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+- uid: Budget.Models.BudgetItem.Category*
+  commentId: Overload:Budget.Models.BudgetItem.Category
+  name: Category
+  nameWithType: BudgetItem.Category
+  fullName: Budget.Models.BudgetItem.Category
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Models.BudgetItem.ShortDescription*
+  commentId: Overload:Budget.Models.BudgetItem.ShortDescription
+  name: ShortDescription
+  nameWithType: BudgetItem.ShortDescription
+  fullName: Budget.Models.BudgetItem.ShortDescription
+- uid: Budget.Models.BudgetItem.Amount*
+  commentId: Overload:Budget.Models.BudgetItem.Amount
+  name: Amount
+  nameWithType: BudgetItem.Amount
+  fullName: Budget.Models.BudgetItem.Amount
+- uid: System.Decimal
+  commentId: T:System.Decimal
+  parent: System
+  isExternal: true
+  name: Decimal
+  nameWithType: Decimal
+  fullName: System.Decimal
+- uid: Budget.Models.BudgetItem.Balance*
+  commentId: Overload:Budget.Models.BudgetItem.Balance
+  name: Balance
+  nameWithType: BudgetItem.Balance
+  fullName: Budget.Models.BudgetItem.Balance

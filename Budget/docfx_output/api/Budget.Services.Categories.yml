@@ -1,0 +1,1241 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Services.Categories
+  commentId: T:Budget.Services.Categories
+  id: Categories
+  parent: Budget.Services
+  children:
+  - Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  - Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  - Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  - Budget.Services.Categories.DatabasePath
+  - Budget.Services.Categories.DeleteCategory(System.Int32)
+  - Budget.Services.Categories.Dispose
+  - Budget.Services.Categories.GetAllCategories
+  - Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  - Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  - Budget.Services.Categories.IsConnected
+  - Budget.Services.Categories.SetCategoriesToDefaults
+  - Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  langs:
+  - csharp
+  - vb
+  name: Categories
+  nameWithType: Categories
+  fullName: Budget.Services.Categories
+  type: Class
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Categories
+    path: Services/Categories.cs
+    startLine: 55
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nProvides comprehensive category management functionality for budget applications.\nManages budget category data including creation, retrieval, updating, and deletion operations.\n"
+  remarks: "\n<p>\nThis class handles all database operations related to budget categories and maintains \nthe database connection lifecycle. Categories are used to classify financial transactions\ninto types such as Income, Expense, Savings, Debt, and Investment.\n</p>\n<p>\nThe class implements the <xref href=\"System.IDisposable\" data-throw-if-not-resolved=\"false\"></xref> pattern to ensure proper resource cleanup.\nAlways dispose of instances when finished to prevent resource leaks.\n</p>\n<p>\nThread Safety: This class is not thread-safe. External synchronization is required \nfor concurrent access from multiple threads.\n</p>\n"
+  example:
+  - "\n<pre><code>// Using with existing database service\nusing var dbService = DatabaseService.OpenExisting(&quot;budget.db&quot;);\nusing var categories = new Categories(dbService);\n\n// Add a new category\nint categoryId = categories.AddCategory(&quot;Entertainment&quot;, CategoryType.Expense);\n\n// Retrieve all categories\nvar allCategories = categories.GetAllCategories();\n\n// Get categories by type\nvar expenseCategories = categories.GetCategoriesByType(CategoryType.Expense);\n\n// Using with independent database\nusing var categories2 = new Categories(&quot;mybudget.db&quot;, isNew: true);\n// Default categories are automatically created for new databases</code></pre>\n"
+  syntax:
+    content: 'public class Categories : IDisposable'
+    content.vb: >-
+      Public Class Categories
+          Implements IDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - System.IDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Services.Categories.DatabasePath
+  commentId: P:Budget.Services.Categories.DatabasePath
+  id: DatabasePath
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: DatabasePath
+  nameWithType: Categories.DatabasePath
+  fullName: Budget.Services.Categories.DatabasePath
+  type: Property
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: DatabasePath
+    path: Services/Categories.cs
+    startLine: 83
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nGets the full path to the database file used by this category service.\n"
+  remarks: "\nThis property is useful for logging, debugging, or displaying the current \ndatabase location to users. The path is resolved to an absolute path even \nif a relative path was originally provided.\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\nConsole.WriteLine($&quot;Database located at: {categories.DatabasePath}&quot;);\n// Output: Database located at: C:\\MyApp\\budget.db</code></pre>\n"
+  syntax:
+    content: public string DatabasePath { get; }
+    parameters: []
+    return:
+      type: System.String
+      description: "\nA string containing the absolute path to the SQLite database file.\nReturns an empty string if no database is connected or the connection is null.\n"
+    content.vb: Public ReadOnly Property DatabasePath As String
+  overload: Budget.Services.Categories.DatabasePath*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Services.Categories.IsConnected
+  commentId: P:Budget.Services.Categories.IsConnected
+  id: IsConnected
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: IsConnected
+  nameWithType: Categories.IsConnected
+  fullName: Budget.Services.Categories.IsConnected
+  type: Property
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: IsConnected
+    path: Services/Categories.cs
+    startLine: 116
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nGets a value indicating whether the database connection is currently open and available.\n"
+  remarks: "\n<p>\nThis property should be checked before performing database operations to ensure \nthe connection is valid. A <code>false</code> value indicates either:\n</p>\n<ul><li>The instance has been disposed</li><li>The database connection is closed or failed</li><li>The database service is null</li></ul>\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\nif (categories.IsConnected)\n{\n    var allCategories = categories.GetAllCategories();\n}\nelse\n{\n    Console.WriteLine(&quot;Database connection is not available&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public bool IsConnected { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+      description: "\n<code>true</code> if the database connection is open and the instance has not been disposed; \notherwise, <code>false</code>.\n"
+    content.vb: Public ReadOnly Property IsConnected As Boolean
+  overload: Budget.Services.Categories.IsConnected*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  commentId: M:Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  id: '#ctor(Budget.Services.DatabaseService)'
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: Categories(DatabaseService)
+  nameWithType: Categories.Categories(DatabaseService)
+  fullName: Budget.Services.Categories.Categories(Budget.Services.DatabaseService)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Services/Categories.cs
+    startLine: 157
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> class using an existing database service.\n"
+  remarks: "\n<p>\nThis constructor is typically used when multiple services need to share the same \ndatabase connection. The provided <code data-dev-comment-type=\"paramref\" class=\"paramref\">databaseService</code> remains under \nexternal ownership and will not be disposed when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> \ninstance is disposed.\n</p>\n<p>\nUse this constructor when integrating with dependency injection containers or \nwhen managing database connections centrally in your application.\n</p>\n"
+  example:
+  - "\n<pre><code>// Shared database service pattern\nusing var dbService = DatabaseService.OpenExisting(&quot;budget.db&quot;);\nusing var categories = new Categories(dbService);\nusing var transactions = new Transactions(dbService); // Shares the same connection\n\n// Both services use the same database connection\nvar categoryId = categories.AddCategory(&quot;Food&quot;, CategoryType.Expense);\nvar transactionId = transactions.AddTransaction(DateTime.Now, categoryId, 25.50m, &quot;Lunch&quot;);</code></pre>\n"
+  syntax:
+    content: public Categories(DatabaseService databaseService)
+    parameters:
+    - id: databaseService
+      type: Budget.Services.DatabaseService
+      description: "\nAn existing <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref> instance that manages the database connection.\nThis service will be used for all database operations but will not be disposed by this instance.\n"
+    content.vb: Public Sub New(databaseService As DatabaseService)
+  overload: Budget.Services.Categories.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databaseService</code> is <code>null</code>.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.#ctor(System.String,System.Boolean)
+    commentId: M:Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  commentId: M:Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  id: '#ctor(System.String,System.Boolean)'
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: Categories(String, Boolean)
+  nameWithType: Categories.Categories(String, Boolean)
+  fullName: Budget.Services.Categories.Categories(System.String, System.Boolean)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Services/Categories.cs
+    startLine: 210
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> class with a database file path.\n"
+  remarks: "\n<p>\nThis constructor creates and manages its own <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref> instance.\nThe created database service will be disposed when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> \ninstance is disposed.\n</p>\n<p>\nWhen <code data-dev-comment-type=\"paramref\" class=\"paramref\">isNew</code> is <code>true</code>, the database is created with a comprehensive \nset of default categories covering common budget scenarios. See <xref href=\"Budget.Services.Categories.SetCategoriesToDefaults\" data-throw-if-not-resolved=\"false\"></xref> \nfor the complete list of default categories.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create a new database with default categories\nusing var categories1 = new Categories(&quot;newbudget.db&quot;, isNew: true);\nvar allCategories = categories1.GetAllCategories(); // Contains default categories\n\n// Open existing database\nusing var categories2 = new Categories(&quot;existingbudget.db&quot;, isNew: false);</code></pre>\n"
+  syntax:
+    content: public Categories(string databasePath, bool isNew = false)
+    parameters:
+    - id: databasePath
+      type: System.String
+      description: "\nThe file path to the SQLite database file. Can be an absolute or relative path.\nThe file must exist unless <code data-dev-comment-type=\"paramref\" class=\"paramref\">isNew</code> is <code>true</code>.\n"
+    - id: isNew
+      type: System.Boolean
+      description: "\n<code>true</code> to create a new database and automatically set up default categories; \n<code>false</code> to open an existing database file.\n"
+    content.vb: Public Sub New(databasePath As String, isNew As Boolean = False)
+  overload: Budget.Services.Categories.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databasePath</code> is <code>null</code>, empty, or contains only whitespace.\n"
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">isNew</code> is <code>false</code> and the specified database file does not exist.\n"
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "\nThrown when the application lacks permission to access the specified file or directory.\n"
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when database initialization fails due to corruption, invalid format, or other database issues.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+    commentId: M:Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  - linkId: Budget.Services.Categories.SetCategoriesToDefaults
+    commentId: M:Budget.Services.Categories.SetCategoriesToDefaults
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.SetCategoriesToDefaults
+  commentId: M:Budget.Services.Categories.SetCategoriesToDefaults
+  id: SetCategoriesToDefaults
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: SetCategoriesToDefaults()
+  nameWithType: Categories.SetCategoriesToDefaults()
+  fullName: Budget.Services.Categories.SetCategoriesToDefaults()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: SetCategoriesToDefaults
+    path: Services/Categories.cs
+    startLine: 275
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nPopulates the database with a comprehensive set of default categories for a new budget system.\n"
+  remarks: "\n<p>\nThis method creates a complete set of budget categories covering common financial scenarios:\n</p>\n<ul><li><strong>Expenses:</strong> Utilities, Food &amp; Dining, Transportation, Health &amp; Personal Care, Insurance, Clothes, Education, Vacation, Social Expenses, Municipal &amp; School Tax, Miscellaneous</li><li><strong>Savings:</strong> Savings</li><li><strong>Debt:</strong> Housing mortgage, Auto loan</li><li><strong>Income:</strong> Salary, Rental Income</li><li><strong>Investment:</strong> Stock &amp; Fund</li></ul>\n<p>\nThe method validates that the database is empty before adding categories to prevent \naccidental duplication. If categories already exist, an exception is thrown.\n</p>\n"
+  example:
+  - "\n<pre><code>// Typically called automatically by constructor with isNew=true\nusing var categories = new Categories(&quot;budget.db&quot;, isNew: true);\n// Default categories are automatically created\n\n// Manual usage (for empty existing database)\nusing var categories2 = new Categories(&quot;empty.db&quot;, isNew: false);\ntry\n{\n    categories2.SetCategoriesToDefaults();\n    Console.WriteLine(&quot;Default categories added successfully&quot;);\n}\ncatch (InvalidOperationException ex)\n{\n    Console.WriteLine($&quot;Categories already exist: {ex.Message}&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public void SetCategoriesToDefaults()
+    content.vb: Public Sub SetCategoriesToDefaults
+  overload: Budget.Services.Categories.SetCategoriesToDefaults*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when categories already exist in the database. This method should only be called on empty databases.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database error occurs during category creation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+    commentId: M:Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  - linkId: Budget.Services.Categories.GetAllCategories
+    commentId: M:Budget.Services.Categories.GetAllCategories
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  id: AddCategory(System.String,Budget.Models.Category.CategoryType)
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: AddCategory(String, Category.CategoryType)
+  nameWithType: Categories.AddCategory(String, Category.CategoryType)
+  fullName: Budget.Services.Categories.AddCategory(System.String, Budget.Models.Category.CategoryType)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: AddCategory
+    path: Services/Categories.cs
+    startLine: 363
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nAdds a new category to the database.\n"
+  remarks: "\n<p>\nCategory names should be descriptive and meaningful to users. While the database \nmay not enforce uniqueness, it&apos;s recommended to use distinct names for better \nuser experience and reporting clarity.\n</p>\n<p>\nThe category type determines how transactions assigned to this category will \naffect balance calculations and financial reports.\n</p>\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\n\n// Add different types of categories\nint entertainmentId = categories.AddCategory(&quot;Entertainment&quot;, CategoryType.Expense);\nint freelanceId = categories.AddCategory(&quot;Freelance Income&quot;, CategoryType.Income);\nint emergencyId = categories.AddCategory(&quot;Emergency Fund&quot;, CategoryType.Savings);\nint creditCardId = categories.AddCategory(&quot;Credit Card Payment&quot;, CategoryType.Debt);\nint stocksId = categories.AddCategory(&quot;Stock Investments&quot;, CategoryType.Investment);\n\nConsole.WriteLine($&quot;Created categories with IDs: {entertainmentId}, {freelanceId}, {emergencyId}, {creditCardId}, {stocksId}&quot;);</code></pre>\n"
+  syntax:
+    content: public int AddCategory(string name, Category.CategoryType type)
+    parameters:
+    - id: name
+      type: System.String
+      description: "\nThe name of the category. Must be unique within the database and cannot be null, empty, or whitespace.\n"
+    - id: type
+      type: Budget.Models.Category.CategoryType
+      description: "\nThe type classification of the category (Income, Expense, Savings, Debt, or Investment).\n"
+    return:
+      type: System.Int32
+      description: "\nThe unique identifier (primary key) of the newly created category record.\nThis ID can be used for subsequent operations and transaction assignments.\n"
+    content.vb: Public Function AddCategory(name As String, type As Category.CategoryType) As Integer
+  overload: Budget.Services.Categories.AddCategory*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">name</code> is <code>null</code>, empty, or contains only whitespace.\n"
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when the database insert operation fails, typically due to constraint violations \n(such as duplicate names) or database connectivity issues.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the insert operation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+    commentId: M:Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  - linkId: Budget.Services.Categories.DeleteCategory(System.Int32)
+    commentId: M:Budget.Services.Categories.DeleteCategory(System.Int32)
+  - linkId: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+    commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  - linkId: Budget.Models.Category.CategoryType
+    commentId: T:Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.DeleteCategory(System.Int32)
+  commentId: M:Budget.Services.Categories.DeleteCategory(System.Int32)
+  id: DeleteCategory(System.Int32)
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: DeleteCategory(Int32)
+  nameWithType: Categories.DeleteCategory(Int32)
+  fullName: Budget.Services.Categories.DeleteCategory(System.Int32)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: DeleteCategory
+    path: Services/Categories.cs
+    startLine: 453
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nDeletes a category from the database if it has no associated transactions.\n"
+  remarks: "\n<p>\nThis method enforces referential integrity by preventing deletion of categories \nthat are referenced by existing transactions. This safeguards against orphaned \ntransaction records and maintains data consistency.\n</p>\n<p>\nTo delete a category that has associated transactions, you must first either:\n</p>\n<ul><li>Delete all transactions in the category</li><li>Reassign the transactions to a different category using <xref href=\"Budget.Services.Transactions.UpdateTransaction(System.Int32%2cSystem.DateTime%2cSystem.String%2cSystem.Decimal%2cSystem.Int32)\" data-throw-if-not-resolved=\"false\"></xref></li></ul>\n<p>\nThe deletion operation is permanent and cannot be undone. Consider implementing \na soft delete mechanism if you need to maintain historical records.\n</p>\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\n\n// Add a temporary category\nint tempId = categories.AddCategory(&quot;Temporary&quot;, CategoryType.Expense);\n\n// Delete the category (succeeds because no transactions are associated)\ntry\n{\n    categories.DeleteCategory(tempId);\n    Console.WriteLine(&quot;Category deleted successfully&quot;);\n}\ncatch (InvalidOperationException ex)\n{\n    Console.WriteLine($&quot;Cannot delete category: {ex.Message}&quot;);\n    // This would happen if transactions exist for this category\n}\n\n// Example of handling categories with transactions\nint categoryWithTransactions = 5;\ntry\n{\n    categories.DeleteCategory(categoryWithTransactions);\n}\ncatch (InvalidOperationException ex) when (ex.Message.Contains(&quot;associated transactions&quot;))\n{\n    Console.WriteLine(&quot;Delete all transactions in this category first, then try again&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public void DeleteCategory(int categoryId)
+    parameters:
+    - id: categoryId
+      type: System.Int32
+      description: "\nThe unique identifier of the category to delete. Must correspond to an existing category.\n"
+    content.vb: Public Sub DeleteCategory(categoryId As Integer)
+  overload: Budget.Services.Categories.DeleteCategory*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when the category has associated transactions and cannot be safely deleted,\nor when no category with the specified <code data-dev-comment-type=\"paramref\" class=\"paramref\">categoryId</code> exists in the database.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the delete operation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+    commentId: M:Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  - linkId: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+    commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  - linkId: Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+    commentId: M:Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.GetAllCategories
+  commentId: M:Budget.Services.Categories.GetAllCategories
+  id: GetAllCategories
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: GetAllCategories()
+  nameWithType: Categories.GetAllCategories()
+  fullName: Budget.Services.Categories.GetAllCategories()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: GetAllCategories
+    path: Services/Categories.cs
+    startLine: 530
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nRetrieves all categories from the database, ordered by type and name for consistent presentation.\n"
+  remarks: "\n<p>\nThis method loads all categories into memory. For applications with a large number \nof categories (>1,000), consider implementing filtering or pagination mechanisms.\nHowever, typical budget applications rarely exceed 50-100 categories.\n</p>\n<p>\nThe consistent ordering by type and name ensures predictable presentation in \nuser interfaces and reports.\n</p>\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\n\nvar allCategories = categories.GetAllCategories();\nConsole.WriteLine($&quot;Found {allCategories.Count} categories&quot;);\n\n// Group and display by type\nvar groupedByType = allCategories.GroupBy(c => c.Type);\nforeach (var typeGroup in groupedByType)\n{\n    Console.WriteLine($&quot;\\n{typeGroup.Key} Categories:&quot;);\n    foreach (var category in typeGroup)\n    {\n        Console.WriteLine($&quot;  - {category.Name} (ID: {category.Id})&quot;);\n    }\n}\n\n// Find specific categories\nvar incomeCategories = allCategories.Where(c => c.Type == CategoryType.Income).ToList();\nvar foodCategory = allCategories.FirstOrDefault(c => c.Name.Contains(&quot;Food&quot;));</code></pre>\n"
+  syntax:
+    content: public List<Category> GetAllCategories()
+    return:
+      type: System.Collections.Generic.List{Budget.Models.Category}
+      description: "\nA list of <xref href=\"Budget.Models.Category\" data-throw-if-not-resolved=\"false\"></xref> objects representing all categories in the database.\nCategories are ordered first by type (Income, Expense, Savings, Debt, Investment), \nthen alphabetically by name within each type. Returns an empty list if no categories exist.\n"
+    content.vb: Public Function GetAllCategories As List(Of Category)
+  overload: Budget.Services.Categories.GetAllCategories*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the query operation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+    commentId: M:Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  - linkId: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+    commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  - linkId: Budget.Models.Category
+    commentId: T:Budget.Models.Category
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  id: UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: UpdateCategory(Int32, String, Category.CategoryType)
+  nameWithType: Categories.UpdateCategory(Int32, String, Category.CategoryType)
+  fullName: Budget.Services.Categories.UpdateCategory(System.Int32, System.String, Budget.Models.Category.CategoryType)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: UpdateCategory
+    path: Services/Categories.cs
+    startLine: 616
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nUpdates an existing category&apos;s name and type.\n"
+  remarks: "\n<p>\nChanging a category&apos;s type will affect how existing transactions in that category \nare treated in balance calculations and financial reports. Exercise caution when \nchanging types, especially for categories with many associated transactions.\n</p>\n<p>\nThe method updates both the name and type in a single database operation to \nmaintain consistency.\n</p>\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\n\n// Get existing category\nvar category = categories.GetCategoryFromId(5);\nif (category != null)\n{\n    Console.WriteLine($&quot;Before: {category.Name} ({category.Type})&quot;);\n\n    // Update both name and type\n    categories.UpdateCategory(5, &quot;Updated Entertainment&quot;, CategoryType.Expense);\n\n    // Verify update\n    var updated = categories.GetCategoryFromId(5);\n    Console.WriteLine($&quot;After: {updated.Name} ({updated.Type})&quot;);\n}\n\n// Update only name (keep same type)\nvar existingCategory = categories.GetCategoryFromId(3);\nif (existingCategory != null)\n{\n    categories.UpdateCategory(3, &quot;New Category Name&quot;, existingCategory.Type);\n}</code></pre>\n"
+  syntax:
+    content: public void UpdateCategory(int categoryId, string name, Category.CategoryType type)
+    parameters:
+    - id: categoryId
+      type: System.Int32
+      description: "\nThe unique identifier of the category to update. Must correspond to an existing category.\n"
+    - id: name
+      type: System.String
+      description: "\nThe new name for the category. Cannot be null, empty, or whitespace.\n"
+    - id: type
+      type: Budget.Models.Category.CategoryType
+      description: "\nThe new type classification for the category.\n"
+    content.vb: Public Sub UpdateCategory(categoryId As Integer, name As String, type As Category.CategoryType)
+  overload: Budget.Services.Categories.UpdateCategory*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">name</code> is null, empty, or contains only whitespace.\n"
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when no category with the specified <code data-dev-comment-type=\"paramref\" class=\"paramref\">categoryId</code> exists in the database.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the update operation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+    commentId: M:Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  - linkId: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+    commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  id: GetCategoriesByType(Budget.Models.Category.CategoryType)
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: GetCategoriesByType(Category.CategoryType)
+  nameWithType: Categories.GetCategoriesByType(Category.CategoryType)
+  fullName: Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: GetCategoriesByType
+    path: Services/Categories.cs
+    startLine: 683
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nRetrieves all categories of a specific type, ordered alphabetically by name.\n"
+  remarks: "\nThis method is useful for populating category selection lists in user interfaces\nor for generating type-specific reports. The alphabetical ordering ensures \nconsistent presentation across different parts of the application.\n"
+  example:
+  - "\n<pre><code>using var categories = new Categories(&quot;budget.db&quot;);\n\n// Get all expense categories for a dropdown list\nvar expenseCategories = categories.GetCategoriesByType(CategoryType.Expense);\nConsole.WriteLine(&quot;Expense Categories:&quot;);\nforeach (var category in expenseCategories)\n{\n    Console.WriteLine($&quot;  - {category.Name}&quot;);\n}\n\n// Get income categories for reporting\nvar incomeCategories = categories.GetCategoriesByType(CategoryType.Income);\nvar totalIncomeCategories = incomeCategories.Count;\n\n// Check if specific type has any categories\nvar investmentCategories = categories.GetCategoriesByType(CategoryType.Investment);\nif (investmentCategories.Any())\n{\n    Console.WriteLine($&quot;Found {investmentCategories.Count} investment categories&quot;);\n}\nelse\n{\n    Console.WriteLine(&quot;No investment categories defined&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public List<Category> GetCategoriesByType(Category.CategoryType type)
+    parameters:
+    - id: type
+      type: Budget.Models.Category.CategoryType
+      description: "\nThe category type to filter by (Income, Expense, Savings, Debt, or Investment).\n"
+    return:
+      type: System.Collections.Generic.List{Budget.Models.Category}
+      description: "\nA list of <xref href=\"Budget.Models.Category\" data-throw-if-not-resolved=\"false\"></xref> objects matching the specified type, \nordered alphabetically by name. Returns an empty list if no categories \nof the specified type exist.\n"
+    content.vb: Public Function GetCategoriesByType(type As Category.CategoryType) As List(Of Category)
+  overload: Budget.Services.Categories.GetCategoriesByType*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Categories\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the query operation.\n"
+  seealso:
+  - linkId: Budget.Services.Categories.GetAllCategories
+    commentId: M:Budget.Services.Categories.GetAllCategories
+  - linkId: Budget.Models.Category.CategoryType
+    commentId: T:Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  id: GetCategoryFromId(System.Int32)
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: GetCategoryFromId(Int32)
+  nameWithType: Categories.GetCategoryFromId(Int32)
+  fullName: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: GetCategoryFromId
+    path: Services/Categories.cs
+    startLine: 715
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nRetrieves a specific category by its ID.\n"
+  example: []
+  syntax:
+    content: public Category GetCategoryFromId(int categoryId)
+    parameters:
+    - id: categoryId
+      type: System.Int32
+      description: The ID of the category to retrieve.
+    return:
+      type: Budget.Models.Category
+      description: A Category object if found; otherwise, null.
+    content.vb: Public Function GetCategoryFromId(categoryId As Integer) As Category
+  overload: Budget.Services.Categories.GetCategoryFromId*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: Thrown when the Categories instance has been disposed.
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Categories.Dispose
+  commentId: M:Budget.Services.Categories.Dispose
+  id: Dispose
+  parent: Budget.Services.Categories
+  langs:
+  - csharp
+  - vb
+  name: Dispose()
+  nameWithType: Categories.Dispose()
+  fullName: Budget.Services.Categories.Dispose()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Categories.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Dispose
+    path: Services/Categories.cs
+    startLine: 762
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nReleases all resources used by the Categories instance.\n"
+  remarks: "\nIf this instance owns the database connection, it will be disposed.\nIf the database connection is externally owned, it will not be disposed.\n"
+  example: []
+  syntax:
+    content: public void Dispose()
+    content.vb: Public Sub Dispose
+  overload: Budget.Services.Categories.Dispose*
+  implements:
+  - System.IDisposable.Dispose
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+references:
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: Budget.Services
+  commentId: N:Budget.Services
+  name: Budget.Services
+  nameWithType: Budget.Services
+  fullName: Budget.Services
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Services.Categories.DatabasePath*
+  commentId: Overload:Budget.Services.Categories.DatabasePath
+  name: DatabasePath
+  nameWithType: Categories.DatabasePath
+  fullName: Budget.Services.Categories.DatabasePath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Services.Categories.IsConnected*
+  commentId: Overload:Budget.Services.Categories.IsConnected
+  name: IsConnected
+  nameWithType: Categories.IsConnected
+  fullName: Budget.Services.Categories.IsConnected
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: Budget.Services.Categories
+  commentId: T:Budget.Services.Categories
+  parent: Budget.Services
+  name: Categories
+  nameWithType: Categories
+  fullName: Budget.Services.Categories
+- uid: Budget.Services.DatabaseService
+  commentId: T:Budget.Services.DatabaseService
+  parent: Budget.Services
+  name: DatabaseService
+  nameWithType: DatabaseService
+  fullName: Budget.Services.DatabaseService
+- uid: Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  commentId: M:Budget.Services.Categories.#ctor(System.String,System.Boolean)
+  isExternal: true
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+- uid: Budget.Services.Categories.#ctor*
+  commentId: Overload:Budget.Services.Categories.#ctor
+  name: Categories
+  nameWithType: Categories.Categories
+  fullName: Budget.Services.Categories.Categories
+- uid: Budget.Services.Categories.SetCategoriesToDefaults
+  commentId: M:Budget.Services.Categories.SetCategoriesToDefaults
+  isExternal: true
+- uid: Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  commentId: M:Budget.Services.Categories.#ctor(Budget.Services.DatabaseService)
+  isExternal: true
+- uid: System.IO.FileNotFoundException
+  commentId: T:System.IO.FileNotFoundException
+  isExternal: true
+- uid: System.UnauthorizedAccessException
+  commentId: T:System.UnauthorizedAccessException
+  isExternal: true
+- uid: System.InvalidOperationException
+  commentId: T:System.InvalidOperationException
+  isExternal: true
+- uid: Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.AddCategory(System.String,Budget.Models.Category.CategoryType)
+  isExternal: true
+- uid: Budget.Services.Categories.GetAllCategories
+  commentId: M:Budget.Services.Categories.GetAllCategories
+  isExternal: true
+- uid: System.ObjectDisposedException
+  commentId: T:System.ObjectDisposedException
+  isExternal: true
+- uid: System.Data.SQLite.SQLiteException
+  commentId: T:System.Data.SQLite.SQLiteException
+  isExternal: true
+- uid: Budget.Services.Categories.SetCategoriesToDefaults*
+  commentId: Overload:Budget.Services.Categories.SetCategoriesToDefaults
+  name: SetCategoriesToDefaults
+  nameWithType: Categories.SetCategoriesToDefaults
+  fullName: Budget.Services.Categories.SetCategoriesToDefaults
+- uid: Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.UpdateCategory(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  isExternal: true
+- uid: Budget.Services.Categories.DeleteCategory(System.Int32)
+  commentId: M:Budget.Services.Categories.DeleteCategory(System.Int32)
+  isExternal: true
+- uid: Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  commentId: M:Budget.Services.Categories.GetCategoryFromId(System.Int32)
+  isExternal: true
+- uid: Budget.Models.Category.CategoryType
+  commentId: T:Budget.Models.Category.CategoryType
+  parent: Budget.Models
+  name: Category.CategoryType
+  nameWithType: Category.CategoryType
+  fullName: Budget.Models.Category.CategoryType
+- uid: System.ArgumentException
+  commentId: T:System.ArgumentException
+  isExternal: true
+- uid: Budget.Services.Categories.AddCategory*
+  commentId: Overload:Budget.Services.Categories.AddCategory
+  name: AddCategory
+  nameWithType: Categories.AddCategory
+  fullName: Budget.Services.Categories.AddCategory
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  commentId: M:Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  isExternal: true
+- uid: Budget.Services.Categories.DeleteCategory*
+  commentId: Overload:Budget.Services.Categories.DeleteCategory
+  name: DeleteCategory
+  nameWithType: Categories.DeleteCategory
+  fullName: Budget.Services.Categories.DeleteCategory
+- uid: Budget.Models.Category
+  commentId: T:Budget.Models.Category
+  parent: Budget.Models
+  name: Category
+  nameWithType: Category
+  fullName: Budget.Models.Category
+- uid: Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Services.Categories.GetCategoriesByType(Budget.Models.Category.CategoryType)
+  isExternal: true
+- uid: Budget.Services.Categories.GetAllCategories*
+  commentId: Overload:Budget.Services.Categories.GetAllCategories
+  name: GetAllCategories
+  nameWithType: Categories.GetAllCategories
+  fullName: Budget.Services.Categories.GetAllCategories
+- uid: System.Collections.Generic.List{Budget.Models.Category}
+  commentId: T:System.Collections.Generic.List{Budget.Models.Category}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<Category>
+  nameWithType: List<Category>
+  fullName: System.Collections.Generic.List<Budget.Models.Category>
+  nameWithType.vb: List(Of Category)
+  fullName.vb: System.Collections.Generic.List(Of Budget.Models.Category)
+  name.vb: List(Of Category)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: Budget.Models.Category
+    name: Category
+    nameWithType: Category
+    fullName: Budget.Models.Category
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: Budget.Models.Category
+    name: Category
+    nameWithType: Category
+    fullName: Budget.Models.Category
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: Budget.Services.Categories.UpdateCategory*
+  commentId: Overload:Budget.Services.Categories.UpdateCategory
+  name: UpdateCategory
+  nameWithType: Categories.UpdateCategory
+  fullName: Budget.Services.Categories.UpdateCategory
+- uid: Budget.Services.Categories.GetCategoriesByType*
+  commentId: Overload:Budget.Services.Categories.GetCategoriesByType
+  name: GetCategoriesByType
+  nameWithType: Categories.GetCategoriesByType
+  fullName: Budget.Services.Categories.GetCategoriesByType
+- uid: Budget.Services.Categories.GetCategoryFromId*
+  commentId: Overload:Budget.Services.Categories.GetCategoryFromId
+  name: GetCategoryFromId
+  nameWithType: Categories.GetCategoryFromId
+  fullName: Budget.Services.Categories.GetCategoryFromId
+- uid: Budget.Services.Categories.Dispose*
+  commentId: Overload:Budget.Services.Categories.Dispose
+  name: Dispose
+  nameWithType: Categories.Dispose
+  fullName: Budget.Services.Categories.Dispose
+- uid: System.IDisposable.Dispose
+  commentId: M:System.IDisposable.Dispose
+  parent: System.IDisposable
+  isExternal: true
+  name: Dispose()
+  nameWithType: IDisposable.Dispose()
+  fullName: System.IDisposable.Dispose()
+  spec.csharp:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )

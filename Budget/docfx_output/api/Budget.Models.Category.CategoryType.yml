@@ -1,0 +1,230 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models.Category.CategoryType
+  commentId: T:Budget.Models.Category.CategoryType
+  id: Category.CategoryType
+  parent: Budget.Models
+  children:
+  - Budget.Models.Category.CategoryType.Debt
+  - Budget.Models.Category.CategoryType.Expense
+  - Budget.Models.Category.CategoryType.Income
+  - Budget.Models.Category.CategoryType.Investment
+  - Budget.Models.Category.CategoryType.Savings
+  langs:
+  - csharp
+  - vb
+  name: Category.CategoryType
+  nameWithType: Category.CategoryType
+  fullName: Budget.Models.Category.CategoryType
+  type: Enum
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: CategoryType
+    path: Models/Category.cs
+    startLine: 229
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nDefines the types of budget categories available in the system.\nEach type determines how transactions are treated in balance calculations and reporting.\n"
+  remarks: "\n<p>\nThe enumeration values correspond directly to database identifiers for efficient \nstorage and retrieval. The specific integer values are chosen to maintain \nconsistency with the database schema and should not be changed without \ncorresponding database updates.\n</p>\n<p>\nEach category type serves a specific purpose in personal finance management:\n</p>\n<ul><li><strong>Income:</strong> Money flowing into accounts (salary, freelance, investments returns, etc.)</li><li><strong>Expense:</strong> Money flowing out for regular purchases and bills (food, utilities, entertainment, etc.)</li><li><strong>Debt:</strong> Money used for debt payments (mortgage, credit cards, loans, etc.)</li><li><strong>Investment:</strong> Money allocated to investments (stocks, bonds, retirement accounts, etc.)</li><li><strong>Savings:</strong> Money set aside for future use (emergency fund, vacation fund, etc.)</li></ul>\n"
+  example:
+  - "\n<pre><code>// Using different category types\nvar incomeCategory = new Category(1, &quot;Salary&quot;, CategoryType.Income);\nvar expenseCategory = new Category(2, &quot;Rent&quot;, CategoryType.Expense);\nvar debtCategory = new Category(3, &quot;Credit Card&quot;, CategoryType.Debt);\nvar investmentCategory = new Category(4, &quot;401k&quot;, CategoryType.Investment);\nvar savingsCategory = new Category(5, &quot;Emergency Fund&quot;, CategoryType.Savings);\n\n// Checking category types programmatically\nif (incomeCategory.Type == CategoryType.Income)\n{\n    Console.WriteLine(&quot;This category increases available balance&quot;);\n}\n\n// Grouping categories by type\nvar categories = new List&lt;Category> { incomeCategory, expenseCategory, debtCategory };\nvar expenseCategories = categories.Where(c => c.Type == CategoryType.Expense);\n\n// Getting the underlying integer value\nint typeValue = (int)CategoryType.Income; // Returns 1\nConsole.WriteLine($&quot;Income type database value: {typeValue}&quot;);</code></pre>\n"
+  syntax:
+    content: public enum CategoryType
+    content.vb: Public Enum CategoryType
+  modifiers.csharp:
+  - public
+  - enum
+  modifiers.vb:
+  - Public
+  - Enum
+- uid: Budget.Models.Category.CategoryType.Income
+  commentId: F:Budget.Models.Category.CategoryType.Income
+  id: Income
+  parent: Budget.Models.Category.CategoryType
+  langs:
+  - csharp
+  - vb
+  name: Income
+  nameWithType: Category.CategoryType.Income
+  fullName: Budget.Models.Category.CategoryType.Income
+  type: Field
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Income
+    path: Models/Category.cs
+    startLine: 240
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents income sources such as salary, freelance payments, investment returns, or other money inflows.\nTransactions in Income categories typically increase the available account balance.\n"
+  remarks: "\nIncome categories are used for any money that flows into your accounts. This includes \nregular income like salaries and wages, as well as irregular income like bonuses, \ntax refunds, or income from side businesses.\n"
+  example: []
+  syntax:
+    content: Income = 1
+    return:
+      type: Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: Budget.Models.Category.CategoryType.Expense
+  commentId: F:Budget.Models.Category.CategoryType.Expense
+  id: Expense
+  parent: Budget.Models.Category.CategoryType
+  langs:
+  - csharp
+  - vb
+  name: Expense
+  nameWithType: Category.CategoryType.Expense
+  fullName: Budget.Models.Category.CategoryType.Expense
+  type: Field
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Expense
+    path: Models/Category.cs
+    startLine: 250
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents regular expenses and purchases such as food, utilities, entertainment, or other money outflows.\nTransactions in Expense categories typically decrease the available account balance.\n"
+  remarks: "\nExpense categories cover all types of spending from essential expenses like housing \nand food to discretionary spending like entertainment and hobbies. This is typically \nthe largest category type in most personal budgets.\n"
+  example: []
+  syntax:
+    content: Expense = 2
+    return:
+      type: Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: Budget.Models.Category.CategoryType.Debt
+  commentId: F:Budget.Models.Category.CategoryType.Debt
+  id: Debt
+  parent: Budget.Models.Category.CategoryType
+  langs:
+  - csharp
+  - vb
+  name: Debt
+  nameWithType: Category.CategoryType.Debt
+  fullName: Budget.Models.Category.CategoryType.Debt
+  type: Field
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Debt
+    path: Models/Category.cs
+    startLine: 260
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents debt-related transactions such as loan payments, credit card payments, or other debt obligations.\nTransactions in Debt categories typically decrease the available account balance while reducing overall debt.\n"
+  remarks: "\nDebt categories help track money that goes toward reducing existing debts. This includes \nmortgage payments, car loan payments, credit card payments, student loan payments, \nand any other debt reduction activities.\n"
+  example: []
+  syntax:
+    content: Debt = 3
+    return:
+      type: Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: Budget.Models.Category.CategoryType.Investment
+  commentId: F:Budget.Models.Category.CategoryType.Investment
+  id: Investment
+  parent: Budget.Models.Category.CategoryType
+  langs:
+  - csharp
+  - vb
+  name: Investment
+  nameWithType: Category.CategoryType.Investment
+  fullName: Budget.Models.Category.CategoryType.Investment
+  type: Field
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Investment
+    path: Models/Category.cs
+    startLine: 270
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents investment-related transactions such as stock purchases, retirement contributions, or other investment activities.\nTransactions in Investment categories typically decrease the available account balance while building long-term wealth.\n"
+  remarks: "\nInvestment categories track money that is put into various investment vehicles. This includes \nstock purchases, bond investments, retirement account contributions, mutual fund investments, \nand other wealth-building activities.\n"
+  example: []
+  syntax:
+    content: Investment = 4
+    return:
+      type: Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+- uid: Budget.Models.Category.CategoryType.Savings
+  commentId: F:Budget.Models.Category.CategoryType.Savings
+  id: Savings
+  parent: Budget.Models.Category.CategoryType
+  langs:
+  - csharp
+  - vb
+  name: Savings
+  nameWithType: Category.CategoryType.Savings
+  fullName: Budget.Models.Category.CategoryType.Savings
+  type: Field
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Savings
+    path: Models/Category.cs
+    startLine: 280
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents savings activities such as emergency fund contributions, vacation savings, or other money set aside for future use.\nTransactions in Savings categories typically decrease the available account balance while building savings reserves.\n"
+  remarks: "\nSavings categories help track money that is set aside for specific future goals or general \nfinancial security. This includes emergency fund contributions, vacation savings, \ndown payment savings, and other targeted savings goals.\n"
+  example: []
+  syntax:
+    content: Savings = 5
+    return:
+      type: Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  - const
+  modifiers.vb:
+  - Public
+  - Const
+references:
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: Budget.Models.Category.CategoryType
+  commentId: T:Budget.Models.Category.CategoryType
+  parent: Budget.Models
+  name: Category.CategoryType
+  nameWithType: Category.CategoryType
+  fullName: Budget.Models.Category.CategoryType

@@ -1,0 +1,648 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models.Category
+  commentId: T:Budget.Models.Category
+  id: Category
+  parent: Budget.Models
+  children:
+  - Budget.Models.Category.#ctor(Budget.Models.Category)
+  - Budget.Models.Category.#ctor(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  - Budget.Models.Category.Id
+  - Budget.Models.Category.Name
+  - Budget.Models.Category.ToString
+  - Budget.Models.Category.Type
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: Category
+  fullName: Budget.Models.Category
+  type: Class
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Category
+    path: Models/Category.cs
+    startLine: 55
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents a budget category used to classify financial transactions.\nCategories help organize transactions into meaningful groups for reporting and analysis.\n"
+  remarks: "\n<p>\nCategories are fundamental organizational units in budget management systems. They provide \na way to classify transactions into logical groups such as &quot;Food &amp; Dining&quot;, &quot;Transportation&quot;, \n&quot;Salary&quot;, etc. Each category has a specific type that determines how transactions assigned \nto it affect balance calculations and financial reports.\n</p>\n<p>\nThe category system supports five main types of financial activities:\nIncome (money coming in), Expenses (money going out), Savings (money set aside), \nDebt (money owed or paid toward debts), and Investments (money put into investments).\n</p>\n<p>\nAll properties in this class are mutable to support category management operations \nsuch as renaming or reclassifying categories as user needs evolve.\n</p>\n<p>\nThread Safety: This class is not thread-safe. External synchronization is required \nfor concurrent access from multiple threads.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create different types of categories\nvar salaryCategory = new Category(1, &quot;Salary&quot;, CategoryType.Income);\nvar groceryCategory = new Category(2, &quot;Groceries&quot;, CategoryType.Expense);\nvar savingsCategory = new Category(3, &quot;Emergency Fund&quot;, CategoryType.Savings);\nvar mortgageCategory = new Category(4, &quot;Home Mortgage&quot;, CategoryType.Debt);\nvar stocksCategory = new Category(5, &quot;Stock Portfolio&quot;, CategoryType.Investment);\n\n// Using default expense type\nvar miscCategory = new Category(6, &quot;Miscellaneous&quot;); // Defaults to Expense\n\n// Copy constructor usage\nvar categoryCopy = new Category(salaryCategory);\ncategoryCopy.Name = &quot;Primary Salary&quot;; // Rename the copy\n\n// Display category information\nConsole.WriteLine($&quot;Category: {salaryCategory}&quot;); // Output: &quot;Salary&quot;\nConsole.WriteLine($&quot;Type: {salaryCategory.Type}&quot;); // Output: &quot;Income&quot;\nConsole.WriteLine($&quot;ID: {salaryCategory.Id}&quot;);     // Output: &quot;1&quot;</code></pre>\n"
+  syntax:
+    content: public class Category
+    content.vb: Public Class Category
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Models.Category.Id
+  commentId: P:Budget.Models.Category.Id
+  id: Id
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: Category.Id
+  fullName: Budget.Models.Category.Id
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Id
+    path: Models/Category.cs
+    startLine: 90
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the unique identifier for this category.\n"
+  remarks: "\n<p>\nThe ID serves as the primary key for database operations and is used for establishing \nrelationships with transactions. While this property is mutable for flexibility in \ndata manipulation scenarios, the ID should generally remain constant once assigned \nby the database system.\n</p>\n<p>\nIn typical usage, IDs are assigned automatically by the database when categories \nare created and should not be modified manually unless performing specific data \nmigration or synchronization operations.\n</p>\n"
+  example:
+  - "\n<pre><code>var category = new Category(42, &quot;Entertainment&quot;, CategoryType.Expense);\nConsole.WriteLine($&quot;Category ID: {category.Id}&quot;); // Output: 42\n\n// While possible, changing IDs manually is not recommended\n// category.Id = 99; // Possible but not recommended in normal usage\n\n// IDs are typically used for database operations and relationships\nvar transaction = new Transaction(1, DateTime.Now, &quot;Movie tickets&quot;, 25.00m, category.Id);</code></pre>\n"
+  syntax:
+    content: public int Id { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+      description: "\nA positive integer that uniquely identifies this category within the budget system.\nThis value typically corresponds to the database primary key.\n"
+    content.vb: Public Property Id As Integer
+  overload: Budget.Models.Category.Id*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Category.Name
+  commentId: P:Budget.Models.Category.Name
+  id: Name
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: Category.Name
+  fullName: Budget.Models.Category.Name
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Name
+    path: Models/Category.cs
+    startLine: 132
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public string Name { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: Budget.Models.Category.Name*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Category.Type
+  commentId: P:Budget.Models.Category.Type
+  id: Type
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: Type
+  nameWithType: Category.Type
+  fullName: Budget.Models.Category.Type
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Type
+    path: Models/Category.cs
+    startLine: 179
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the type classification of this category.\n"
+  remarks: "\n<p>\nThe category type is fundamental to how the budget system interprets and processes \ntransactions. It determines whether transactions increase or decrease account balances \nand controls which reports include the transactions.\n</p>\n<p>\nChanging a category&apos;s type will affect how all existing transactions in that category \nare treated in balance calculations and reports. Exercise caution when changing types, \nespecially for categories with many associated transactions.\n</p>\n<p>\nThe type also influences user interface elements such as color coding, grouping, \nand validation rules in transaction entry forms.\n</p>\n"
+  example:
+  - "\n<pre><code>var category = new Category(1, &quot;Freelance Work&quot;, CategoryType.Income);\nConsole.WriteLine($&quot;Category type: {category.Type}&quot;); // Output: &quot;Income&quot;\n\n// Changing category type (use with caution)\ncategory.Type = CategoryType.Investment; // Now treats as investment income\n\n// Type affects balance calculations:\n// Income: Increases balance\n// Expense: Decreases balance  \n// Savings: Decreases available balance, increases savings\n// Debt: Debt payments decrease balance\n// Investment: Investment purchases decrease balance\n\n// Examples of appropriate type assignments:\nvar groceries = new Category(2, &quot;Groceries&quot;, CategoryType.Expense);\nvar retirement = new Category(3, &quot;401k Contribution&quot;, CategoryType.Savings);\nvar mortgage = new Category(4, &quot;Mortgage Payment&quot;, CategoryType.Debt);\nvar portfolio = new Category(5, &quot;Stock Purchase&quot;, CategoryType.Investment);</code></pre>\n"
+  syntax:
+    content: public Category.CategoryType Type { get; set; }
+    parameters: []
+    return:
+      type: Budget.Models.Category.CategoryType
+      description: "\nA <xref href=\"Budget.Models.Category.CategoryType\" data-throw-if-not-resolved=\"false\"></xref> enumeration value that determines how transactions \nin this category affect balance calculations and financial reporting.\n"
+    content.vb: Public Property Type As Category.CategoryType
+  overload: Budget.Models.Category.Type*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Category.#ctor(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  commentId: M:Budget.Models.Category.#ctor(System.Int32,System.String,Budget.Models.Category.CategoryType)
+  id: '#ctor(System.Int32,System.String,Budget.Models.Category.CategoryType)'
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: Category(Int32, String, Category.CategoryType)
+  nameWithType: Category.Category(Int32, String, Category.CategoryType)
+  fullName: Budget.Models.Category.Category(System.Int32, System.String, Budget.Models.Category.CategoryType)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Models/Category.cs
+    startLine: 333
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Models.Category\" data-throw-if-not-resolved=\"false\"></xref> class with the specified values.\n"
+  remarks: "\n<p>\nThis is the primary constructor for creating new category instances. The default type \nof <xref href=\"Budget.Models.Category.CategoryType.Expense\" data-throw-if-not-resolved=\"false\"></xref> is chosen because expenses represent the majority \nof categories in typical personal budgets, making it a convenient default.\n</p>\n<p>\nNo validation is performed on the parameters in this constructor to maintain simplicity \nand flexibility. Validation should be performed at the service layer when categories \nare persisted to the database.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create categories with explicit types\nvar salaryCategory = new Category(1, &quot;Monthly Salary&quot;, CategoryType.Income);\nvar rentCategory = new Category(2, &quot;Rent Payment&quot;, CategoryType.Expense);\nvar savingsCategory = new Category(3, &quot;Emergency Fund&quot;, CategoryType.Savings);\nvar loanCategory = new Category(4, &quot;Student Loan&quot;, CategoryType.Debt);\nvar stockCategory = new Category(5, &quot;Stock Portfolio&quot;, CategoryType.Investment);\n\n// Using default expense type\nvar groceryCategory = new Category(6, &quot;Groceries&quot;); // Automatically set to Expense\nvar utilityCategory = new Category(7, &quot;Utilities&quot;); // Automatically set to Expense\n\nConsole.WriteLine($&quot;Grocery category type: {groceryCategory.Type}&quot;); // Output: &quot;Expense&quot;\n\n// Categories ready for use in transaction assignments\nvar transaction = new Transaction(1, DateTime.Now, &quot;Weekly groceries&quot;, 125.50m, groceryCategory.Id);</code></pre>\n"
+  syntax:
+    content: public Category(int id, string name, Category.CategoryType type = Category.CategoryType.Expense)
+    parameters:
+    - id: id
+      type: System.Int32
+      description: "\nThe unique identifier for this category. Should be a positive integer that uniquely \nidentifies this category within the budget system.\n"
+    - id: name
+      type: System.String
+      description: "\nThe display name of the category. Should be a descriptive, user-friendly name \nthat clearly indicates the category&apos;s purpose.\n"
+    - id: type
+      type: Budget.Models.Category.CategoryType
+      description: "\nThe type classification of the category. Defaults to <xref href=\"Budget.Models.Category.CategoryType.Expense\" data-throw-if-not-resolved=\"false\"></xref> \nif not specified, as expenses are the most common category type in typical budgets.\n"
+    content.vb: Public Sub New(id As Integer, name As String, type As Category.CategoryType = Category.CategoryType.Expense)
+  overload: Budget.Models.Category.#ctor*
+  seealso:
+  - linkId: Budget.Models.Category.#ctor(Budget.Models.Category)
+    commentId: M:Budget.Models.Category.#ctor(Budget.Models.Category)
+  - linkId: Budget.Models.Category.CategoryType
+    commentId: T:Budget.Models.Category.CategoryType
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Category.#ctor(Budget.Models.Category)
+  commentId: M:Budget.Models.Category.#ctor(Budget.Models.Category)
+  id: '#ctor(Budget.Models.Category)'
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: Category(Category)
+  nameWithType: Category.Category(Category)
+  fullName: Budget.Models.Category.Category(Budget.Models.Category)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Models/Category.cs
+    startLine: 410
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public Category(Category category)
+    parameters:
+    - id: category
+      type: Budget.Models.Category
+    content.vb: Public Sub New(category As Category)
+  overload: Budget.Models.Category.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Category.ToString
+  commentId: M:Budget.Models.Category.ToString
+  id: ToString
+  parent: Budget.Models.Category
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Category.ToString()
+  fullName: Budget.Models.Category.ToString()
+  type: Method
+  source:
+    remote:
+      path: Budget/Models/Category.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: ToString
+    path: Models/Category.cs
+    startLine: 476
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nReturns the name of this category as its string representation.\n"
+  remarks: "\n<p>\nThis method is particularly useful in user interface scenarios where categories need \nto be displayed in lists, dropdown menus, or reports. By returning just the name, \nit provides clean, readable text without exposing implementation details like ID numbers.\n</p>\n<p>\nThe string representation focuses on user-friendliness rather than debugging information, \nmaking it ideal for end-user displays. For debugging purposes, you may want to access \nthe individual properties directly to see ID and type information.\n</p>\n"
+  example:
+  - "\n<pre><code>var category = new Category(5, &quot;Entertainment&quot;, CategoryType.Expense);\n\n// Direct ToString() call\nConsole.WriteLine(category.ToString()); // Output: &quot;Entertainment&quot;\n\n// Implicit ToString() call in string context\nConsole.WriteLine($&quot;Selected category: {category}&quot;); // Output: &quot;Selected category: Entertainment&quot;\n\n// Useful in collections and UI scenarios\nvar categories = new List&lt;Category>\n{\n    new Category(1, &quot;Salary&quot;, CategoryType.Income),\n    new Category(2, &quot;Groceries&quot;, CategoryType.Expense),\n    new Category(3, &quot;Savings&quot;, CategoryType.Savings)\n};\n\n// Display category names in a list\nConsole.WriteLine(&quot;Available categories:&quot;);\nforeach (var cat in categories)\n{\n    Console.WriteLine($&quot;- {cat}&quot;); // Uses ToString() implicitly\n}\n// Output:\n// Available categories:\n// - Salary\n// - Groceries  \n// - Savings\n\n// Useful for dropdown/combobox data binding\n// UI frameworks often call ToString() automatically\nvar categoryNames = categories.Select(c => c.ToString()).ToList();\n\n// For debugging, you might want more detail:\nConsole.WriteLine($&quot;Category details: ID={category.Id}, Name={category.Name}, Type={category.Type}&quot;);</code></pre>\n"
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: "\nThe <xref href=\"Budget.Models.Category.Name\" data-throw-if-not-resolved=\"false\"></xref> property value, providing a user-friendly string representation \nof the category suitable for display in user interfaces and reports.\n"
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: Budget.Models.Category.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Models.Category.Id*
+  commentId: Overload:Budget.Models.Category.Id
+  name: Id
+  nameWithType: Category.Id
+  fullName: Budget.Models.Category.Id
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: Budget.Models.Category.Name*
+  commentId: Overload:Budget.Models.Category.Name
+  name: Name
+  nameWithType: Category.Name
+  fullName: Budget.Models.Category.Name
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Models.Category.CategoryType
+  commentId: T:Budget.Models.Category.CategoryType
+  parent: Budget.Models
+  name: Category.CategoryType
+  nameWithType: Category.CategoryType
+  fullName: Budget.Models.Category.CategoryType
+- uid: Budget.Models.Category.Type*
+  commentId: Overload:Budget.Models.Category.Type
+  name: Type
+  nameWithType: Category.Type
+  fullName: Budget.Models.Category.Type
+- uid: Budget.Models.Category
+  commentId: T:Budget.Models.Category
+  parent: Budget.Models
+  name: Category
+  nameWithType: Category
+  fullName: Budget.Models.Category
+- uid: Budget.Models.Category.CategoryType.Expense
+  commentId: F:Budget.Models.Category.CategoryType.Expense
+  isExternal: true
+- uid: Budget.Models.Category.#ctor(Budget.Models.Category)
+  commentId: M:Budget.Models.Category.#ctor(Budget.Models.Category)
+  isExternal: true
+- uid: Budget.Models.Category.#ctor*
+  commentId: Overload:Budget.Models.Category.#ctor
+  name: Category
+  nameWithType: Category.Category
+  fullName: Budget.Models.Category.Category
+- uid: Budget.Models.Category.Name
+  commentId: P:Budget.Models.Category.Name
+  isExternal: true
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: Budget.Models.Category.ToString*
+  commentId: Overload:Budget.Models.Category.ToString
+  name: ToString
+  nameWithType: Category.ToString
+  fullName: Budget.Models.Category.ToString

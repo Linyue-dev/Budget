@@ -1,0 +1,60 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  id: Budget.Models
+  children:
+  - Budget.Models.BudgetItem
+  - Budget.Models.BudgetItemsByCategory
+  - Budget.Models.BudgetItemsByMonth
+  - Budget.Models.Category
+  - Budget.Models.Category.CategoryType
+  - Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+  type: Namespace
+  assemblies:
+  - Budget
+references:
+- uid: Budget.Models.BudgetItem
+  commentId: T:Budget.Models.BudgetItem
+  name: BudgetItem
+  nameWithType: BudgetItem
+  fullName: Budget.Models.BudgetItem
+- uid: Budget.Models.BudgetItemsByMonth
+  commentId: T:Budget.Models.BudgetItemsByMonth
+  name: BudgetItemsByMonth
+  nameWithType: BudgetItemsByMonth
+  fullName: Budget.Models.BudgetItemsByMonth
+- uid: Budget.Models.BudgetItemsByCategory
+  commentId: T:Budget.Models.BudgetItemsByCategory
+  name: BudgetItemsByCategory
+  nameWithType: BudgetItemsByCategory
+  fullName: Budget.Models.BudgetItemsByCategory
+- uid: Budget.Models.Category
+  commentId: T:Budget.Models.Category
+  parent: Budget.Models
+  name: Category
+  nameWithType: Category
+  fullName: Budget.Models.Category
+- uid: Budget.Models.Category.CategoryType
+  commentId: T:Budget.Models.Category.CategoryType
+  parent: Budget.Models
+  name: Category.CategoryType
+  nameWithType: Category.CategoryType
+  fullName: Budget.Models.Category.CategoryType
+- uid: Budget.Models.Transaction
+  commentId: T:Budget.Models.Transaction
+  parent: Budget.Models
+  name: Transaction
+  nameWithType: Transaction
+  fullName: Budget.Models.Transaction
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models

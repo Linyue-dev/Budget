@@ -182,10 +182,12 @@ namespace Budget.Services
                 // Create transactions table
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS transactions(
                     Id INTEGER PRIMARY KEY, 
-                    Date TEXT NOT NULL, 
+                    TransactionDate TEXT NOT NULL,
                     Description TEXT, 
                     Amount DECIMAL(10,2) NOT NULL, 
-                    CategoryId INTEGER NOT NULL,                               
+                    CategoryId INTEGER NOT NULL,    
+                    CreatedBy TEXT NOT NULL DEFAULT 'Unknown',
+                    CreatedAt TEXT NOT NULL DEFAULT (datetime('now','localtime')),    
                     FOREIGN KEY(CategoryId) REFERENCES categories(Id));";
                 command.ExecuteNonQuery();
 

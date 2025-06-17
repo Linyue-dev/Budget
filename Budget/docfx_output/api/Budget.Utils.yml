@@ -1,0 +1,28 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Utils
+  commentId: N:Budget.Utils
+  id: Budget.Utils
+  children:
+  - Budget.Utils.BudgetFiles
+  - Budget.Utils.ConsoleTestDB
+  langs:
+  - csharp
+  - vb
+  name: Budget.Utils
+  nameWithType: Budget.Utils
+  fullName: Budget.Utils
+  type: Namespace
+  assemblies:
+  - Budget
+references:
+- uid: Budget.Utils.BudgetFiles
+  commentId: T:Budget.Utils.BudgetFiles
+  name: BudgetFiles
+  nameWithType: BudgetFiles
+  fullName: Budget.Utils.BudgetFiles
+- uid: Budget.Utils.ConsoleTestDB
+  commentId: T:Budget.Utils.ConsoleTestDB
+  name: ConsoleTestDB
+  nameWithType: ConsoleTestDB
+  fullName: Budget.Utils.ConsoleTestDB

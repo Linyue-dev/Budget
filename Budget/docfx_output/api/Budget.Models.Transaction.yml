@@ -1,0 +1,778 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models.Transaction
+  commentId: T:Budget.Models.Transaction
+  id: Transaction
+  parent: Budget.Models
+  children:
+  - Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  - Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  - Budget.Models.Transaction.Amount
+  - Budget.Models.Transaction.CategoryId
+  - Budget.Models.Transaction.Date
+  - Budget.Models.Transaction.Description
+  - Budget.Models.Transaction.Id
+  - Budget.Models.Transaction.ToString
+  langs:
+  - csharp
+  - vb
+  name: Transaction
+  nameWithType: Transaction
+  fullName: Budget.Models.Transaction
+  type: Class
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Transaction
+    path: Models/Transaction.cs
+    startLine: 57
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nRepresents a financial transaction in the budget system.\nContains information about a single financial event including date, amount, description, and categorization.\n"
+  remarks: "\n<p>\nThis class is an immutable data model for financial transactions. The <xref href=\"Budget.Models.Transaction.Id\" data-throw-if-not-resolved=\"false\"></xref> and \n<xref href=\"Budget.Models.Transaction.Date\" data-throw-if-not-resolved=\"false\"></xref> properties are read-only to maintain data integrity, while other properties \ncan be modified to support transaction updates.\n</p>\n<p>\nTransactions are the core data elements in budget tracking, representing individual financial \nevents such as purchases, income receipts, savings deposits, debt payments, or investments.\nEach transaction must be associated with a category to enable proper classification and reporting.\n</p>\n<p>\nThread Safety: This class is not thread-safe. External synchronization is required for \nconcurrent access from multiple threads.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create a new expense transaction\nvar expense = new Transaction(\n    id: 1,\n    date: DateTime.Now,\n    description: &quot;Grocery shopping at Walmart&quot;,\n    amount: 87.45m,\n    categoryId: 3); // Food category\n\n// Create an income transaction\nvar income = new Transaction(\n    id: 2,\n    date: new DateTime(2025, 1, 1),\n    description: &quot;January salary payment&quot;,\n    amount: 5000.00m,\n    categoryId: 1); // Salary category\n\n// Copy constructor usage\nvar transactionCopy = new Transaction(expense);\n\n// Update mutable properties\ntransactionCopy.Description = &quot;Updated description&quot;;\ntransactionCopy.Amount = 92.50m;\n\nConsole.WriteLine(expense.ToString());\n// Output: 2025-01-15 - Grocery shopping at Walmart: $87.45</code></pre>\n"
+  syntax:
+    content: public class Transaction
+    content.vb: Public Class Transaction
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Models.Transaction.Id
+  commentId: P:Budget.Models.Transaction.Id
+  id: Id
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: Transaction.Id
+  fullName: Budget.Models.Transaction.Id
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Id
+    path: Models/Transaction.cs
+    startLine: 82
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets the unique identifier for this transaction.\n"
+  remarks: "\nThe ID serves as the primary key for database operations and is used for updating, \ndeleting, and referencing transactions. Once set during construction, this value \ncannot be modified to maintain referential integrity.\n"
+  example:
+  - "\n<pre><code>var transaction = new Transaction(42, DateTime.Now, &quot;Test&quot;, 100m, 1);\nConsole.WriteLine($&quot;Transaction ID: {transaction.Id}&quot;); // Output: Transaction ID: 42\n\n// ID cannot be changed after creation\n// transaction.Id = 99; // Compilation error - no setter available</code></pre>\n"
+  syntax:
+    content: public int Id { get; }
+    parameters: []
+    return:
+      type: System.Int32
+      description: "\nA positive integer that uniquely identifies this transaction within the database.\nThis value is typically assigned by the database system and cannot be changed after creation.\n"
+    content.vb: Public ReadOnly Property Id As Integer
+  overload: Budget.Models.Transaction.Id*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Models.Transaction.Date
+  commentId: P:Budget.Models.Transaction.Date
+  id: Date
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Date
+  nameWithType: Transaction.Date
+  fullName: Budget.Models.Transaction.Date
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Date
+    path: Models/Transaction.cs
+    startLine: 118
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets the date and time when this transaction occurred.\n"
+  remarks: "\n<p>\nThe transaction date is crucial for chronological reporting, balance calculations, \nand period-based analysis. It represents the actual date the financial event occurred, \nnot necessarily when it was recorded in the system.\n</p>\n<p>\nThe date is stored with full date and time precision, allowing for multiple \ntransactions on the same day to be properly ordered.\n</p>\n"
+  example:
+  - "\n<pre><code>var transaction = new Transaction(\n    1, \n    new DateTime(2025, 1, 15, 14, 30, 0), \n    &quot;Lunch&quot;, \n    25.50m, \n    5);\n\nConsole.WriteLine($&quot;Transaction occurred on: {transaction.Date:yyyy-MM-dd HH:mm}&quot;);\n// Output: Transaction occurred on: 2025-01-15 14:30\n\n// Date cannot be changed after creation\n// transaction.Date = DateTime.Now; // Compilation error - no setter available</code></pre>\n"
+  syntax:
+    content: public DateTime Date { get; }
+    parameters: []
+    return:
+      type: System.DateTime
+      description: "\nA <xref href=\"System.DateTime\" data-throw-if-not-resolved=\"false\"></xref> representing when the financial transaction took place.\nThis value is immutable after construction to maintain historical accuracy.\n"
+    content.vb: Public ReadOnly Property Date As Date
+  overload: Budget.Models.Transaction.Date*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Models.Transaction.Amount
+  commentId: P:Budget.Models.Transaction.Amount
+  id: Amount
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Amount
+  nameWithType: Transaction.Amount
+  fullName: Budget.Models.Transaction.Amount
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Amount
+    path: Models/Transaction.cs
+    startLine: 157
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the monetary amount of this transaction.\n"
+  remarks: "\n<p>\nThe amount represents the monetary value involved in the transaction. \nThe interpretation of whether this increases or decreases account balances \ndepends on the category type (Income vs. Expense vs. Savings, etc.).\n</p>\n<p>\nUsing <xref href=\"System.Decimal\" data-throw-if-not-resolved=\"false\"></xref> ensures precise financial calculations without \nfloating-point rounding errors that could occur with <xref href=\"System.Double\" data-throw-if-not-resolved=\"false\"></xref> or <xref href=\"System.Single\" data-throw-if-not-resolved=\"false\"></xref>.\n</p>\n<p>\nThis property is mutable to support transaction updates through the application lifecycle.\n</p>\n"
+  example:
+  - "\n<pre><code>var transaction = new Transaction(1, DateTime.Now, &quot;Coffee&quot;, 4.50m, 3);\nConsole.WriteLine($&quot;Original amount: {transaction.Amount:C}&quot;); // $4.50\n\n// Update the amount (perhaps correcting an error)\ntransaction.Amount = 5.25m;\nConsole.WriteLine($&quot;Updated amount: {transaction.Amount:C}&quot;); // $5.25\n\n// Amounts should typically be positive\n// The category type determines the balance impact\nvar income = new Transaction(2, DateTime.Now, &quot;Salary&quot;, 3000.00m, 1);\nvar expense = new Transaction(3, DateTime.Now, &quot;Rent&quot;, 1200.00m, 2);</code></pre>\n"
+  syntax:
+    content: public decimal Amount { get; set; }
+    parameters: []
+    return:
+      type: System.Decimal
+      description: "\nA <xref href=\"System.Decimal\" data-throw-if-not-resolved=\"false\"></xref> representing the transaction amount. \nPositive values typically represent the magnitude of the transaction, \nwith the impact direction determined by the associated category type.\n"
+    content.vb: Public Property Amount As Decimal
+  overload: Budget.Models.Transaction.Amount*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Transaction.Description
+  commentId: P:Budget.Models.Transaction.Description
+  id: Description
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: Transaction.Description
+  fullName: Budget.Models.Transaction.Description
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Description
+    path: Models/Transaction.cs
+    startLine: 200
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets a descriptive text explaining what this transaction represents.\n"
+  remarks: "\n<p>\nThe description provides context and details about the transaction that help \nusers understand and categorize their financial activities. Good descriptions \ninclude vendor names, purchase details, or income sources.\n</p>\n<p>\nThis property is mutable to allow correction of typos or addition of missing \ninformation after the transaction is initially created.\n</p>\n<p>\nWhile the description can be null or empty, providing meaningful descriptions \ngreatly improves the usefulness of financial reports and transaction searches.\n</p>\n"
+  example:
+  - "\n<pre><code>var transaction = new Transaction(1, DateTime.Now, &quot;Coffee at Starbucks&quot;, 6.75m, 4);\nConsole.WriteLine($&quot;Description: {transaction.Description}&quot;);\n\n// Update description to add more detail\ntransaction.Description = &quot;Coffee and pastry at Starbucks - Main St location&quot;;\n\n// Descriptions can be empty but it&apos;s not recommended\nvar vague = new Transaction(2, DateTime.Now, &quot;&quot;, 50.00m, 5);\nvar better = new Transaction(3, DateTime.Now, &quot;Gas - Shell Station&quot;, 45.30m, 6);\n\n// Good description examples:\n// &quot;Weekly grocery shopping - Kroger&quot;\n// &quot;Electric bill - January 2025&quot;\n// &quot;Freelance payment - ABC Company&quot;\n// &quot;ATM withdrawal - emergency cash&quot;</code></pre>\n"
+  syntax:
+    content: public string Description { get; set; }
+    parameters: []
+    return:
+      type: System.String
+      description: "\nA string containing a human-readable description of the transaction. \nCan be null or empty, though descriptive values are recommended for better record-keeping.\n"
+    content.vb: Public Property Description As String
+  overload: Budget.Models.Transaction.Description*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Transaction.CategoryId
+  commentId: P:Budget.Models.Transaction.CategoryId
+  id: CategoryId
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: CategoryId
+  nameWithType: Transaction.CategoryId
+  fullName: Budget.Models.Transaction.CategoryId
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: CategoryId
+    path: Models/Transaction.cs
+    startLine: 244
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public int CategoryId { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property CategoryId As Integer
+  overload: Budget.Models.Transaction.CategoryId*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  commentId: M:Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  id: '#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)'
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Transaction(Int32, DateTime, String, Decimal, Int32)
+  nameWithType: Transaction.Transaction(Int32, DateTime, String, Decimal, Int32)
+  fullName: Budget.Models.Transaction.Transaction(System.Int32, System.DateTime, System.String, System.Decimal, System.Int32)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Models/Transaction.cs
+    startLine: 325
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Models.Transaction\" data-throw-if-not-resolved=\"false\"></xref> class with the specified values.\n"
+  remarks: "\n<p>\nThis is the primary constructor for creating new transaction instances. \nThe <code data-dev-comment-type=\"paramref\" class=\"paramref\">id</code> and <code data-dev-comment-type=\"paramref\" class=\"paramref\">date</code> become immutable after construction,\nwhile other properties can be modified later if needed.\n</p>\n<p>\nThe constructor validates that both ID values are positive to prevent invalid \nreferences and maintain data integrity constraints.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create a typical expense transaction\nvar expense = new Transaction(\n    id: 101,\n    date: DateTime.Now,\n    description: &quot;Coffee and bagel&quot;,\n    amount: 8.75m,\n    categoryId: 5); // Food category\n\n// Create an income transaction\nvar paycheck = new Transaction(\n    id: 102,\n    date: new DateTime(2025, 1, 15),\n    description: &quot;Bi-weekly salary&quot;,\n    amount: 2500.00m,\n    categoryId: 1); // Income category\n\n// Invalid examples that would throw exceptions:\ntry\n{\n    var invalid1 = new Transaction(0, DateTime.Now, &quot;Test&quot;, 100m, 1); // ID = 0\n}\ncatch (ArgumentException ex)\n{\n    Console.WriteLine(ex.Message); // &quot;ID must be greater than zero.&quot;\n}\n\ntry\n{\n    var invalid2 = new Transaction(1, DateTime.Now, &quot;Test&quot;, 100m, -1); // CategoryId = -1\n}\ncatch (ArgumentException ex)\n{\n    Console.WriteLine(ex.Message); // &quot;Category ID must be greater than zero.&quot;\n}</code></pre>\n"
+  syntax:
+    content: public Transaction(int id, DateTime date, string description, decimal amount, int categoryId)
+    parameters:
+    - id: id
+      type: System.Int32
+      description: "\nThe unique identifier for this transaction. Must be greater than zero.\nTypically assigned by the database system.\n"
+    - id: date
+      type: System.DateTime
+      description: "\nThe date and time when this transaction occurred.\n"
+    - id: description
+      type: System.String
+      description: "\nA descriptive text explaining what this transaction represents.\nCan be null or empty, though descriptive values improve record-keeping.\n"
+    - id: amount
+      type: System.Decimal
+      description: "\nThe monetary amount of this transaction. Should typically be positive,\nwith the impact direction determined by the associated category type.\n"
+    - id: categoryId
+      type: System.Int32
+      description: "\nThe identifier of the category this transaction belongs to. Must be greater than zero\nand should correspond to an existing category in the system.\n"
+    content.vb: Public Sub New(id As Integer, date As Date, description As String, amount As Decimal, categoryId As Integer)
+  overload: Budget.Models.Transaction.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">id</code> or <code data-dev-comment-type=\"paramref\" class=\"paramref\">categoryId</code> is less than or equal to zero.\n"
+  seealso:
+  - linkId: Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+    commentId: M:Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  commentId: M:Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  id: '#ctor(Budget.Models.Transaction)'
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: Transaction(Transaction)
+  nameWithType: Transaction.Transaction(Transaction)
+  fullName: Budget.Models.Transaction.Transaction(Budget.Models.Transaction)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Models/Transaction.cs
+    startLine: 412
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Models.Transaction\" data-throw-if-not-resolved=\"false\"></xref> class by copying values from another transaction.\n"
+  remarks: "\n<p>\nThis copy constructor creates a new transaction instance with identical values \nto the source transaction. This is useful for creating transaction templates, \nbacking up transaction data before modifications, or implementing undo functionality.\n</p>\n<p>\nThe new instance is completely independent of the source transaction - modifications \nto one will not affect the other.\n</p>\n<p>\nNote that this creates a shallow copy since all properties are value types or immutable strings.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create an original transaction\nvar original = new Transaction(\n    id: 50,\n    date: DateTime.Now,\n    description: &quot;Original description&quot;,\n    amount: 100.00m,\n    categoryId: 2);\n\n// Create a copy\nvar copy = new Transaction(original);\n\n// Verify the copy has the same values\nConsole.WriteLine($&quot;Original: {original}&quot;);\nConsole.WriteLine($&quot;Copy: {copy}&quot;);\n// Both will show identical output\n\n// Modify the copy - original remains unchanged\ncopy.Description = &quot;Modified description&quot;;\ncopy.Amount = 150.00m;\n\nConsole.WriteLine($&quot;After modification:&quot;);\nConsole.WriteLine($&quot;Original: {original}&quot;); // Still shows original values\nConsole.WriteLine($&quot;Copy: {copy}&quot;);         // Shows modified values\n\n// Use case: Creating a template for similar transactions\nvar template = new Transaction(1, DateTime.Now, &quot;Monthly Subscription&quot;, 9.99m, 3);\nvar january = new Transaction(template);\nvar february = new Transaction(template);\n\njanuary.Description = &quot;January Netflix&quot;;\nfebruary.Description = &quot;February Netflix&quot;;\n\n// Error handling\ntry\n{\n    var invalid = new Transaction(null); // Throws ArgumentNullException\n}\ncatch (ArgumentNullException ex)\n{\n    Console.WriteLine(ex.Message); // &quot;Transaction object cannot be null.&quot;\n}</code></pre>\n"
+  syntax:
+    content: public Transaction(Transaction obj)
+    parameters:
+    - id: obj
+      type: Budget.Models.Transaction
+      description: "\nThe source <xref href=\"Budget.Models.Transaction\" data-throw-if-not-resolved=\"false\"></xref> object to copy values from. Cannot be null.\n"
+    content.vb: Public Sub New(obj As Transaction)
+  overload: Budget.Models.Transaction.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">obj</code> is null.\n"
+  seealso:
+  - linkId: Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+    commentId: M:Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.Transaction.ToString
+  commentId: M:Budget.Models.Transaction.ToString
+  id: ToString
+  parent: Budget.Models.Transaction
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Transaction.ToString()
+  fullName: Budget.Models.Transaction.ToString()
+  type: Method
+  source:
+    remote:
+      path: Budget/Models/Transaction.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: ToString
+    path: Models/Transaction.cs
+    startLine: 482
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: Budget.Models.Transaction.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: Budget.Models.Transaction.Id
+  commentId: P:Budget.Models.Transaction.Id
+  isExternal: true
+- uid: Budget.Models.Transaction.Date
+  commentId: P:Budget.Models.Transaction.Date
+  isExternal: true
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Models.Transaction.Id*
+  commentId: Overload:Budget.Models.Transaction.Id
+  name: Id
+  nameWithType: Transaction.Id
+  fullName: Budget.Models.Transaction.Id
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+- uid: Budget.Models.Transaction.Date*
+  commentId: Overload:Budget.Models.Transaction.Date
+  name: Date
+  nameWithType: Transaction.Date
+  fullName: Budget.Models.Transaction.Date
+- uid: System.Decimal
+  commentId: T:System.Decimal
+  parent: System
+  isExternal: true
+  name: Decimal
+  nameWithType: Decimal
+  fullName: System.Decimal
+- uid: System.Double
+  commentId: T:System.Double
+  isExternal: true
+- uid: System.Single
+  commentId: T:System.Single
+  isExternal: true
+- uid: Budget.Models.Transaction.Amount*
+  commentId: Overload:Budget.Models.Transaction.Amount
+  name: Amount
+  nameWithType: Transaction.Amount
+  fullName: Budget.Models.Transaction.Amount
+- uid: Budget.Models.Transaction.Description*
+  commentId: Overload:Budget.Models.Transaction.Description
+  name: Description
+  nameWithType: Transaction.Description
+  fullName: Budget.Models.Transaction.Description
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Models.Transaction.CategoryId*
+  commentId: Overload:Budget.Models.Transaction.CategoryId
+  name: CategoryId
+  nameWithType: Transaction.CategoryId
+  fullName: Budget.Models.Transaction.CategoryId
+- uid: Budget.Models.Transaction
+  commentId: T:Budget.Models.Transaction
+  parent: Budget.Models
+  name: Transaction
+  nameWithType: Transaction
+  fullName: Budget.Models.Transaction
+- uid: Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  commentId: M:Budget.Models.Transaction.#ctor(Budget.Models.Transaction)
+  isExternal: true
+- uid: System.ArgumentException
+  commentId: T:System.ArgumentException
+  isExternal: true
+- uid: Budget.Models.Transaction.#ctor*
+  commentId: Overload:Budget.Models.Transaction.#ctor
+  name: Transaction
+  nameWithType: Transaction.Transaction
+  fullName: Budget.Models.Transaction.Transaction
+- uid: Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  commentId: M:Budget.Models.Transaction.#ctor(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  isExternal: true
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: Budget.Models.Transaction.ToString*
+  commentId: Overload:Budget.Models.Transaction.ToString
+  name: ToString
+  nameWithType: Transaction.ToString
+  fullName: Budget.Models.Transaction.ToString

@@ -1,0 +1,22 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget
+  commentId: N:Budget
+  id: Budget
+  children:
+  - Budget.HomeBudget
+  langs:
+  - csharp
+  - vb
+  name: Budget
+  nameWithType: Budget
+  fullName: Budget
+  type: Namespace
+  assemblies:
+  - Budget
+references:
+- uid: Budget.HomeBudget
+  commentId: T:Budget.HomeBudget
+  name: HomeBudget
+  nameWithType: HomeBudget
+  fullName: Budget.HomeBudget

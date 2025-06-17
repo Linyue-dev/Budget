@@ -1,0 +1,26 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.csproj" ],
+          "src": "Budget"
+        }
+      ],
+      "dest": "../docfx_output/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "api/**.yml", "api/toc.yml" ],
+        "src": "docfx_output"
+      },
+      {
+        "files": [ "*.md", "toc.yml" ]
+      }
+    ],
+    "dest": "docfx_output/_site",
+    "template": [ "default" ]
+  }
+}

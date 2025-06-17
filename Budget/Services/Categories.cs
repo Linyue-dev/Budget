@@ -14,6 +14,10 @@ using System.Data;
 
 namespace Budget.Services
 {
+    /// <summary>
+    /// Provides services for managing categories in the budget application.
+    /// Handles creation, retrieval, update, and deletion of category records.
+    /// </summary>
     public class Categories : IDisposable
     {
         #region Private Fields
@@ -21,18 +25,16 @@ namespace Budget.Services
         private readonly bool _ownsDatabase;
         private bool _disposed = false;
         #endregion
-        #region Public Properties    
 
+        #region Public Properties    
         /// <summary>
-        /// Gets the full path to the database file.
+        /// Gets the full path of the connected database.
         /// </summary>
-        /// <value>The full path as string, or empty string if no database is connected.</value>
         public string DatabasePath => Path.GetFullPath(_databaseService?.Connection?.DataSource ?? "");
 
         /// <summary>
         /// Gets a value indicating whether the database connection is open.
         /// </summary>
-        /// <value>true if connected; otherwise, false.</value>
         public bool IsConnected => _databaseService?.Connection?.State == System.Data.ConnectionState.Open;
 
         #endregion
@@ -40,24 +42,21 @@ namespace Budget.Services
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the Categories class using an existing DatabaseService.
+        /// Initializes a new instance of the <see cref="Categories"/> class with an existing <see cref="DatabaseService"/>.
         /// </summary>
-        /// <param name="databaseService">An existing DatabaseService instance.</param>
-        /// <exception cref="ArgumentNullException">Thrown when databaseService is null.</exception>
-        /// <remarks>This constructor does not take ownership of the database connection.</remarks>
+        /// <param name="databaseService">The existing database service instance.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the databaseService is null.</exception>
         public Categories(DatabaseService databaseService)
         {
             _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
             _ownsDatabase = false; // External ownership
         }
-
         /// <summary>
-        /// Initializes a new instance of the Categories class with a database path.
+        /// Initializes a new instance of the <see cref="Categories"/> class and creates or opens a database at the specified path.
         /// </summary>
-        /// <param name="databasePath">Path to the SQLite database file.</param>
-        /// <param name="isNew">If true, creates a new database and sets up default categories.</param>
-        /// <exception cref="ArgumentNullException">Thrown when databasePath is null or whitespace.</exception>
-        /// <remarks>This constructor takes ownership of the database connection.</remarks>
+        /// <param name="databasePath">The file path of the SQLite database.</param>
+        /// <param name="isNew">Indicates whether to create a new database.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the databasePath is null or empty.</exception>
         public Categories(string databasePath, bool isNew = false)
         {
             if (string.IsNullOrWhiteSpace(databasePath)) throw new ArgumentNullException(nameof(databasePath));
@@ -75,18 +74,9 @@ namespace Budget.Services
         #endregion
 
         /// <summary>
-        /// Populates the database with default categories for a new budget system.
+        /// Adds a predefined list of default categories to the database.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when categories already exist in the database.</exception>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        /// <remarks>
-        /// Adds the following default categories:
-        /// - Expenses: Utilities, Food &amp; Dining, Transportation, Health &amp; Personal Care, Insurance, Clothes, Education, Vacation, Social Expenses, Municipal &amp; School Tax, Rental Expenses, Miscellaneous
-        /// - Savings: Savings  
-        /// - Debt: Housing mortgage, Auto loan
-        /// - Income: Salary, Rental Income
-        /// - Investment: Stock &amp; Fund
-        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown if categories already exist in the database.</exception>
         public void SetCategoriesToDefaults()
         {
             EnsureNotDisposed();
@@ -124,16 +114,10 @@ namespace Budget.Services
         /// Adds a new category to the database.
         /// </summary>
         /// <param name="name">The name of the category.</param>
-        /// <param name="type">The type of category (Income, Expense, Savings, Debt, Investment).</param>
-        /// <returns>The ID of the newly created category.</returns>
-        /// <exception cref="ArgumentException">Thrown when name is null or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the insert operation fails.</exception>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        /// <example>
-        /// <code>
-        /// int categoryId = categories.Add("Entertainment", CategoryType.Expense);
-        /// </code>
-        /// </example>
+        /// <param name="type">The type of the category.</param>
+        /// <returns>The ID of the newly inserted category.</returns>
+        /// <exception cref="ArgumentException">Thrown if the category name is null or empty.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if insertion fails.</exception>
         public int AddCategory(string name, Category.CategoryType type)
         {
             EnsureNotDisposed();
@@ -158,30 +142,10 @@ namespace Budget.Services
         }
 
         /// <summary>
-        /// Deletes a category from the database if it has no associated transactions.
+        /// Deletes a category by its ID if no transactions are associated with it.
         /// </summary>
         /// <param name="categoryId">The ID of the category to delete.</param>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the category has associated transactions or doesn't exist.
-        /// </exception>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        /// <remarks>
-        /// This method prevents deletion of categories that are referenced by transactions 
-        /// to maintain referential integrity. All associated transactions must be deleted 
-        /// or reassigned before the category can be removed.
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// try
-        /// {
-        ///     categories.Delete(5);
-        /// }
-        /// catch (InvalidOperationException ex)
-        /// {
-        ///     Console.WriteLine(ex.Message); // "Cannot delete category with 3 associated transactions..."
-        /// }
-        /// </code>
-        /// </example>
+        /// <exception cref="InvalidOperationException">Thrown if transactions are associated or category not found.</exception>
         public void DeleteCategory(int categoryId)
         {
             EnsureNotDisposed();
@@ -207,12 +171,10 @@ namespace Budget.Services
                 throw new InvalidOperationException($"Category with ID {categoryId} not found.");
             }
         }
-
         /// <summary>
-        /// Retrieves all categories from the database, ordered by type and name.
+        /// Retrieves all categories from the database.
         /// </summary>
-        /// <returns>A list of Category objects representing all categories in the database.</returns>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
+        /// <returns>A list of all categories.</returns>
         public List<Category> GetAllCategories()
         {
             EnsureNotDisposed();
@@ -235,14 +197,12 @@ namespace Budget.Services
             }
             return categories;
         }
-
         /// <summary>
-        /// Updates an existing category's name and type.
+        /// Updates the name and type of a category.
         /// </summary>
         /// <param name="categoryId">The ID of the category to update.</param>
-        /// <param name="name">The new name for the category.</param>
-        /// <param name="type">The new type for the category.</param>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
+        /// <param name="name">The new name of the category.</param>
+        /// <param name="type">The new type of the category.</param>
         public void UpdateCategory(int categoryId, string name, CategoryType type)
         {
             EnsureNotDisposed();
@@ -259,16 +219,10 @@ namespace Budget.Services
         }
 
         /// <summary>
-        /// Retrieves all categories of a specific type, ordered by name.
+        /// Retrieves all categories matching a specified type.
         /// </summary>
-        /// <param name="type">The category type to filter by.</param>
-        /// <returns>A list of Category objects matching the specified type.</returns>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
-        /// <example>
-        /// <code>
-        /// var expenses = categories.GetCategoriesByType(CategoryType.Expense);
-        /// </code>
-        /// </example>
+        /// <param name="type">The type of category to filter by.</param>
+        /// <returns>A list of categories of the specified type.</returns>
         public List<Category> GetCategoriesByType(CategoryType type)
         {
             EnsureNotDisposed();
@@ -296,11 +250,10 @@ namespace Budget.Services
         }
 
         /// <summary>
-        /// Retrieves a specific category by its ID.
+        /// Retrieves a single category based on its ID.
         /// </summary>
-        /// <param name="categoryId">The ID of the category to retrieve.</param>
-        /// <returns>A Category object if found; otherwise, null.</returns>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
+        /// <param name="categoryId">The ID of the category.</param>
+        /// <returns>The corresponding category, or null if not found.</returns>
         public Category? GetCategoryFromId(int categoryId)
         {
             EnsureNotDisposed();
@@ -328,9 +281,9 @@ namespace Budget.Services
         #region Helper Methods
 
         /// <summary>
-        /// Ensures that the Categories instance has not been disposed.
+        /// Throws an exception if this instance has been disposed.
         /// </summary>
-        /// <exception cref="ObjectDisposedException">Thrown when the Categories instance has been disposed.</exception>
+        /// <exception cref="ObjectDisposedException">Thrown if this instance has already been disposed.</exception>
         private void EnsureNotDisposed()
         {
             if (_disposed) // Check whether the Categories object has been released
@@ -342,12 +295,8 @@ namespace Budget.Services
         #region IDisposable Implementation
 
         /// <summary>
-        /// Releases all resources used by the Categories instance.
+        /// Releases all resources used by this instance of <see cref="Categories"/>.
         /// </summary>
-        /// <remarks>
-        /// If this instance owns the database connection, it will be disposed.
-        /// If the database connection is externally owned, it will not be disposed.
-        /// </remarks>
         public void Dispose()
         {
             if (!_disposed)

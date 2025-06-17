@@ -1,0 +1,1145 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Services.Transactions
+  commentId: T:Budget.Services.Transactions
+  id: Transactions
+  parent: Budget.Services
+  children:
+  - Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  - Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  - Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  - Budget.Services.Transactions.DatabasePath
+  - Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  - Budget.Services.Transactions.Dispose
+  - Budget.Services.Transactions.GetAllTransactions
+  - Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  - Budget.Services.Transactions.IsConnected
+  - Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  langs:
+  - csharp
+  - vb
+  name: Transactions
+  nameWithType: Transactions
+  fullName: Budget.Services.Transactions
+  type: Class
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Transactions
+    path: Services/Transactions.cs
+    startLine: 53
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nProvides comprehensive transaction management functionality for budget applications.\nManages financial transaction data including creation, retrieval, updating, and deletion operations.\n"
+  remarks: "\n<p>\nThis class handles all database operations related to financial transactions and maintains \nthe database connection lifecycle. It supports both shared database connections and \nindependent database management.\n</p>\n<p>\nThe class implements the <xref href=\"System.IDisposable\" data-throw-if-not-resolved=\"false\"></xref> pattern to ensure proper resource cleanup.\nAlways dispose of instances when finished to prevent resource leaks.\n</p>\n<p>\nThread Safety: This class is not thread-safe. External synchronization is required \nfor concurrent access from multiple threads.\n</p>\n"
+  example:
+  - "\n<pre><code>// Using with existing database service\nusing var dbService = DatabaseService.OpenExisting(&quot;budget.db&quot;);\nusing var transactions = new Transactions(dbService);\n\n// Add a new transaction\nint transactionId = transactions.AddTransaction(\n    DateTime.Now, \n    categoryId: 1, \n    amount: 299.99m, \n    description: &quot;Grocery shopping&quot;);\n\n// Retrieve all transactions\nvar allTransactions = transactions.GetAllTransactions();\n\n// Using with independent database\nusing var transactions2 = new Transactions(&quot;mybudget.db&quot;, isNew: false);\nvar specificTransaction = transactions2.GetTransactionFromId(transactionId);</code></pre>\n"
+  syntax:
+    content: 'public class Transactions : IDisposable'
+    content.vb: >-
+      Public Class Transactions
+          Implements IDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - System.IDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Services.Transactions.DatabasePath
+  commentId: P:Budget.Services.Transactions.DatabasePath
+  id: DatabasePath
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: DatabasePath
+  nameWithType: Transactions.DatabasePath
+  fullName: Budget.Services.Transactions.DatabasePath
+  type: Property
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: DatabasePath
+    path: Services/Transactions.cs
+    startLine: 82
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nGets the full path to the database file used by this transaction service.\n"
+  remarks: "\nThis property is useful for logging, debugging, or displaying the current \ndatabase location to users. The path is resolved to an absolute path even \nif a relative path was originally provided.\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\nConsole.WriteLine($&quot;Database located at: {transactions.DatabasePath}&quot;);\n// Output: Database located at: C:\\MyApp\\budget.db</code></pre>\n"
+  syntax:
+    content: public string DatabasePath { get; }
+    parameters: []
+    return:
+      type: System.String
+      description: "\nA string containing the absolute path to the SQLite database file.\nReturns an empty string if no database is connected or the connection is null.\n"
+    content.vb: Public ReadOnly Property DatabasePath As String
+  overload: Budget.Services.Transactions.DatabasePath*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Services.Transactions.IsConnected
+  commentId: P:Budget.Services.Transactions.IsConnected
+  id: IsConnected
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: IsConnected
+  nameWithType: Transactions.IsConnected
+  fullName: Budget.Services.Transactions.IsConnected
+  type: Property
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: IsConnected
+    path: Services/Transactions.cs
+    startLine: 115
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nGets a value indicating whether the database connection is currently open and available.\n"
+  remarks: "\n<p>\nThis property should be checked before performing database operations to ensure \nthe connection is valid. A <code>false</code> value indicates either:\n</p>\n<ul><li>The instance has been disposed</li><li>The database connection is closed or failed</li><li>The database service is null</li></ul>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\nif (transactions.IsConnected)\n{\n    var allTransactions = transactions.GetAllTransactions();\n}\nelse\n{\n    Console.WriteLine(&quot;Database connection is not available&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public bool IsConnected { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+      description: "\n<code>true</code> if the database connection is open and the instance has not been disposed; \notherwise, <code>false</code>.\n"
+    content.vb: Public ReadOnly Property IsConnected As Boolean
+  overload: Budget.Services.Transactions.IsConnected*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  commentId: M:Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  id: '#ctor(Budget.Services.DatabaseService)'
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: Transactions(DatabaseService)
+  nameWithType: Transactions.Transactions(DatabaseService)
+  fullName: Budget.Services.Transactions.Transactions(Budget.Services.DatabaseService)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Services/Transactions.cs
+    startLine: 154
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> class using an existing database service.\n"
+  remarks: "\n<p>\nThis constructor is typically used when multiple services need to share the same \ndatabase connection. The provided <code data-dev-comment-type=\"paramref\" class=\"paramref\">databaseService</code> remains under \nexternal ownership and will not be disposed when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> \ninstance is disposed.\n</p>\n<p>\nUse this constructor when integrating with dependency injection containers or \nwhen managing database connections centrally in your application.\n</p>\n"
+  example:
+  - "\n<pre><code>// Shared database service pattern\nusing var dbService = DatabaseService.OpenExisting(&quot;budget.db&quot;);\nusing var categories = new Categories(dbService);\nusing var transactions = new Transactions(dbService); // Shares the same connection\n\n// Both services use the same database connection\nvar categoryId = categories.AddCategory(&quot;Food&quot;, CategoryType.Expense);\nvar transactionId = transactions.AddTransaction(DateTime.Now, categoryId, 25.50m, &quot;Lunch&quot;);</code></pre>\n"
+  syntax:
+    content: public Transactions(DatabaseService databaseService)
+    parameters:
+    - id: databaseService
+      type: Budget.Services.DatabaseService
+      description: "\nAn existing <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref> instance that manages the database connection.\nThis service will be used for all database operations but will not be disposed by this instance.\n"
+    content.vb: Public Sub New(databaseService As DatabaseService)
+  overload: Budget.Services.Transactions.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databaseService</code> is <code>null</code>.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+    commentId: M:Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  commentId: M:Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  id: '#ctor(System.String,System.Boolean)'
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: Transactions(String, Boolean)
+  nameWithType: Transactions.Transactions(String, Boolean)
+  fullName: Budget.Services.Transactions.Transactions(System.String, System.Boolean)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Services/Transactions.cs
+    startLine: 215
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> class with a database file path.\n"
+  remarks: "\n<p>\nThis constructor creates and manages its own <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref> instance.\nThe created database service will be disposed when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> \ninstance is disposed.\n</p>\n<p>\nWhen <code data-dev-comment-type=\"paramref\" class=\"paramref\">isNew</code> is <code>true</code>, any existing file at the specified \npath will be deleted and replaced with a new, empty database with the proper schema.\n</p>\n<p>\nUse this constructor when you need independent control over the database connection\nor when working with a single service instance.\n</p>\n"
+  example:
+  - "\n<pre><code>// Create a new database\nusing var transactions1 = new Transactions(&quot;newbudget.db&quot;, isNew: true);\n\n// Open existing database\nusing var transactions2 = new Transactions(&quot;existingbudget.db&quot;, isNew: false);\n\n// Using relative path\nusing var transactions3 = new Transactions(@&quot;Data\\budget.db&quot;, isNew: false);\n\n// Using absolute path\nusing var transactions4 = new Transactions(@&quot;C:\\MyApp\\Data\\budget.db&quot;, isNew: false);</code></pre>\n"
+  syntax:
+    content: public Transactions(string databasePath, bool isNew = false)
+    parameters:
+    - id: databasePath
+      type: System.String
+      description: "\nThe file path to the SQLite database file. Can be an absolute or relative path.\nThe file must exist unless <code data-dev-comment-type=\"paramref\" class=\"paramref\">isNew</code> is <code>true</code>.\n"
+    - id: isNew
+      type: System.Boolean
+      description: "\n<code>true</code> to create a new database (existing file will be overwritten); \n<code>false</code> to open an existing database file.\n"
+    content.vb: Public Sub New(databasePath As String, isNew As Boolean = False)
+  overload: Budget.Services.Transactions.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databasePath</code> is <code>null</code>, empty, or contains only whitespace.\n"
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "\nThrown when the application lacks permission to access the specified file or directory.\n"
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when database initialization fails due to corruption, invalid format, or other database issues.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+    commentId: M:Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  - linkId: Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+    commentId: M:Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  - linkId: Budget.Services.DatabaseService.OpenExisting(System.String)
+    commentId: M:Budget.Services.DatabaseService.OpenExisting(System.String)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  commentId: M:Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  id: AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: AddTransaction(DateTime, Int32, Decimal, String)
+  nameWithType: Transactions.AddTransaction(DateTime, Int32, Decimal, String)
+  fullName: Budget.Services.Transactions.AddTransaction(System.DateTime, System.Int32, System.Decimal, System.String)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: AddTransaction
+    path: Services/Transactions.cs
+    startLine: 310
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nAdds a new financial transaction to the database.\n"
+  remarks: "\n<p>\nThe transaction amount should always be entered as a positive value. The interpretation \nof whether it increases or decreases the account balance depends on the associated \ncategory type (Income, Expense, Savings, etc.).\n</p>\n<p>\nThe method ensures transactional integrity by using parameterized queries to prevent \nSQL injection attacks and by validating the insert operation&apos;s success.\n</p>\n<p>\nPerformance note: This method executes synchronously. For high-volume operations, \nconsider batching multiple transactions or using asynchronous patterns.\n</p>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\n\n// Add an expense transaction\nint expenseId = transactions.AddTransaction(\n    date: DateTime.Now,\n    categoryId: 5, // Food category\n    amount: 42.75m,\n    description: &quot;Dinner at restaurant&quot;);\n\n// Add an income transaction\nint incomeId = transactions.AddTransaction(\n    date: new DateTime(2025, 1, 1),\n    categoryId: 1, // Salary category\n    amount: 5000.00m,\n    description: &quot;January salary payment&quot;);\n\nConsole.WriteLine($&quot;Created transactions with IDs: {expenseId}, {incomeId}&quot;);</code></pre>\n"
+  syntax:
+    content: public int AddTransaction(DateTime date, int categoryId, decimal amount, string description)
+    parameters:
+    - id: date
+      type: System.DateTime
+      description: "\nThe date and time when the transaction occurred. The date is stored with full \ndate and time precision in the database.\n"
+    - id: categoryId
+      type: System.Int32
+      description: "\nThe unique identifier of the category this transaction belongs to. \nThe category must exist in the database before adding the transaction.\n"
+    - id: amount
+      type: System.Decimal
+      description: "\nThe monetary amount of the transaction. Must be greater than zero for expenses \nand positive values for income. The sign interpretation depends on the category type.\n"
+    - id: description
+      type: System.String
+      description: "\nA descriptive text explaining the transaction. Cannot be null, empty, or whitespace.\nMaximum length depends on database schema but typically supports several hundred characters.\n"
+    return:
+      type: System.Int32
+      description: "\nThe unique identifier (primary key) of the newly created transaction record.\nThis ID can be used for subsequent update, delete, or retrieval operations.\n"
+    content.vb: Public Function AddTransaction(date As Date, categoryId As Integer, amount As Decimal, description As String) As Integer
+  overload: Budget.Services.Transactions.AddTransaction*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">amount</code> is zero or <code data-dev-comment-type=\"paramref\" class=\"paramref\">description</code> \nis null, empty, or contains only whitespace.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when the database insert operation fails, typically due to foreign key \nconstraint violations (invalid categoryId) or database connectivity issues.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the insert operation.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+    commentId: M:Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  - linkId: Budget.Services.Transactions.DeleteTransaction(System.Int32)
+    commentId: M:Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  - linkId: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+    commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  commentId: M:Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  id: DeleteTransaction(System.Int32)
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: DeleteTransaction(Int32)
+  nameWithType: Transactions.DeleteTransaction(Int32)
+  fullName: Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: DeleteTransaction
+    path: Services/Transactions.cs
+    startLine: 385
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nDeletes a transaction from the database.\n"
+  remarks: "\n<p>\nThis operation permanently removes the transaction from the database and cannot be undone.\nConsider implementing a soft delete mechanism or transaction archiving if you need to \nmaintain historical records.\n</p>\n<p>\nThe method verifies that the deletion actually affected a row to ensure the transaction \nexisted before the operation.\n</p>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\n\n// Add a transaction\nint transactionId = transactions.AddTransaction(\n    DateTime.Now, 1, 100.00m, &quot;Test transaction&quot;);\n\n// Later, delete the transaction\ntry\n{\n    transactions.DeleteTransaction(transactionId);\n    Console.WriteLine(&quot;Transaction deleted successfully&quot;);\n}\ncatch (InvalidOperationException ex)\n{\n    Console.WriteLine($&quot;Transaction not found: {ex.Message}&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public void DeleteTransaction(int transactionId)
+    parameters:
+    - id: transactionId
+      type: System.Int32
+      description: "\nThe unique identifier of the transaction to delete. Must correspond to an existing transaction.\n"
+    content.vb: Public Sub DeleteTransaction(transactionId As Integer)
+  overload: Budget.Services.Transactions.DeleteTransaction*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when no transaction with the specified <code data-dev-comment-type=\"paramref\" class=\"paramref\">transactionId</code> exists in the database.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the delete operation.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+    commentId: M:Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  - linkId: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+    commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.GetAllTransactions
+  commentId: M:Budget.Services.Transactions.GetAllTransactions
+  id: GetAllTransactions
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: GetAllTransactions()
+  nameWithType: Transactions.GetAllTransactions()
+  fullName: Budget.Services.Transactions.GetAllTransactions()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: GetAllTransactions
+    path: Services/Transactions.cs
+    startLine: 455
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nRetrieves all transactions from the database, ordered by date and ID in descending order.\n"
+  remarks: "\n<p>\nThis method loads all transactions into memory, which may have performance implications \nfor databases with large numbers of transactions (>10,000 records). Consider implementing \npagination or filtering for production applications with large datasets.\n</p>\n<p>\nThe transactions are ordered by date in descending order (newest first), with ID as a \nsecondary sort to ensure consistent ordering for transactions on the same date.\n</p>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\n\nvar allTransactions = transactions.GetAllTransactions();\nConsole.WriteLine($&quot;Found {allTransactions.Count} transactions&quot;);\n\n// Display the 5 most recent transactions\nforeach (var transaction in allTransactions.Take(5))\n{\n    Console.WriteLine($&quot;{transaction.Date:yyyy-MM-dd} - {transaction.Description}: {transaction.Amount:C}&quot;);\n}\n\n// Group by month\nvar monthlyGroups = allTransactions\n    .GroupBy(t => new { t.Date.Year, t.Date.Month })\n    .OrderByDescending(g => g.Key.Year)\n    .ThenByDescending(g => g.Key.Month);\n\nforeach (var group in monthlyGroups)\n{\n    var total = group.Sum(t => t.Amount);\n    Console.WriteLine($&quot;{group.Key.Year}-{group.Key.Month:D2}: {group.Count()} transactions, Total: {total:C}&quot;);\n}</code></pre>\n"
+  syntax:
+    content: public List<Transaction> GetAllTransactions()
+    return:
+      type: System.Collections.Generic.List{Budget.Models.Transaction}
+      description: "\nA list of <xref href=\"Budget.Models.Transaction\" data-throw-if-not-resolved=\"false\"></xref> objects representing all transactions in the database.\nThe list is ordered with the most recent transactions first. Returns an empty list if \nno transactions exist.\n"
+    content.vb: Public Function GetAllTransactions As List(Of Transaction)
+  overload: Budget.Services.Transactions.GetAllTransactions*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the query operation.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+    commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  - linkId: Budget.Models.Transaction
+    commentId: T:Budget.Models.Transaction
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  id: GetTransactionFromId(System.Int32)
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: GetTransactionFromId(Int32)
+  nameWithType: Transactions.GetTransactionFromId(Int32)
+  fullName: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: GetTransactionFromId
+    path: Services/Transactions.cs
+    startLine: 529
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nRetrieves a specific transaction by its unique identifier.\n"
+  remarks: "\n<p>\nThis method is optimized for single transaction retrieval and uses an indexed query \nfor efficient lookup by primary key.\n</p>\n<p>\nAlways check for <code>null</code> return values before using the result, as the method \nreturns <code>null</code> rather than throwing an exception when the transaction is not found.\n</p>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\n\n// Retrieve a specific transaction\nvar transaction = transactions.GetTransactionFromId(42);\nif (transaction != null)\n{\n    Console.WriteLine($&quot;Found: {transaction.Description} - {transaction.Amount:C}&quot;);\n    Console.WriteLine($&quot;Date: {transaction.Date:yyyy-MM-dd}&quot;);\n    Console.WriteLine($&quot;Category ID: {transaction.CategoryId}&quot;);\n}\nelse\n{\n    Console.WriteLine(&quot;Transaction not found&quot;);\n}\n\n// Safe pattern with null-conditional operator\nvar amount = transactions.GetTransactionFromId(42)?.Amount ?? 0;</code></pre>\n"
+  syntax:
+    content: public Transaction GetTransactionFromId(int transactionId)
+    parameters:
+    - id: transactionId
+      type: System.Int32
+      description: "\nThe unique identifier of the transaction to retrieve.\n"
+    return:
+      type: Budget.Models.Transaction
+      description: "\nA <xref href=\"Budget.Models.Transaction\" data-throw-if-not-resolved=\"false\"></xref> object if found; otherwise, <code>null</code> if no transaction \nwith the specified ID exists in the database.\n"
+    content.vb: Public Function GetTransactionFromId(transactionId As Integer) As Transaction
+  overload: Budget.Services.Transactions.GetTransactionFromId*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the query operation.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.GetAllTransactions
+    commentId: M:Budget.Services.Transactions.GetAllTransactions
+  - linkId: Budget.Models.Transaction
+    commentId: T:Budget.Models.Transaction
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  commentId: M:Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  id: UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: UpdateTransaction(Int32, DateTime, String, Decimal, Int32)
+  nameWithType: Transactions.UpdateTransaction(Int32, DateTime, String, Decimal, Int32)
+  fullName: Budget.Services.Transactions.UpdateTransaction(System.Int32, System.DateTime, System.String, System.Decimal, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: UpdateTransaction
+    path: Services/Transactions.cs
+    startLine: 636
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nUpdates an existing transaction with new values.\n"
+  remarks: "\n<p>\nThis method updates all fields of the transaction. If you only need to update specific \nfields, retrieve the current transaction first and pass the unchanged values for the \nfields you don&apos;t want to modify.\n</p>\n<p>\nThe method verifies that the update actually affected a row to ensure the transaction \nexisted before the operation.\n</p>\n"
+  example:
+  - "\n<pre><code>using var transactions = new Transactions(&quot;budget.db&quot;);\n\n// Add a transaction\nint transactionId = transactions.AddTransaction(\n    DateTime.Now, 1, 100.00m, &quot;Original description&quot;);\n\n// Update the transaction\ntry\n{\n    transactions.UpdateTransaction(\n        transactionId: transactionId,\n        date: DateTime.Now.AddDays(-1), // Change date\n        description: &quot;Updated description&quot;, // Change description\n        amount: 150.00m, // Change amount\n        categoryId: 2); // Change category\n\n    Console.WriteLine(&quot;Transaction updated successfully&quot;);\n}\ncatch (InvalidOperationException ex)\n{\n    Console.WriteLine($&quot;Update failed: {ex.Message}&quot;);\n}\n\n// Partial update pattern (update only amount and description)\nvar existingTransaction = transactions.GetTransactionFromId(transactionId);\nif (existingTransaction != null)\n{\n    transactions.UpdateTransaction(\n        transactionId,\n        existingTransaction.Date, // Keep original date\n        &quot;New description&quot;, // Update description\n        200.00m, // Update amount\n        existingTransaction.CategoryId); // Keep original category\n}</code></pre>\n"
+  syntax:
+    content: public void UpdateTransaction(int transactionId, DateTime date, string description, decimal amount, int categoryId)
+    parameters:
+    - id: transactionId
+      type: System.Int32
+      description: "\nThe unique identifier of the transaction to update. Must correspond to an existing transaction.\n"
+    - id: date
+      type: System.DateTime
+      description: "\nThe new date and time for the transaction.\n"
+    - id: description
+      type: System.String
+      description: "\nThe new description for the transaction. Cannot be null, empty, or whitespace.\n"
+    - id: amount
+      type: System.Decimal
+      description: "\nThe new amount for the transaction. Must be greater than zero.\n"
+    - id: categoryId
+      type: System.Int32
+      description: "\nThe new category ID for the transaction. The category must exist in the database.\n"
+    content.vb: Public Sub UpdateTransaction(transactionId As Integer, date As Date, description As String, amount As Decimal, categoryId As Integer)
+  overload: Budget.Services.Transactions.UpdateTransaction*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\nThrown when no transaction with the specified <code data-dev-comment-type=\"paramref\" class=\"paramref\">transactionId</code> exists in the database,\nor when the category specified by <code data-dev-comment-type=\"paramref\" class=\"paramref\">categoryId</code> does not exist.\n"
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">amount</code> is zero or <code data-dev-comment-type=\"paramref\" class=\"paramref\">description</code> \nis null, empty, or contains only whitespace.\n"
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when this <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance has been disposed.\n"
+  - type: System.Data.SQLite.SQLiteException
+    commentId: T:System.Data.SQLite.SQLiteException
+    description: "\nThrown when a database-specific error occurs during the update operation.\n"
+  seealso:
+  - linkId: Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+    commentId: M:Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  - linkId: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+    commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.Transactions.Dispose
+  commentId: M:Budget.Services.Transactions.Dispose
+  id: Dispose
+  parent: Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: Dispose()
+  nameWithType: Transactions.Dispose()
+  fullName: Budget.Services.Transactions.Dispose()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/Transactions.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Dispose
+    path: Services/Transactions.cs
+    startLine: 728
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nReleases all resources used by the <xref href=\"Budget.Services.Transactions\" data-throw-if-not-resolved=\"false\"></xref> instance.\n"
+  remarks: "\n<p>\nThis method closes the database connection and releases all managed resources.\nIf this instance owns the database service (created via the string constructor),\nthe database service will also be disposed. If the database service was provided\nexternally (via the DatabaseService constructor), it will not be disposed.\n</p>\n<p>\nAfter calling this method, the instance should not be used for any operations.\nAttempting to use the instance after disposal will result in <xref href=\"System.ObjectDisposedException\" data-throw-if-not-resolved=\"false\"></xref>.\n</p>\n<p>\nThis method is safe to call multiple times. Subsequent calls have no effect.\n</p>\n"
+  example:
+  - "\n<pre><code>// Using statement (recommended)\nusing (var transactions = new Transactions(&quot;budget.db&quot;))\n{\n    // Use transactions...\n} // Dispose called automatically\n\n// Manual disposal\nvar transactions = new Transactions(&quot;budget.db&quot;);\ntry\n{\n    // Use transactions...\n}\nfinally\n{\n    transactions.Dispose();\n}\n\n// Shared database service scenario\nusing var dbService = DatabaseService.OpenExisting(&quot;budget.db&quot;);\nusing var transactions = new Transactions(dbService); // Won&apos;t dispose dbService\nusing var categories = new Categories(dbService);     // Won&apos;t dispose dbService\n// dbService.Dispose() called automatically when using block exits</code></pre>\n"
+  syntax:
+    content: public void Dispose()
+    content.vb: Public Sub Dispose
+  overload: Budget.Services.Transactions.Dispose*
+  implements:
+  - System.IDisposable.Dispose
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+references:
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: Budget.Services
+  commentId: N:Budget.Services
+  name: Budget.Services
+  nameWithType: Budget.Services
+  fullName: Budget.Services
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Services.Transactions.DatabasePath*
+  commentId: Overload:Budget.Services.Transactions.DatabasePath
+  name: DatabasePath
+  nameWithType: Transactions.DatabasePath
+  fullName: Budget.Services.Transactions.DatabasePath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Services.Transactions.IsConnected*
+  commentId: Overload:Budget.Services.Transactions.IsConnected
+  name: IsConnected
+  nameWithType: Transactions.IsConnected
+  fullName: Budget.Services.Transactions.IsConnected
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: Budget.Services.Transactions
+  commentId: T:Budget.Services.Transactions
+  parent: Budget.Services
+  name: Transactions
+  nameWithType: Transactions
+  fullName: Budget.Services.Transactions
+- uid: Budget.Services.DatabaseService
+  commentId: T:Budget.Services.DatabaseService
+  parent: Budget.Services
+  name: DatabaseService
+  nameWithType: DatabaseService
+  fullName: Budget.Services.DatabaseService
+- uid: Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  commentId: M:Budget.Services.Transactions.#ctor(System.String,System.Boolean)
+  isExternal: true
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+- uid: Budget.Services.Transactions.#ctor*
+  commentId: Overload:Budget.Services.Transactions.#ctor
+  name: Transactions
+  nameWithType: Transactions.Transactions
+  fullName: Budget.Services.Transactions.Transactions
+- uid: Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  commentId: M:Budget.Services.Transactions.#ctor(Budget.Services.DatabaseService)
+  isExternal: true
+- uid: Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  commentId: M:Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  isExternal: true
+- uid: Budget.Services.DatabaseService.OpenExisting(System.String)
+  commentId: M:Budget.Services.DatabaseService.OpenExisting(System.String)
+  isExternal: true
+- uid: System.ArgumentException
+  commentId: T:System.ArgumentException
+  isExternal: true
+- uid: System.UnauthorizedAccessException
+  commentId: T:System.UnauthorizedAccessException
+  isExternal: true
+- uid: System.InvalidOperationException
+  commentId: T:System.InvalidOperationException
+  isExternal: true
+- uid: Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  commentId: M:Budget.Services.Transactions.UpdateTransaction(System.Int32,System.DateTime,System.String,System.Decimal,System.Int32)
+  isExternal: true
+- uid: Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  commentId: M:Budget.Services.Transactions.DeleteTransaction(System.Int32)
+  isExternal: true
+- uid: Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  commentId: M:Budget.Services.Transactions.GetTransactionFromId(System.Int32)
+  isExternal: true
+- uid: System.ObjectDisposedException
+  commentId: T:System.ObjectDisposedException
+  isExternal: true
+- uid: System.Data.SQLite.SQLiteException
+  commentId: T:System.Data.SQLite.SQLiteException
+  isExternal: true
+- uid: Budget.Services.Transactions.AddTransaction*
+  commentId: Overload:Budget.Services.Transactions.AddTransaction
+  name: AddTransaction
+  nameWithType: Transactions.AddTransaction
+  fullName: Budget.Services.Transactions.AddTransaction
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Decimal
+  commentId: T:System.Decimal
+  parent: System
+  isExternal: true
+  name: Decimal
+  nameWithType: Decimal
+  fullName: System.Decimal
+- uid: Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  commentId: M:Budget.Services.Transactions.AddTransaction(System.DateTime,System.Int32,System.Decimal,System.String)
+  isExternal: true
+- uid: Budget.Services.Transactions.DeleteTransaction*
+  commentId: Overload:Budget.Services.Transactions.DeleteTransaction
+  name: DeleteTransaction
+  nameWithType: Transactions.DeleteTransaction
+  fullName: Budget.Services.Transactions.DeleteTransaction
+- uid: Budget.Models.Transaction
+  commentId: T:Budget.Models.Transaction
+  parent: Budget.Models
+  name: Transaction
+  nameWithType: Transaction
+  fullName: Budget.Models.Transaction
+- uid: Budget.Services.Transactions.GetAllTransactions*
+  commentId: Overload:Budget.Services.Transactions.GetAllTransactions
+  name: GetAllTransactions
+  nameWithType: Transactions.GetAllTransactions
+  fullName: Budget.Services.Transactions.GetAllTransactions
+- uid: System.Collections.Generic.List{Budget.Models.Transaction}
+  commentId: T:System.Collections.Generic.List{Budget.Models.Transaction}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<Transaction>
+  nameWithType: List<Transaction>
+  fullName: System.Collections.Generic.List<Budget.Models.Transaction>
+  nameWithType.vb: List(Of Transaction)
+  fullName.vb: System.Collections.Generic.List(Of Budget.Models.Transaction)
+  name.vb: List(Of Transaction)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: Budget.Models.Transaction
+    name: Transaction
+    nameWithType: Transaction
+    fullName: Budget.Models.Transaction
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: Budget.Models.Transaction
+    name: Transaction
+    nameWithType: Transaction
+    fullName: Budget.Models.Transaction
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: Budget.Services.Transactions.GetAllTransactions
+  commentId: M:Budget.Services.Transactions.GetAllTransactions
+  isExternal: true
+- uid: Budget.Services.Transactions.GetTransactionFromId*
+  commentId: Overload:Budget.Services.Transactions.GetTransactionFromId
+  name: GetTransactionFromId
+  nameWithType: Transactions.GetTransactionFromId
+  fullName: Budget.Services.Transactions.GetTransactionFromId
+- uid: Budget.Services.Transactions.UpdateTransaction*
+  commentId: Overload:Budget.Services.Transactions.UpdateTransaction
+  name: UpdateTransaction
+  nameWithType: Transactions.UpdateTransaction
+  fullName: Budget.Services.Transactions.UpdateTransaction
+- uid: Budget.Services.Transactions.Dispose*
+  commentId: Overload:Budget.Services.Transactions.Dispose
+  name: Dispose
+  nameWithType: Transactions.Dispose
+  fullName: Budget.Services.Transactions.Dispose
+- uid: System.IDisposable.Dispose
+  commentId: M:System.IDisposable.Dispose
+  parent: System.IDisposable
+  isExternal: true
+  name: Dispose()
+  nameWithType: IDisposable.Dispose()
+  fullName: System.IDisposable.Dispose()
+  spec.csharp:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )

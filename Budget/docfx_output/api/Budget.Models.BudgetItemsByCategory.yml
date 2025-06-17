@@ -1,0 +1,571 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Models.BudgetItemsByCategory
+  commentId: T:Budget.Models.BudgetItemsByCategory
+  id: BudgetItemsByCategory
+  parent: Budget.Models
+  children:
+  - Budget.Models.BudgetItemsByCategory.Category
+  - Budget.Models.BudgetItemsByCategory.Details
+  - Budget.Models.BudgetItemsByCategory.Total
+  langs:
+  - csharp
+  - vb
+  name: BudgetItemsByCategory
+  nameWithType: BudgetItemsByCategory
+  fullName: Budget.Models.BudgetItemsByCategory
+  type: Class
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: BudgetItemsByCategory
+    path: Models/BudgetItem.cs
+    startLine: 638
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public class BudgetItemsByCategory
+    content.vb: Public Class BudgetItemsByCategory
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Models.BudgetItemsByCategory.Category
+  commentId: P:Budget.Models.BudgetItemsByCategory.Category
+  id: Category
+  parent: Budget.Models.BudgetItemsByCategory
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: BudgetItemsByCategory.Category
+  fullName: Budget.Models.BudgetItemsByCategory.Category
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Category
+    path: Models/BudgetItem.cs
+    startLine: 661
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public string Category { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Category As String
+  overload: Budget.Models.BudgetItemsByCategory.Category*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItemsByCategory.Details
+  commentId: P:Budget.Models.BudgetItemsByCategory.Details
+  id: Details
+  parent: Budget.Models.BudgetItemsByCategory
+  langs:
+  - csharp
+  - vb
+  name: Details
+  nameWithType: BudgetItemsByCategory.Details
+  fullName: Budget.Models.BudgetItemsByCategory.Details
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Details
+    path: Models/BudgetItem.cs
+    startLine: 695
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  syntax:
+    content: public List<BudgetItem> Details { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{Budget.Models.BudgetItem}
+    content.vb: Public Property Details As List(Of BudgetItem)
+  overload: Budget.Models.BudgetItemsByCategory.Details*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: Budget.Models.BudgetItemsByCategory.Total
+  commentId: P:Budget.Models.BudgetItemsByCategory.Total
+  id: Total
+  parent: Budget.Models.BudgetItemsByCategory
+  langs:
+  - csharp
+  - vb
+  name: Total
+  nameWithType: BudgetItemsByCategory.Total
+  fullName: Budget.Models.BudgetItemsByCategory.Total
+  type: Property
+  source:
+    remote:
+      path: Budget/Models/BudgetItem.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Total
+    path: Models/BudgetItem.cs
+    startLine: 729
+  assemblies:
+  - Budget
+  namespace: Budget.Models
+  summary: "\nGets or sets the total net amount for all transactions in this category.\n"
+  remarks: "\nThe total reflects the net financial impact of the category, calculated as the sum \nof all transaction amounts. This is useful for identifying high-spending categories \nor comparing income versus expense categories.\n"
+  example:
+  - "\n<pre><code>var categoryBudget = new BudgetItemsByCategory\n{\n    Category = &quot;Salary&quot;,\n    Total = 5000.00m\n};\n\nif (categoryBudget.Total > 0)\n{\n    Console.WriteLine($&quot;Income from {categoryBudget.Category}: {categoryBudget.Total:C}&quot;);\n}\nelse\n{\n    Console.WriteLine($&quot;Spent on {categoryBudget.Category}: {Math.Abs(categoryBudget.Total):C}&quot;);\n}\n\n// Rank categories by spending\nvar rankedCategories = categoryBudgets.OrderByDescending(c => Math.Abs(c.Total));</code></pre>\n"
+  syntax:
+    content: public decimal Total { get; set; }
+    parameters: []
+    return:
+      type: System.Decimal
+      description: "\nA <xref href=\"System.Decimal\" data-throw-if-not-resolved=\"false\"></xref> representing the sum of all transaction amounts in this category. \nPositive values indicate net income, while negative values indicate net spending.\n"
+    content.vb: Public Property Total As Decimal
+  overload: Budget.Models.BudgetItemsByCategory.Total*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+references:
+- uid: Budget.Models
+  commentId: N:Budget.Models
+  name: Budget.Models
+  nameWithType: Budget.Models
+  fullName: Budget.Models
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Budget.Models.BudgetItemsByCategory.Category*
+  commentId: Overload:Budget.Models.BudgetItemsByCategory.Category
+  name: Category
+  nameWithType: BudgetItemsByCategory.Category
+  fullName: Budget.Models.BudgetItemsByCategory.Category
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Models.BudgetItemsByCategory.Details*
+  commentId: Overload:Budget.Models.BudgetItemsByCategory.Details
+  name: Details
+  nameWithType: BudgetItemsByCategory.Details
+  fullName: Budget.Models.BudgetItemsByCategory.Details
+- uid: System.Collections.Generic.List{Budget.Models.BudgetItem}
+  commentId: T:System.Collections.Generic.List{Budget.Models.BudgetItem}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<BudgetItem>
+  nameWithType: List<BudgetItem>
+  fullName: System.Collections.Generic.List<Budget.Models.BudgetItem>
+  nameWithType.vb: List(Of BudgetItem)
+  fullName.vb: System.Collections.Generic.List(Of Budget.Models.BudgetItem)
+  name.vb: List(Of BudgetItem)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: Budget.Models.BudgetItem
+    name: BudgetItem
+    nameWithType: BudgetItem
+    fullName: Budget.Models.BudgetItem
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: Budget.Models.BudgetItem
+    name: BudgetItem
+    nameWithType: BudgetItem
+    fullName: Budget.Models.BudgetItem
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: System.Decimal
+  commentId: T:System.Decimal
+  parent: System
+  isExternal: true
+  name: Decimal
+  nameWithType: Decimal
+  fullName: System.Decimal
+- uid: Budget.Models.BudgetItemsByCategory.Total*
+  commentId: Overload:Budget.Models.BudgetItemsByCategory.Total
+  name: Total
+  nameWithType: BudgetItemsByCategory.Total
+  fullName: Budget.Models.BudgetItemsByCategory.Total

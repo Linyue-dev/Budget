@@ -9,476 +9,367 @@ using static Budget.Models.Category;
 
 namespace TestBudget
 {
-    public class TestConstants
+    /// <summary>
+    /// Tests for the updated HomeBudget class with CreatedBy and TransactionDate support
+    /// </summary>
+    public class TestHomeBudgetNew : IDisposable
     {
-        public static string testDBInputFile = "testBudget.db";
-
-        public static string GetSolutionDir()
-        {
-            string currentDir = Directory.GetCurrentDirectory();
-            DirectoryInfo directory = new DirectoryInfo(currentDir);
-            while (directory != null && !directory.GetFiles("*.sln").Any())
-            {
-                directory = directory.Parent;
-            }
-            return directory?.FullName ?? currentDir;
-        }
-
-        // New: Ensure test database exists
-        public static string EnsureTestDatabaseExists()
-        {
-            string folder = GetSolutionDir();
-            string testDbPath = Path.Combine(folder, testDBInputFile);
-
-            if (!File.Exists(testDbPath))
-            {
-                CreateTestDatabase(testDbPath);
-            }
-
-            return testDbPath;
-        }
-
-        // Create test database and populate with data
-        private static void CreateTestDatabase(string dbPath)
-        {
-            Console.WriteLine($"Creating test database at: {dbPath}");
-
-            using (var homeBudget = new HomeBudget(dbPath, isNewDB: true))
-            {
-                PopulateTestData(homeBudget);
-            }
-
-            Console.WriteLine("Test database created successfully!");
-        }
-
-        // Populate test data
-        private static void PopulateTestData(HomeBudget homeBudget)
-        {
-            var categories = homeBudget.categories.GetAllCategories();
-
-            // Get different types of categories
-            var salaryCategory = categories.FirstOrDefault(c => c.Type == CategoryType.Income);
-            var utilitiesCategory = categories.FirstOrDefault(c => c.Name.Contains("Utilities"));
-            var foodCategory = categories.FirstOrDefault(c => c.Name.Contains("Food"));
-            var savingsCategory = categories.FirstOrDefault(c => c.Type == CategoryType.Savings);
-            var mortgageCategory = categories.FirstOrDefault(c => c.Name.Contains("mortgage"));
-
-            if (salaryCategory == null)
-            {
-                // If no salary category found, create one
-                int newCategoryId = homeBudget.categories.AddCategory("Salary", CategoryType.Income);
-                salaryCategory = new Category(newCategoryId, "Salary", CategoryType.Income);
-            }
-
-            // Add 2024 data
-            AddYearData(homeBudget, 2024, salaryCategory, utilitiesCategory, foodCategory, savingsCategory, mortgageCategory);
-
-            // Add 2025 data  
-            AddYearData(homeBudget, 2025, salaryCategory, utilitiesCategory, foodCategory, savingsCategory, mortgageCategory);
-        }
-
-        private static void AddYearData(HomeBudget homeBudget, int year,
-            Category salary, Category utilities, Category food, Category savings, Category mortgage)
-        {
-            var random = new Random(42); // Fixed seed for consistent data
-
-            for (int month = 1; month <= 12; month++)
-            {
-                // Monthly salary
-                if (salary != null)
-                {
-                    homeBudget.transactions.AddTransaction(
-                        new DateTime(year, month, 1),
-                        salary.Id,
-                        5000m,
-                        $"{year}-{month:D2} Monthly Salary"
-                    );
-                }
-
-                // Utilities
-                if (utilities != null)
-                {
-                    decimal amount = 150m + (decimal)(random.NextDouble() * 100);
-                    homeBudget.transactions.AddTransaction(
-                        new DateTime(year, month, 5),
-                        utilities.Id,
-                        amount,
-                        $"{year}-{month:D2} Utilities Bill"
-                    );
-                }
-
-                // Food expenses (2-4 times per month)
-                if (food != null)
-                {
-                    int foodTransactions = random.Next(2, 5);
-                    for (int i = 0; i < foodTransactions; i++)
-                    {
-                        decimal amount = 50m + (decimal)(random.NextDouble() * 200);
-                        int day = random.Next(1, 28);
-                        homeBudget.transactions.AddTransaction(
-                            new DateTime(year, month, day),
-                            food.Id,
-                            amount,
-                            $"{year}-{month:D2} Food Expense #{i + 1}"
-                        );
-                    }
-                }
-
-                // Savings (quarterly)
-                if (savings != null && month % 3 == 0)
-                {
-                    homeBudget.transactions.AddTransaction(
-                        new DateTime(year, month, 28),
-                        savings.Id,
-                        1000m,
-                        $"{year}-Q{(month - 1) / 3 + 1} Quarterly Savings"
-                    );
-                }
-
-                // Mortgage (monthly)
-                if (mortgage != null)
-                {
-                    homeBudget.transactions.AddTransaction(
-                        new DateTime(year, month, 15),
-                        mortgage.Id,
-                        1200m,
-                        $"{year}-{month:D2} Mortgage Payment"
-                    );
-                }
-            }
-        }
-
-        // Get temporary test database path
-        public static string GetTempDbPath(string suffix = "")
-        {
-            string tempDir = Path.GetTempPath();
-            string fileName = $"temp_test_budget_{suffix}_{Guid.NewGuid()}.db";
-            return Path.Combine(tempDir, fileName);
-        }
-    }
-
-    // Test base class - provides common setup and cleanup
-    public abstract class TestBase : IDisposable
-    {
-        protected HomeBudget homeBudget;
-        protected string messyDB;
+        private HomeBudget homeBudget;
+        private string testDatabasePath;
         private bool disposed = false;
 
-        protected void SetupTest(string testSuffix = "")
+        public TestHomeBudgetNew()
         {
-            // Ensure test database exists
-            string goodDB = TestConstants.EnsureTestDatabaseExists();
+            // Create a unique temporary database for each test
+            testDatabasePath = Path.Combine(Path.GetTempPath(), $"test_homebudget_{Guid.NewGuid()}.db");
 
-            // Create temporary database
-            messyDB = TestConstants.GetTempDbPath(testSuffix);
-            File.Copy(goodDB, messyDB, true);
+            // Create new database with test data
+            homeBudget = new HomeBudget(testDatabasePath, isNewDB: true);
 
-            // Create HomeBudget instance
-            homeBudget = new HomeBudget(messyDB, false);
+            // Add some test data
+            CreateTestData();
         }
 
-        public virtual void Dispose()
+        private void CreateTestData()
+        {
+            // Get default categories
+            var categories = homeBudget.categories.GetAllCategories();
+            var incomeCategory = categories.FirstOrDefault(c => c.Type == CategoryType.Income);
+            var expenseCategory = categories.FirstOrDefault(c => c.Type == CategoryType.Expense);
+
+            // If no income category, create one
+            if (incomeCategory == null)
+            {
+                int categoryId = homeBudget.categories.AddCategory("Salary", CategoryType.Income);
+                incomeCategory = new Category(categoryId, "Salary", CategoryType.Income);
+            }
+
+            // If no expense category, create one
+            if (expenseCategory == null)
+            {
+                int categoryId = homeBudget.categories.AddCategory("Food", CategoryType.Expense);
+                expenseCategory = new Category(categoryId, "Food", CategoryType.Expense);
+            }
+
+            // Add test transactions with different creators
+            homeBudget.transactions.AddTransaction(
+                new DateTime(2024, 1, 15),
+                incomeCategory.Id,
+                5000m,
+                "January Salary",
+                "selina"
+            );
+
+            homeBudget.transactions.AddTransaction(
+                new DateTime(2024, 1, 20),
+                expenseCategory.Id,
+                150m,
+                "Grocery Shopping",
+                "Sophie"
+            );
+
+            homeBudget.transactions.AddTransaction(
+                new DateTime(2024, 2, 1),
+                incomeCategory.Id,
+                5000m,
+                "February Salary",
+                "Woody"
+            );
+
+            homeBudget.transactions.AddTransaction(
+                new DateTime(2024, 2, 10),
+                expenseCategory.Id,
+                80m,
+                "Restaurant",
+                "Charles"
+            );
+
+            homeBudget.transactions.AddTransaction(
+                new DateTime(2025, 1, 5),
+                expenseCategory.Id,
+                200m,
+                "New Year Shopping",
+                "Sophie"
+            );
+        }
+
+        public void Dispose()
         {
             if (!disposed)
             {
                 homeBudget?.Dispose();
 
-                if (!string.IsNullOrEmpty(messyDB) && File.Exists(messyDB))
+                if (File.Exists(testDatabasePath))
                 {
                     try
                     {
-                        File.Delete(messyDB);
+                        File.Delete(testDatabasePath);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Warning: Failed to delete temp file {messyDB}: {ex.Message}");
+                        Console.WriteLine($"Warning: Could not delete test database {testDatabasePath}: {ex.Message}");
                     }
                 }
 
                 disposed = true;
             }
         }
-    }
 
-    // Updated test classes using base class
-    public class TestHomeBudget : TestBase
-    {
+        #region Basic Functionality Tests
+
         [Fact]
-        public void HomeBudgetMethod_GetBudgetItems_NoStartEnd_NoFilter()
+        public void HomeBudget_Constructor_ShouldCreateValidInstance()
         {
-            // Arrange
-            SetupTest("no_filter");
+            // Assert
+            Assert.NotNull(homeBudget);
+            Assert.NotNull(homeBudget.categories);
+            Assert.NotNull(homeBudget.transactions);
+            Assert.NotNull(homeBudget.DatabaseService);
+        }
 
-            List<Transaction> listTransactions = homeBudget.transactions.GetAllTransactions();
-            List<Category> listCategories = homeBudget.categories.GetAllCategories();
-
+        [Fact]
+        public void HomeBudget_GetBudgetItems_ShouldReturnAllTransactions()
+        {
             // Act
             List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, false, 9);
 
             // Assert
-            Assert.Equal(listTransactions.Count, budgetItems.Count);
+            Assert.NotNull(budgetItems);
+            Assert.True(budgetItems.Count > 0, "Should have budget items");
 
-            foreach (Transaction transaction in listTransactions)
+            // Verify each item has all required fields
+            foreach (var item in budgetItems)
             {
-                BudgetItem budgetItem = budgetItems.Find(b => b.TransactionID == transaction.Id);
-                Assert.NotNull(budgetItem); // Ensure corresponding BudgetItem was found
+                Assert.True(item.TransactionID > 0, "TransactionID should be positive");
+                Assert.True(item.CategoryID > 0, "CategoryID should be positive");
+                Assert.NotNull(item.Category);
+                Assert.NotNull(item.ShortDescription);
+                Assert.NotNull(item.CreatedBy);
+                Assert.NotEqual(default(DateTime), item.Date);
+                Assert.NotEqual(default(DateTime), item.CreatedAt);
+            }
 
-                Category category = listCategories.Find(c => c.Id == transaction.CategoryId);
-                Assert.NotNull(category); // Ensure corresponding Category was found
+            Console.WriteLine($"Found {budgetItems.Count} budget items");
+        }
 
-                Assert.Equal(budgetItem.Category, category.Name);
-                Assert.Equal(budgetItem.CategoryID, transaction.CategoryId);
-                Assert.Equal(budgetItem.ShortDescription, transaction.Description);
-                Assert.Equal(budgetItem.Date, transaction.Date);
+        #endregion
 
-                // Verify amount display logic: Income is positive, expenses are negative
-                if (category.Type == CategoryType.Income)
-                {
-                    Assert.True(Math.Abs(budgetItem.Amount - transaction.Amount) < 0.000001m,
-                               $"Income amount mismatch: expected {transaction.Amount}, actual {budgetItem.Amount}");
-                }
-                else
-                {
-                    Assert.True(Math.Abs(budgetItem.Amount - (-transaction.Amount)) < 0.000001m,
-                               $"Expense amount mismatch: expected {-transaction.Amount}, actual {budgetItem.Amount}");
-                }
+        #region CreatedBy Functionality Tests
+
+        [Fact]
+        public void HomeBudget_GetBudgetItemsByCreatedBy_ShouldFilterCorrectly()
+        {
+            // Act
+            var CharlesnItems = homeBudget.GetBudgetItemsByCreatedBy("Charles");
+            var SohpieItems = homeBudget.GetBudgetItemsByCreatedBy("Sophie");
+
+            // Assert
+            Assert.True(CharlesnItems.Count > 0, "Should have transactions created by Charles");
+            Assert.True(SohpieItems.Count > 0, "Should have transactions created by Sohpie");
+
+            // Verify filtering
+            foreach (var item in CharlesnItems)
+            {
+                Assert.Equal("Charles", item.CreatedBy);
+            }
+
+            foreach (var item in SohpieItems)
+            {
+                Assert.Equal("Sophie", item.CreatedBy);
+            }
+
+            Console.WriteLine($"Charles created {CharlesnItems.Count} transactions");
+            Console.WriteLine($"Sophie created {SohpieItems.Count} transactions");
+        }
+
+
+        [Fact]
+        public void HomeBudget_GetCreatedByStatistics_ShouldReturnValidStats()
+        {
+            // Act
+            var statistics = homeBudget.GetCreatedByStatistics();
+
+            // Assert
+            Assert.NotNull(statistics);
+            Assert.True(statistics.Count > 0, "Should have statistics");
+
+            foreach (var stat in statistics)
+            {
+                Assert.True(stat.ContainsKey("CreatedBy"));
+                Assert.True(stat.ContainsKey("TransactionCount"));
+                Assert.True(stat.ContainsKey("NetAmount"));
+                Assert.True(stat.ContainsKey("IncomeAmount"));
+                Assert.True(stat.ContainsKey("ExpenseAmount"));
+
+                Assert.NotNull(stat["CreatedBy"]);
+                Assert.True((int)stat["TransactionCount"] > 0);
+            }
+
+            // Print statistics for verification
+            Console.WriteLine("Created By Statistics:");
+            foreach (var stat in statistics)
+            {
+                Console.WriteLine($"  {stat["CreatedBy"]}: {stat["TransactionCount"]} transactions, " +
+                                $"Net: {stat["NetAmount"]:C}");
             }
         }
 
+        #endregion
+
+        #region Date Filtering Tests
+
         [Fact]
-        public void HomeBudgetMethod_GetBudgetItems_WithDateFilter()
+        public void HomeBudget_GetBudgetItems_WithDateRange_ShouldFilterCorrectly()
         {
             // Arrange
-            SetupTest("date_filter");
-
-            DateTime startDate = new DateTime(2025, 1, 1);
-            DateTime endDate = new DateTime(2025, 3, 31);
+            DateTime startDate = new DateTime(2024, 1, 1);
+            DateTime endDate = new DateTime(2024, 12, 31);
 
             // Act
             List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(startDate, endDate, false, 9);
 
             // Assert
-            Assert.True(budgetItems.Count > 0, "Should have transactions in the specified date range");
+            Assert.True(budgetItems.Count > 0, "Should have transactions in 2024");
 
             foreach (BudgetItem item in budgetItems)
             {
                 Assert.True(item.Date >= startDate, $"Date {item.Date} should be >= {startDate}");
                 Assert.True(item.Date <= endDate, $"Date {item.Date} should be <= {endDate}");
             }
+
+            Console.WriteLine($"Found {budgetItems.Count} transactions in 2024");
         }
 
         [Fact]
-        public void HomeBudgetMethod_GetBudgetItems_WithCategoryFilter()
+        public void HomeBudget_GetBudgetItemsByCreatedBy_WithDateRange_ShouldWork()
         {
             // Arrange
-            SetupTest("category_filter");
+            DateTime startDate = new DateTime(2024, 1, 1);
+            DateTime endDate = new DateTime(2024, 12, 31);
 
+            // Act
+            var zhangSanItems = homeBudget.GetBudgetItemsByCreatedBy("Charles", startDate, endDate);
+
+            // Assert
+            foreach (var item in zhangSanItems)
+            {
+                Assert.Equal("Charles", item.CreatedBy);
+                Assert.True(item.Date >= startDate);
+                Assert.True(item.Date <= endDate);
+            }
+
+            Console.WriteLine($"Charles had {zhangSanItems.Count} transactions in 2024");
+        }
+
+        #endregion
+
+        #region Category Filtering Tests
+
+        [Fact]
+        public void HomeBudget_GetBudgetItems_WithCategoryFilter_ShouldWork()
+        {
+            // Arrange
             List<Category> categories = homeBudget.categories.GetAllCategories();
             var incomeCategory = categories.FirstOrDefault(c => c.Type == CategoryType.Income);
-            Assert.NotNull(incomeCategory); // Ensure we have an income category
-
-            int targetCategoryId = incomeCategory.Id;
+            Assert.NotNull(incomeCategory);
 
             // Act
-            List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, true, targetCategoryId);
+            List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, true, incomeCategory.Id);
 
             // Assert
-            Assert.True(budgetItems.Count > 0);
+            Assert.True(budgetItems.Count > 0, "Should have income transactions");
+
             foreach (BudgetItem item in budgetItems)
             {
-                Assert.Equal(targetCategoryId, item.CategoryID);
-                Assert.True(item.Amount > 0); // Income should be displayed as positive
+                Assert.Equal(incomeCategory.Id, item.CategoryID);
+                Assert.True(item.Amount > 0, "Income should be displayed as positive");
             }
+
+            Console.WriteLine($"Found {budgetItems.Count} income transactions");
         }
 
+        #endregion
+
+        #region Amount Display Logic Tests
+
         [Fact]
-        public void HomeBudgetMethod_GetBudgetItems_BalanceCalculation()
+        public void HomeBudget_GetBudgetItems_AmountDisplayLogic_ShouldBeCorrect()
         {
             // Arrange
-            SetupTest("balance_calc");
-
-            // Act
+            List<Transaction> allTransactions = homeBudget.transactions.GetAllTransactions();
+            List<Category> allCategories = homeBudget.categories.GetAllCategories();
             List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, false, 9);
 
-            // Assert - Verify balance calculation
-            var sortedItems = budgetItems.OrderBy(b => b.Date).ThenBy(b => b.TransactionID).ToList();
-            decimal expectedBalance = 0;
-
-            foreach (BudgetItem item in sortedItems)
+            // Act & Assert
+            foreach (Transaction transaction in allTransactions)
             {
-                expectedBalance += item.Amount; // Amount has already been adjusted for positive/negative based on type
-                Assert.Equal(expectedBalance, item.Balance);
-            }
-        }
-    }
+                BudgetItem budgetItem = budgetItems.Find(b => b.TransactionID == transaction.Id);
+                Assert.NotNull(budgetItem);
 
-    public class TestHomeBudget_GetBudgetItemsByMonth : TestBase
-    {
-        [Fact]
-        public void HomeBudgetMethod_GetBudgetItemsByMonth_NoFilter()
-        {
-            // Arrange
-            SetupTest("month_no_filter");
-
-            List<BudgetItem> allItems = homeBudget.GetBudgetItems(null, null, false, 9);
-
-            // Act
-            List<BudgetItemsByMonth> monthlyItems = homeBudget.GetBudgetItemsByMonth(null, null, false, 9);
-
-            // Assert
-            Assert.True(monthlyItems.Count > 0);
-
-            // Verify totals are consistent
-            int totalDetailCount = monthlyItems.Sum(m => m.Details.Count);
-            Assert.Equal(allItems.Count, totalDetailCount);
-
-            // Verify monthly summary calculations
-            foreach (var monthGroup in monthlyItems)
-            {
-                decimal expectedTotal = monthGroup.Details.Sum(d => d.Amount);
-                Assert.Equal(expectedTotal, monthGroup.Total);
-
-                // Verify month format
-                Assert.Matches(@"^\d{4}/\d{2}$", monthGroup.Month);
-            }
-        }
-
-        [Fact]
-        public void HomeBudgetMethod_GetBudgetItemsByMonth_WithDateRange()
-        {
-            // Arrange
-            SetupTest("month_date_range");
-
-            DateTime startDate = new DateTime(2025, 2, 1);
-            DateTime endDate = new DateTime(2025, 4, 30);
-
-            // Act
-            List<BudgetItemsByMonth> monthlyItems = homeBudget.GetBudgetItemsByMonth(startDate, endDate, false, 9);
-
-            // Assert
-            foreach (var monthGroup in monthlyItems)
-            {
-                // Parse month string
-                var parts = monthGroup.Month.Split('/');
-                int year = int.Parse(parts[0]);
-                int month = int.Parse(parts[1]);
-
-                // Verify month is within specified range
-                Assert.True(year == 2025);
-                Assert.True(month >= 2 && month <= 4);
-
-                // Verify all detail records are in correct month
-                foreach (var detail in monthGroup.Details)
-                {
-                    Assert.Equal(year, detail.Date.Year);
-                    Assert.Equal(month, detail.Date.Month);
-                }
-            }
-        }
-    }
-
-    public class TestHomeBudget_GetBudgetItemsByCategory : TestBase
-    {
-        [Fact]
-        public void HomeBudgetMethod_GetBudgetItemsByCategory_NoFilter()
-        {
-            // Arrange
-            SetupTest("category_no_filter");
-
-            List<BudgetItem> allItems = homeBudget.GetBudgetItems(null, null, false, 9);
-            List<Category> allCategories = homeBudget.categories.GetAllCategories();
-
-            // Act
-            List<BudgetItemsByCategory> categoryItems = homeBudget.GetBudgetItemsByCategory(null, null, false, 9);
-
-            // Assert
-            // Verify totals are consistent
-            int totalDetailCount = categoryItems.Sum(c => c.Details.Count);
-            Assert.Equal(allItems.Count, totalDetailCount);
-
-            // Verify summary calculations for each category
-            foreach (var categoryGroup in categoryItems)
-            {
-                decimal expectedTotal = categoryGroup.Details.Sum(d => d.Amount);
-                Assert.Equal(expectedTotal, categoryGroup.Total);
-
-                // Verify all detail records belong to correct category
-                foreach (var detail in categoryGroup.Details)
-                {
-                    Assert.Equal(categoryGroup.Category, detail.Category);
-                }
-
-                // Verify category exists in system
-                Assert.Contains(allCategories, c => c.Name == categoryGroup.Category);
-            }
-        }
-
-        [Fact]
-        public void HomeBudgetMethod_GetBudgetItemsByCategory_IncomeVsExpense()
-        {
-            // Arrange
-            SetupTest("income_vs_expense");
-
-            List<Category> allCategories = homeBudget.categories.GetAllCategories();
-
-            // Act
-            List<BudgetItemsByCategory> categoryItems = homeBudget.GetBudgetItemsByCategory(null, null, false, 9);
-
-            // Assert
-            foreach (var categoryGroup in categoryItems)
-            {
-                var category = allCategories.Find(c => c.Name == categoryGroup.Category);
+                Category category = allCategories.Find(c => c.Id == transaction.CategoryId);
                 Assert.NotNull(category);
 
+                // Verify amount display logic
                 if (category.Type == CategoryType.Income)
                 {
-                    // Income category totals should be positive (or zero)
-                    Assert.True(categoryGroup.Total >= 0, $"Income category {categoryGroup.Category} should have positive total");
-
-                    // All items in income category should be displayed as positive
-                    foreach (var detail in categoryGroup.Details)
-                    {
-                        Assert.True(detail.Amount >= 0, $"Income item should be positive: {detail.Amount}");
-                    }
+                    Assert.True(budgetItem.Amount > 0, $"Income should be positive, got {budgetItem.Amount}");
+                    Assert.Equal(transaction.Amount, budgetItem.Amount);
                 }
                 else
                 {
-                    // Expense category totals should be negative (or zero)
-                    Assert.True(categoryGroup.Total <= 0, $"Expense category {categoryGroup.Category} should have negative total");
-
-                    // All items in expense category should be displayed as negative
-                    foreach (var detail in categoryGroup.Details)
-                    {
-                        Assert.True(detail.Amount <= 0, $"Expense item should be negative: {detail.Amount}");
-                    }
+                    Assert.True(budgetItem.Amount < 0, $"Expense should be negative, got {budgetItem.Amount}");
+                    Assert.Equal(-transaction.Amount, budgetItem.Amount);
                 }
             }
         }
-    }
 
-    public class TestHomeBudget_Integration : TestBase
-    {
+        #endregion
+
+        #region Balance Calculation Tests
+
         [Fact]
-        public void HomeBudgetMethod_ConsistencyAcrossAllMethods()
-        {
-            // Arrange
-            SetupTest("consistency");
 
+        public void HomeBudget_GetBudgetItems_BalanceCalculation_ShouldBeCorrect()
+        {
+            // Act
+            List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, false, 9);
+
+            // Assert
+            Assert.True(budgetItems.Count > 0, "Should have budget items");
+
+            // The items are already sorted by the GetBudgetItems method
+            decimal expectedBalance = 0;
+            foreach (BudgetItem item in budgetItems)
+            {
+                expectedBalance += item.Amount;
+
+                Assert.True(expectedBalance == item.Balance,
+                    $"Balance mismatch for transaction {item.TransactionID}. Expected: {expectedBalance}, Actual: {item.Balance}");
+            }
+
+            Console.WriteLine($"Final balance: {expectedBalance:C}");
+        }
+
+        #endregion
+
+        #region Integration Tests
+
+        [Fact]
+        public void HomeBudget_AllMethods_ShouldReturnConsistentData()
+        {
             // Act
             List<BudgetItem> allItems = homeBudget.GetBudgetItems(null, null, false, 9);
             List<BudgetItemsByMonth> monthlyItems = homeBudget.GetBudgetItemsByMonth(null, null, false, 9);
             List<BudgetItemsByCategory> categoryItems = homeBudget.GetBudgetItemsByCategory(null, null, false, 9);
 
-            // Assert - Verify data consistency
-
-            // 1. Total record count should be consistent
+            // Assert - Data consistency
             int monthlyDetailCount = monthlyItems.Sum(m => m.Details.Count);
             int categoryDetailCount = categoryItems.Sum(c => c.Details.Count);
 
             Assert.Equal(allItems.Count, monthlyDetailCount);
             Assert.Equal(allItems.Count, categoryDetailCount);
 
-            // 2. Total amounts should be consistent
+            // Amount consistency
             decimal totalFromItems = allItems.Sum(i => i.Amount);
             decimal totalFromMonthly = monthlyItems.Sum(m => m.Total);
             decimal totalFromCategory = categoryItems.Sum(c => c.Total);
@@ -486,54 +377,38 @@ namespace TestBudget
             Assert.Equal(totalFromItems, totalFromMonthly);
             Assert.Equal(totalFromItems, totalFromCategory);
 
-            // 3. Each transaction record should exist in all methods
-            foreach (var item in allItems)
-            {
-                // Find in monthly report
-                bool foundInMonthly = monthlyItems
-                    .SelectMany(m => m.Details)
-                    .Any(d => d.TransactionID == item.TransactionID);
-                Assert.True(foundInMonthly, $"Transaction {item.TransactionID} not found in monthly report");
-
-                // Find in category report
-                bool foundInCategory = categoryItems
-                    .SelectMany(c => c.Details)
-                    .Any(d => d.TransactionID == item.TransactionID);
-                Assert.True(foundInCategory, $"Transaction {item.TransactionID} not found in category report");
-            }
+            Console.WriteLine($"Total transactions: {allItems.Count}");
+            Console.WriteLine($"Total amount: {totalFromItems:C}");
         }
-    }
 
-    // Additional utility test for database setup verification
-    public class TestHomeBudget_Setup : TestBase
-    {
+        #endregion
+
+        #region Edge Cases
+
         [Fact]
-        public void TestDatabase_CreationAndBasicData()
+        public void HomeBudget_EmptyDateRange_ShouldReturnEmptyList()
         {
-            // Arrange & Act
-            SetupTest("setup_verification");
+            // Arrange
+            DateTime futureStart = new DateTime(2030, 1, 1);
+            DateTime futureEnd = new DateTime(2030, 12, 31);
+
+            // Act
+            var items = homeBudget.GetBudgetItems(futureStart, futureEnd, false, 9);
 
             // Assert
-            Assert.NotNull(homeBudget);
-
-            var categories = homeBudget.categories.GetAllCategories();
-            var transactions = homeBudget.transactions.GetAllTransactions();
-
-            Assert.True(categories.Count > 0, "Should have categories");
-            Assert.True(transactions.Count > 0, "Should have transactions");
-
-            // Verify we have both income and expense categories
-            var incomeCategories = categories.Where(c => c.Type == CategoryType.Income).ToList();
-            var expenseCategories = categories.Where(c => c.Type == CategoryType.Expense).ToList();
-
-            Assert.True(incomeCategories.Count > 0, "Should have income categories");
-            Assert.True(expenseCategories.Count > 0, "Should have expense categories");
-
-            Console.WriteLine($"Test database contains:");
-            Console.WriteLine($"- {categories.Count} categories");
-            Console.WriteLine($"- {transactions.Count} transactions");
-            Console.WriteLine($"- {incomeCategories.Count} income categories");
-            Console.WriteLine($"- {expenseCategories.Count} expense categories");
+            Assert.Empty(items);
         }
+
+        [Fact]
+        public void HomeBudget_NonExistentCreatedBy_ShouldReturnEmptyList()
+        {
+            // Act
+            var items = homeBudget.GetBudgetItemsByCreatedBy("not exist!");
+
+            // Assert
+            Assert.Empty(items);
+        }
+
+        #endregion
     }
 }

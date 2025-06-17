@@ -202,7 +202,7 @@ namespace Budget.Tests
             // Verify table structures
             VerifyTableStructure(service, "categoryTypes", new[] { "Id", "Description" });
             VerifyTableStructure(service, "categories", new[] { "Id", "Name", "TypeId" });
-            VerifyTableStructure(service, "transactions", new[] { "Id", "CategoryId", "Amount", "Date", "Description" });
+            VerifyTableStructure(service, "transactions", new[] { "Id", "CategoryId", "Amount", "TransactionDate", "Description" });
         }
 
         [Fact]

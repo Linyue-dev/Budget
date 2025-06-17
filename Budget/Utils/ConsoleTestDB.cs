@@ -14,7 +14,7 @@ namespace Budget.Utils
 
         private static void InitializationDB()
         {
-            string dbPath = "test.db";
+            string dbPath = "messy.db";
 
             try
             {
@@ -71,6 +71,7 @@ namespace Budget.Utils
             {
                 Console.WriteLine($"Test failed: {ex.Message}");
             }
+
         }
         private static void VerifyTables(DatabaseService db)
         {
@@ -97,27 +98,28 @@ namespace Budget.Utils
         private static void InsertDataTransactions(DatabaseService newDb)
         {
             using var command = newDb.Connection.CreateCommand();
-            command.CommandText = "INSERT INTO Transactions (Id, Date, Description, Amount, CategoryId) VALUES" +
-                "(1, '2018-01-10', 'Tshirt', 22.00, 6)," +
-                "(2, '2018-01-16', 'mortagage', 800.00, 14)," +
-                "(3, '2018-02-10', 'monthly salary', 3500.00, 16)," +
-                "(4, '2019-02-10', 'visit friend', 35.00, 9)," +
-                "(5, '2020-01-11', 'McDonalds', 45.00, 2)," +
-                "(6, '2020-01-10', 'monthly salary', 4500.00, 16)," +
-                "(7, '2020-01-12', 'Electricity bill', 225.00, 1)," +
-                "(8, '2020-01-15', 'Wendys', 25.00, 2)," +
-                "(9, '2020-02-01', 'Costco', 133.33, 2)," +
-                "(10, '2020-02-20', 'Mobile fee', 125.06, 1)," +
-                "(11, '2020-03-25', 'french course', 450.00, 7)," +
-                "(12, '2020-04-21', '2020 municipal', 2500.00, 10)," +
-                "(13, '2021-02-10', 'car insurance', 1100.00, 5)," +
-                "(14, '2021-07-11', 'school tax', 720.11, 10)," +
-                "(15, '2024-01-11', 'us found', 1720.11, 18)," +
-                "(16, '2024-03-01', 'rental income', 2720.11, 17)," +
-                "(17, '2024-03-15', 'Costco', 126.66, 2)," +
-                "(18, '2024-04-07', 'fix fence', 1026.66, 11)";
+            command.CommandText = @"INSERT INTO Transactions (Id, TransactionDate, Description, Amount, CategoryId, CreatedBy, CreatedAt) VALUES
+            (1, '2018-01-10', 'Tshirt', 22.00, 6, 'Mom', '2018-01-10 10:30:00'),
+            (2, '2018-01-16', 'mortagage', 800.00, 14, 'Dad', '2018-01-16 09:15:00'),
+            (3, '2018-02-10', 'monthly salary', 3500.00, 16, 'Dad', '2018-02-10 08:00:00'),
+            (4, '2019-02-10', 'visit friend', 35.00, 9, 'Son', '2019-02-10 14:20:00'),
+            (5, '2020-01-11', 'McDonalds', 45.00, 2, 'Daughter', '2020-01-11 12:30:00'),
+            (6, '2020-01-10', 'monthly salary', 4500.00, 16, 'Dad', '2020-01-10 08:00:00'),
+            (7, '2020-01-12', 'Electricity bill', 225.00, 1, 'Mom', '2020-01-12 11:45:00'),
+            (8, '2020-01-15', 'Wendys', 25.00, 2, 'Son', '2020-01-15 18:30:00'),
+            (9, '2020-02-01', 'Costco', 133.33, 2, 'Mom', '2020-02-01 16:20:00'),
+            (10, '2020-02-20', 'Mobile fee', 125.06, 1, 'Dad', '2020-02-20 10:15:00'),
+            (11, '2020-03-25', 'french course', 450.00, 7, 'Daughter', '2020-03-25 13:00:00'),
+            (12, '2020-04-21', '2020 municipal', 2500.00, 10, 'Dad', '2020-04-21 09:30:00'),
+            (13, '2021-02-10', 'car insurance', 1100.00, 5, 'Mom', '2021-02-10 15:45:00'),
+            (14, '2021-07-11', 'school tax', 720.11, 10, 'Dad', '2021-07-11 11:20:00'),
+            (15, '2024-01-11', 'us found', 1720.11, 18, 'Dad', '2024-01-11 14:10:00'),
+            (16, '2024-03-01', 'rental income', 2720.11, 17, 'Mom', '2024-03-01 09:00:00'),
+            (17, '2024-03-15', 'Costco', 126.66, 2, 'Mom', '2024-03-15 17:30:00'),
+            (18, '2024-04-07', 'fix fence', 1026.66, 11, 'Dad', '2024-04-07 08:45:00')";
+
             command.ExecuteNonQuery();
-            Console.WriteLine("Insert Transactions data successfuly!");
+            Console.WriteLine("Insert Transactions data successfully!");
         }
 
         private static void InsertDataForCategories(DatabaseService newDb)

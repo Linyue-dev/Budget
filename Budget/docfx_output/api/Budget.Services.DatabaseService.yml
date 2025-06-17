@@ -1,0 +1,714 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Services.DatabaseService
+  commentId: T:Budget.Services.DatabaseService
+  id: DatabaseService
+  parent: Budget.Services
+  children:
+  - Budget.Services.DatabaseService.#ctor(System.String)
+  - Budget.Services.DatabaseService.Connection
+  - Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  - Budget.Services.DatabaseService.CreateTables
+  - Budget.Services.DatabaseService.Dispose
+  - Budget.Services.DatabaseService.OpenExisting(System.String)
+  langs:
+  - csharp
+  - vb
+  name: DatabaseService
+  nameWithType: DatabaseService
+  fullName: Budget.Services.DatabaseService
+  type: Class
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: DatabaseService
+    path: Services/DatabaseService.cs
+    startLine: 12
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nProvides database connection and management functionality for the Budget application.\nManages SQLite database operations including creation, connection, and table initialization.\n"
+  example: []
+  syntax:
+    content: 'public class DatabaseService : IDisposable'
+    content.vb: >-
+      Public Class DatabaseService
+          Implements IDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - System.IDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: Budget.Services.DatabaseService.Connection
+  commentId: P:Budget.Services.DatabaseService.Connection
+  id: Connection
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: Connection
+  nameWithType: DatabaseService.Connection
+  fullName: Budget.Services.DatabaseService.Connection
+  type: Property
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Connection
+    path: Services/DatabaseService.cs
+    startLine: 44
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nGets the current SQLite database connection.\n"
+  example: []
+  syntax:
+    content: public SQLiteConnection Connection { get; }
+    parameters: []
+    return:
+      type: System.Data.SQLite.SQLiteConnection
+      description: "\nThe active <xref href=\"System.Data.SQLite.SQLiteConnection\" data-throw-if-not-resolved=\"false\"></xref> instance used for database operations.\n"
+    content.vb: Public ReadOnly Property Connection As SQLiteConnection
+  overload: Budget.Services.DatabaseService.Connection*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "\nThrown when the DatabaseService has been disposed.\n"
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: Budget.Services.DatabaseService.#ctor(System.String)
+  commentId: M:Budget.Services.DatabaseService.#ctor(System.String)
+  id: '#ctor(System.String)'
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: DatabaseService(String)
+  nameWithType: DatabaseService.DatabaseService(String)
+  fullName: Budget.Services.DatabaseService.DatabaseService(System.String)
+  type: Constructor
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: .ctor
+    path: Services/DatabaseService.cs
+    startLine: 69
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nInitializes a new instance of the <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref> class.\nCreates the database file if it doesn&apos;t exist and establishes a connection.\n"
+  example: []
+  syntax:
+    content: public DatabaseService(string databasePath)
+    parameters:
+    - id: databasePath
+      type: System.String
+      description: The file path where the SQLite database is located or should be created.
+    content.vb: Public Sub New(databasePath As String)
+  overload: Budget.Services.DatabaseService.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databasePath</code> is null or empty.\n"
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "\nThrown when database connection fails due to file access issues, invalid path, or SQLite errors.\n"
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  commentId: M:Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  id: CreateNewDatabase(System.String)
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: CreateNewDatabase(String)
+  nameWithType: DatabaseService.CreateNewDatabase(String)
+  fullName: Budget.Services.DatabaseService.CreateNewDatabase(System.String)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: CreateNewDatabase
+    path: Services/DatabaseService.cs
+    startLine: 110
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nCreates a new database with all necessary tables and default data.\nIf a file already exists at the specified path, it will be deleted and replaced.\n"
+  example: []
+  syntax:
+    content: public static DatabaseService CreateNewDatabase(string databasePath)
+    parameters:
+    - id: databasePath
+      type: System.String
+      description: The file path where the new database should be created.
+    return:
+      type: Budget.Services.DatabaseService
+      description: A new <xref href="Budget.Services.DatabaseService" data-throw-if-not-resolved="false"></xref> instance connected to the newly created database.
+    content.vb: Public Shared Function CreateNewDatabase(databasePath As String) As DatabaseService
+  overload: Budget.Services.DatabaseService.CreateNewDatabase*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databasePath</code> is null or empty.\n"
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "\nThrown when database creation fails due to file access issues, invalid path, or table creation errors.\n"
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: Budget.Services.DatabaseService.OpenExisting(System.String)
+  commentId: M:Budget.Services.DatabaseService.OpenExisting(System.String)
+  id: OpenExisting(System.String)
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: OpenExisting(String)
+  nameWithType: DatabaseService.OpenExisting(String)
+  fullName: Budget.Services.DatabaseService.OpenExisting(System.String)
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: OpenExisting
+    path: Services/DatabaseService.cs
+    startLine: 137
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nOpens an existing database file for use.\n"
+  example: []
+  syntax:
+    content: public static DatabaseService OpenExisting(string databasePath)
+    parameters:
+    - id: databasePath
+      type: System.String
+      description: The file path to the existing database file.
+    return:
+      type: Budget.Services.DatabaseService
+      description: A new <xref href="Budget.Services.DatabaseService" data-throw-if-not-resolved="false"></xref> instance connected to the existing database.
+    content.vb: Public Shared Function OpenExisting(databasePath As String) As DatabaseService
+  overload: Budget.Services.DatabaseService.OpenExisting*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\nThrown when <code data-dev-comment-type=\"paramref\" class=\"paramref\">databasePath</code> is null or empty.\n"
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\nThrown when the specified database file does not exist.\n"
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "\nThrown when database connection fails due to file access issues or SQLite errors.\n"
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: Budget.Services.DatabaseService.CreateTables
+  commentId: M:Budget.Services.DatabaseService.CreateTables
+  id: CreateTables
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: CreateTables()
+  nameWithType: DatabaseService.CreateTables()
+  fullName: Budget.Services.DatabaseService.CreateTables()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: CreateTables
+    path: Services/DatabaseService.cs
+    startLine: 161
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nCreates all necessary database tables and populates them with default data.\n"
+  example: []
+  syntax:
+    content: public void CreateTables()
+    content.vb: Public Sub CreateTables
+  overload: Budget.Services.DatabaseService.CreateTables*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "\nThrown when table creation fails due to SQL syntax errors, constraint violations, or database access issues.\n"
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: Budget.Services.DatabaseService.Dispose
+  commentId: M:Budget.Services.DatabaseService.Dispose
+  id: Dispose
+  parent: Budget.Services.DatabaseService
+  langs:
+  - csharp
+  - vb
+  name: Dispose()
+  nameWithType: DatabaseService.Dispose()
+  fullName: Budget.Services.DatabaseService.Dispose()
+  type: Method
+  source:
+    remote:
+      path: Budget/Services/DatabaseService.cs
+      branch: HomeBudget_using_db
+      repo: https://github.com/linyueCS-IT/Budget.git
+    id: Dispose
+    path: Services/DatabaseService.cs
+    startLine: 224
+  assemblies:
+  - Budget
+  namespace: Budget.Services
+  summary: "\nReleases all resources used by the <xref href=\"Budget.Services.DatabaseService\" data-throw-if-not-resolved=\"false\"></xref>.\n"
+  example: []
+  syntax:
+    content: public void Dispose()
+    content.vb: Public Sub Dispose
+  overload: Budget.Services.DatabaseService.Dispose*
+  implements:
+  - System.IDisposable.Dispose
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+references:
+- uid: Budget.Services
+  commentId: N:Budget.Services
+  name: Budget.Services
+  nameWithType: Budget.Services
+  fullName: Budget.Services
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Data.SQLite.SQLiteConnection
+  commentId: T:System.Data.SQLite.SQLiteConnection
+  parent: System.Data.SQLite
+  isExternal: true
+  name: SQLiteConnection
+  nameWithType: SQLiteConnection
+  fullName: System.Data.SQLite.SQLiteConnection
+- uid: System.ObjectDisposedException
+  commentId: T:System.ObjectDisposedException
+  isExternal: true
+- uid: Budget.Services.DatabaseService.Connection*
+  commentId: Overload:Budget.Services.DatabaseService.Connection
+  name: Connection
+  nameWithType: DatabaseService.Connection
+  fullName: Budget.Services.DatabaseService.Connection
+- uid: System.Data.SQLite
+  commentId: N:System.Data.SQLite
+  isExternal: true
+  name: System.Data.SQLite
+  nameWithType: System.Data.SQLite
+  fullName: System.Data.SQLite
+- uid: Budget.Services.DatabaseService
+  commentId: T:Budget.Services.DatabaseService
+  parent: Budget.Services
+  name: DatabaseService
+  nameWithType: DatabaseService
+  fullName: Budget.Services.DatabaseService
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+- uid: System.Exception
+  commentId: T:System.Exception
+  isExternal: true
+- uid: Budget.Services.DatabaseService.#ctor*
+  commentId: Overload:Budget.Services.DatabaseService.#ctor
+  name: DatabaseService
+  nameWithType: DatabaseService.DatabaseService
+  fullName: Budget.Services.DatabaseService.DatabaseService
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Budget.Services.DatabaseService.CreateNewDatabase*
+  commentId: Overload:Budget.Services.DatabaseService.CreateNewDatabase
+  name: CreateNewDatabase
+  nameWithType: DatabaseService.CreateNewDatabase
+  fullName: Budget.Services.DatabaseService.CreateNewDatabase
+- uid: System.IO.FileNotFoundException
+  commentId: T:System.IO.FileNotFoundException
+  isExternal: true
+- uid: Budget.Services.DatabaseService.OpenExisting*
+  commentId: Overload:Budget.Services.DatabaseService.OpenExisting
+  name: OpenExisting
+  nameWithType: DatabaseService.OpenExisting
+  fullName: Budget.Services.DatabaseService.OpenExisting
+- uid: Budget.Services.DatabaseService.CreateTables*
+  commentId: Overload:Budget.Services.DatabaseService.CreateTables
+  name: CreateTables
+  nameWithType: DatabaseService.CreateTables
+  fullName: Budget.Services.DatabaseService.CreateTables
+- uid: Budget.Services.DatabaseService.Dispose*
+  commentId: Overload:Budget.Services.DatabaseService.Dispose
+  name: Dispose
+  nameWithType: DatabaseService.Dispose
+  fullName: Budget.Services.DatabaseService.Dispose
+- uid: System.IDisposable.Dispose
+  commentId: M:System.IDisposable.Dispose
+  parent: System.IDisposable
+  isExternal: true
+  name: Dispose()
+  nameWithType: IDisposable.Dispose()
+  fullName: System.IDisposable.Dispose()
+  spec.csharp:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    nameWithType: IDisposable.Dispose
+    fullName: System.IDisposable.Dispose
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )

@@ -1,0 +1,42 @@
+### YamlMime:ManagedReference
+items:
+- uid: Budget.Services
+  commentId: N:Budget.Services
+  id: Budget.Services
+  children:
+  - Budget.Services.Categories
+  - Budget.Services.DatabaseService
+  - Budget.Services.Transactions
+  langs:
+  - csharp
+  - vb
+  name: Budget.Services
+  nameWithType: Budget.Services
+  fullName: Budget.Services
+  type: Namespace
+  assemblies:
+  - Budget
+references:
+- uid: Budget.Services.Categories
+  commentId: T:Budget.Services.Categories
+  parent: Budget.Services
+  name: Categories
+  nameWithType: Categories
+  fullName: Budget.Services.Categories
+- uid: Budget.Services.DatabaseService
+  commentId: T:Budget.Services.DatabaseService
+  parent: Budget.Services
+  name: DatabaseService
+  nameWithType: DatabaseService
+  fullName: Budget.Services.DatabaseService
+- uid: Budget.Services.Transactions
+  commentId: T:Budget.Services.Transactions
+  parent: Budget.Services
+  name: Transactions
+  nameWithType: Transactions
+  fullName: Budget.Services.Transactions
+- uid: Budget.Services
+  commentId: N:Budget.Services
+  name: Budget.Services
+  nameWithType: Budget.Services
+  fullName: Budget.Services
